@@ -39,6 +39,7 @@ window.onload = function () {
         playerSpecs = {
             'type': 'player',
             'name': 'Bob',
+            'hp': 100,
             'size': 12,
             'speed': 100,
             'mobility': 10,
@@ -48,11 +49,36 @@ window.onload = function () {
             'gun': create(Gun, fullAuto),
             'color': '#4D90FE'
         },
+        enemySpecs = {
+            'type': 'enemy',
+            'name': null,
+            'hp': 50,
+            'size': 12,
+            'speed': 45,
+            'mobility': 10,
+            'x': null,
+            'y': null,
+            'direction': 0,
+            'gun': null,
+            'color': 'rbg(0,255,0)'
+        };
+
     player = new Character(playerSpecs);
     crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2);
 
+    for (var i = 0; i < 3; i++) {
+        enemySpecs.name = i;
+        enemySpecs.x = Math.random() * canvas.width;
+        enemySpecs.y = Math.random() * canvas.height;
+        enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
+        enemySpecs.gun = create(Gun, fullAuto);
+
+        enemies.push(new Character(enemySpecs));
+    }
+
     console.log(player);
     console.log(crosshairs);
+    console.log(enemies);
 
     //We use a loop to keep the entire program synchronous
     function startLoop () {
@@ -96,6 +122,7 @@ function create(constructor, args) {
 }
 
 bullets = [];
+enemies = [];
 
 Crosshairs = function (x, y) {
     this.x = x;
@@ -164,6 +191,8 @@ Crosshairs.prototype.update = function (timeElapsed) {
 Character = function(specs) {
     this.type = specs.type;
     this.name = specs.name;
+    this.hp = specs.hp;
+    this.health = 100; // Percent
     this.size = specs.size;
     this.speed = specs.speed;
     this.mobility = specs.mobility;
@@ -194,6 +223,10 @@ Character.prototype.draw = function () {
     // context.arc(this.x, this.y, 15, 0, 2 * Math.PI, false);
     // context.fill();
     // context.closePath();
+
+    // Draws health
+    context.fillStyle = '#000';
+    context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
 
     // Draws Name
     context.fillStyle = '#000';
@@ -232,7 +265,14 @@ Character.prototype.update = function (timeElapsed) {
         }
 
     } else {
-        // ...
+        this.x += this.speed * Math.cos(this.direction) * timeElapsed;
+        this.y += this.speed * Math.sin(this.direction) * timeElapsed;
+
+        if (this.mobility < 0) {
+            this.direction += Math.PI / this.mobility * timeElapsed;
+        };
+
+        this.color = 'rgb(' + parseInt(255 * (100 - this.health) / 100) + ',' + parseInt(255 * this.health / 100) + ',0)';
     }
 };
 
@@ -264,6 +304,21 @@ Bullet.prototype.update = function(timeElapsed) {
     if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
         bullets.splice(bullets.indexOf(this), 1);
         return;
+    }
+
+    for (var i = 0, len = enemies.length; i < len; i++) {
+        if (Math.sqrt((this.x - enemies[i].x) * (this.x - enemies[i].x) + (this.y - enemies[i].y) * (this.y - enemies[i].y)) <= enemies[i].size) {
+            enemies[i].health -= this.gun.damage;
+            console.log(enemies[i]);
+            if (enemies[i].health < 0) {
+                enemies[i].health = 0;
+                enemies[i].speed = 0;
+                enemies[i].mobility = 0;
+            }
+
+            bullets.splice(bullets.indexOf(this), 1);
+            return;
+        }
     }
 
     this.x -= this.speed * Math.cos(this.direction) * timeElapsed * 100;
@@ -313,10 +368,16 @@ Gun.prototype.fire = function() {
 };
 
 function update (timeElapsed) {
+    var i;
     /*Every frame, update will run commands and call functions to update
         the necessary game variables so that the draw function can draw them
         out properly.*/
+
     // Can't cache the length of the arrays b/c they can change mid-loop.
+    for (i = 0; i < enemies.length; i++) {
+        enemies[i].update(timeElapsed);
+    }
+
     for (i = 0; i < bullets.length; i++) {
         bullets[i].update(timeElapsed);
     }
@@ -337,7 +398,11 @@ function draw (context) {
     //Step 2: Draw all items on the screen
     player.draw();
 
-    for (var i = 0, len = bullets.length; i < len; i++) {
+    for (i = 0, len = enemies.length; i < len; i++) {
+        enemies[i].draw();
+    }
+
+    for (i = 0, len = bullets.length; i < len; i++) {
         bullets[i].draw();
     }
 
