@@ -78,6 +78,14 @@ Crosshairs = function (x, y) {
                          // being @ the player's location)
     this.mouseDistFromPlayer = 0;
     this.kickCounter = 0;
+
+    var curs = document.createElement('img');
+    curs.src = './crosshairCursor.png';
+    curs.id = 'cursor';
+    curs.draggable = false;
+    document.getElementsByTagName('body')[0].appendChild(curs);
+    
+    cursor = document.getElementById('cursor');
 };
 
 Crosshairs.prototype.draw = function () {
@@ -315,6 +323,9 @@ function handleKeyUp (event) {
 function handleMouseMove (event) {
     input.mouse.x = event.x;
     input.mouse.y = event.y;
+
+    cursor.style.left = event.x - cursor.width / 2 + 'px';
+    cursor.style.top = event.y - cursor.height / 2 + 'px';
 }
 
 function handleMouseDown () {

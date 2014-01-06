@@ -1,3 +1,6 @@
+html {
+    cursor: none;
+}
 body {
     margin: 0;
 }
@@ -8,4 +11,6 @@ canvas {
     box-sizing: border-box;
     background: #DDDDDD; /*Because why not, that's why*/
     cursor: crosshair;
+#cursor {
+    position: absolute;
 }
