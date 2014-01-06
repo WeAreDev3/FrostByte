@@ -23,7 +23,6 @@ window.onload = function () {
         'mouseDown': false
     };
 
-    crosshairs = new Crosshairs(canvas.width / 2 + 100, canvas.height / 2 + 100);
     /*
       (In order)
       type: Name of gun
@@ -50,6 +49,7 @@ window.onload = function () {
             'color': '#4D90FE'
         },
     player = new Character(playerSpecs);
+    crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2);
 
     console.log(player);
     console.log(crosshairs);
@@ -120,7 +120,7 @@ Crosshairs = function (x, y) {
 
 Crosshairs.prototype.draw = function () {
     context.beginPath();
-    context.arc(this.x, this.y, 15, 0, 2 * Math.PI, false);
+    context.arc(this.x, this.y, 13, 0, 2 * Math.PI, false);
     context.lineWidth = 2;
     context.strokeStyle = '#FE634D';
     context.stroke();
@@ -336,11 +336,13 @@ function draw (context) {
 
     //Step 2: Draw all items on the screen
     player.draw();
-    crosshairs.draw();
 
     for (var i = 0, len = bullets.length; i < len; i++) {
         bullets[i].draw();
     }
+
+    //Step 2a: Crosshairs should be last so it is always on top.
+    crosshairs.draw();
 }
 
 function handleKeyDown (event) {
