@@ -4,13 +4,13 @@ html {
 body {
     margin: 0;
 }
-
 canvas {
     display: block;
     margin: 0 auto;
     box-sizing: border-box;
-    background: #DDDDDD; /*Because why not, that's why*/
-    cursor: crosshair;
+    background: #DDDDDD;
+    /*Because why not, that's why*/
+}
 #cursor {
     position: absolute;
 }

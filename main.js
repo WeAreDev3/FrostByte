@@ -1,4 +1,4 @@
-window.onload = function () {
+window.onload = function() {
     canvas = document.getElementById('frame');
     context = canvas.getContext('2d');
 
@@ -81,14 +81,15 @@ window.onload = function () {
     console.log(enemies);
 
     //We use a loop to keep the entire program synchronous
-    function startLoop () {
+
+    function startLoop() {
         var frameId = 0,
             lastFrame = Date.now(),
             count = 0;
 
-        function loop () {
+        function loop() {
             var thisFrame = Date.now(),
-            timeElapsed = (thisFrame - lastFrame) / 1000;
+                timeElapsed = (thisFrame - lastFrame) / 1000;
 
             frameId = window.requestAnimationFrame(loop);
 
@@ -108,7 +109,7 @@ window.onload = function () {
     startLoop();
 };
 
-function initCanvas () {
+function initCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
@@ -124,15 +125,15 @@ function create(constructor, args) {
 bullets = [];
 enemies = [];
 
-Crosshairs = function (x, y) {
+Crosshairs = function(x, y) {
     this.x = x;
     this.y = y;
     this.distFromPlayer = 0;
     this.distFromMouse = 0;
     this.angle = 0; // The angle that the crosshairs make (with the origin
-                    // being @ the player's location)
+    // being @ the player's location)
     this.mouseAngle = 0; // The angle that the mouse makes (with the origin
-                         // being @ the player's location)
+    // being @ the player's location)
     this.mouseDistFromPlayer = 0;
     this.kickCounter = 0;
 
@@ -141,19 +142,20 @@ Crosshairs = function (x, y) {
     curs.id = 'cursor';
     curs.draggable = false;
     document.getElementsByTagName('body')[0].appendChild(curs);
-    
+
     cursor = document.getElementById('cursor');
 };
 
-Crosshairs.prototype.draw = function () {
+Crosshairs.prototype.draw = function() {
     context.beginPath();
     context.arc(this.x, this.y, 13, 0, 2 * Math.PI, false);
     context.lineWidth = 2;
     context.strokeStyle = '#FE634D';
     context.stroke();
+    context.closePath();
 };
 
-Crosshairs.prototype.update = function (timeElapsed) {
+Crosshairs.prototype.update = function(timeElapsed) {
     var mouseXDiff = input.mouse.x - this.x,
         mouseYDiff = input.mouse.y - this.y,
         playerXDiff = player.x - this.x,
@@ -180,7 +182,7 @@ Crosshairs.prototype.update = function (timeElapsed) {
 
     for (var i = this.kickCounter - 1; i >= 0; i--) {
         this.angle += (Math.random() * 2 * Math.PI - Math.PI) * player.gun.kick / 100;
-    };
+    }
 
     this.kickCounter = 0;
 
@@ -204,7 +206,7 @@ Character = function(specs) {
     this.color = specs.color;
 };
 
-Character.prototype.draw = function () {
+Character.prototype.draw = function() {
     var namePositionX = this.x - (context.measureText(this.name).width / 2),
         namePositionY = this.y + (this.size * 2);
 
@@ -233,7 +235,7 @@ Character.prototype.draw = function () {
     context.fillText(this.name, namePositionX, namePositionY);
 };
 
-Character.prototype.update = function (timeElapsed) {
+Character.prototype.update = function(timeElapsed) {
     if (this.type === 'player') {
         if (input.w) { // Up (Press W)
             this.y -= this.speed * timeElapsed;
@@ -270,7 +272,7 @@ Character.prototype.update = function (timeElapsed) {
 
         if (this.mobility < 0) {
             this.direction += Math.PI / this.mobility * timeElapsed;
-        };
+        }
 
         this.color = 'rgb(' + parseInt(255 * (100 - this.health) / 100) + ',' + parseInt(255 * this.health / 100) + ',0)';
     }
@@ -288,11 +290,11 @@ Bullet = function(gun, speed, direction) {
 
 Bullet.prototype.draw = function() {
     context.beginPath();
-    context.moveTo(this.x - (5 + this.character.size) * Math.cos(this.direction),
-                   this.y - (5 + this.character.size) * Math.sin(this.direction));
+    context.moveTo(this.x - (5 + this.gun.character.size) * Math.cos(this.direction),
+        this.y - (5 + this.gun.character.size) * Math.sin(this.direction));
 
-    context.lineTo(this.x - (10 + this.character.size) * Math.cos(this.direction),
-                   this.y - (10 + this.character.size) * Math.sin(this.direction));
+    context.lineTo(this.x - (10 + this.gun.character.size) * Math.cos(this.direction),
+        this.y - (10 + this.gun.character.size) * Math.sin(this.direction));
 
     context.lineWidth = 1;
     context.strokeStyle = '#000';
@@ -363,11 +365,11 @@ Gun.prototype.fire = function() {
                 }
                 break;
         }
-        console.log(crosshairs.kickCounter);
+        // console.log(crosshairs.kickCounter);
     }
 };
 
-function update (timeElapsed) {
+function update(timeElapsed) {
     var i;
     /*Every frame, update will run commands and call functions to update
         the necessary game variables so that the draw function can draw them
@@ -386,7 +388,7 @@ function update (timeElapsed) {
     crosshairs.update(timeElapsed);
 }
 
-function draw (context) {
+function draw(context) {
     var i,
         len;
     /*Every frame, draw will clear the frame and redraw all
@@ -410,7 +412,7 @@ function draw (context) {
     crosshairs.draw();
 }
 
-function handleKeyDown (event) {
+function handleKeyDown(event) {
     switch (event.keyCode) {
         case 87: // w
             input.w = true;
@@ -427,7 +429,7 @@ function handleKeyDown (event) {
     }
 }
 
-function handleKeyUp (event) {
+function handleKeyUp(event) {
     switch (event.keyCode) {
         case 87: // w
             input.w = false;
@@ -444,7 +446,7 @@ function handleKeyUp (event) {
     }
 }
 
-function handleMouseMove (event) {
+function handleMouseMove(event) {
     input.mouse.x = event.x;
     input.mouse.y = event.y;
 
@@ -452,14 +454,14 @@ function handleMouseMove (event) {
     cursor.style.top = event.y - cursor.height / 2 + 'px';
 }
 
-function handleMouseDown () {
+function handleMouseDown() {
     input.mouseDown = true;
 }
 
-function handleMouseUp () {
+function handleMouseUp() {
     input.mouseDown = false;
 }
 
-function clearScreen () {
+function clearScreen() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
