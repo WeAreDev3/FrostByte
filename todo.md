@@ -18,9 +18,7 @@
         - Coin/Power-up/etc.??
 
 # Misc. (order of importance)
-- Should we move from Floobits to Koding/Nitrous.io?
-    - Even though Floobits says it handles images, it seems to be having problems.
-    - Easy previewing of the website
-    - We would have a server to do server stuff on.
-- MODULARIZE THE DAMN JS FILE!!!!! (put each object in a separate file)
+- Get a server running on Nitrous! It doesn't have to be anything fancy, just serve up game.html
 - Fix the bloated crosshairs stuff. Some of that code belongs in the input object.
+- Use the new class system and the inheritance by John Resig.
+- ~~MODULARIZE THE DAMN JS FILE!!!!! (put each object in a separate file)~~
