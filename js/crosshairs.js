@@ -12,8 +12,7 @@ Crosshairs = function(x, y, character) {
     this.kickCounter = 0;
 
     var curs = document.createElement('img');
-    //curs.src = './crosshairCursor.png';
-    curs.src = 'https://raw.github.com/talbenari1/Top-Down-Shooter/master/crosshairCursor.png';
+    curs.src = 'img/crosshairs.png';
     curs.id = 'cursor';
     curs.draggable = false;
     document.getElementsByTagName('body')[0].appendChild(curs);
