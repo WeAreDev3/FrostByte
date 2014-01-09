@@ -29,7 +29,7 @@ Gun.prototype.fire = function() {
             case 'shotgun':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    for (var i = 0; i < 5; i++) {
+                    for (var i = 0; i < 15; i++) {
                         new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
                     }
                     crosshairs.kickCounter++;
