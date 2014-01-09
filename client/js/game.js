@@ -72,15 +72,28 @@ function startGame () {
     crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
 
     //Create the enemies!
-    for (var i = 0; i < 3; i++) {
+    // for (var i = 0; i < 3; i++) {
+    //     enemySpecs.name = i;
+    //     enemySpecs.x = Math.random() * canvas.width;
+    //     enemySpecs.y = Math.random() * canvas.height;
+    //     enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
+    //     enemySpecs.gun = create(Gun, fullAuto);
+
+    //     enemies.push(new Character(enemySpecs));
+    // }
+
+    //creates enemies    //mkeedlinger
+    function createEnemies (howMany) {
+        for (var i = 0; i < howMany ; i++){
         enemySpecs.name = i;
         enemySpecs.x = Math.random() * canvas.width;
         enemySpecs.y = Math.random() * canvas.height;
         enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
         enemySpecs.gun = create(Gun, fullAuto);
 
-        enemies.push(new Character(enemySpecs));
+        enemies.push(new Character(enemySpecs));}
     }
+    createEnemies(5);
 
     console.log(player);
     console.log(crosshairs);
