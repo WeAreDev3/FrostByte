@@ -2,6 +2,9 @@
 - multiplayer
 - actual game logic (massive map or lobby style?)
 
+## game logic goals
+- make dead enemies disapear after some time (fade away?)
+
 # What do we need in the gun object?
 - Accuracy
 - ~~Kick~~
