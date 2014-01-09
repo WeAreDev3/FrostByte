@@ -1,6 +1,7 @@
 # Goals (in order)
 - multiplayer
 - actual game logic (massive map or lobby style?)
+- make sprites final (look nice)
 
 ## game logic goals
 - make dead enemies disapear after some time (fade away?)
