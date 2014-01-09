@@ -3,8 +3,5 @@ Entity = Class.extend({
         this.type = type;
         this.x = x;
         this.y = y;
-    },
-    draw: function() {
-
     }
 });
