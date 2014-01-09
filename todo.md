@@ -1,3 +1,7 @@
+# Goals (in order)
+- multiplayer
+- actually game logic (massive map or lobby style?)
+
 # What do we need in the gun object?
 - Accuracy
 - ~~Kick~~
