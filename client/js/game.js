@@ -1,4 +1,4 @@
-window.onload = function() {
+function startGame () {
     canvas = document.getElementById('frame');
     context = canvas.getContext('2d');
 
@@ -35,8 +35,8 @@ window.onload = function() {
       rate: Higher is WORSE
     */
 
-    var semiAuto = ['semi-auto', 5, 30, 5, 17, 140],
-        fullAuto = ['full-auto', 8, 20, 5, 15, 100],
+    var semiAuto = ['semi-auto', 5, 30, 5, 2, 140],
+        fullAuto = ['full-auto', 8, 20, 2, 15, 100],
         shotgun = ['shotgun', 13, 10, 7, 17, 220],
         playerSpecs = {
             'type': 'player',
@@ -48,7 +48,7 @@ window.onload = function() {
             'x': canvas.width / 2,
             'y': canvas.height / 2,
             'direction': Math.PI / 2,
-            'gun': create(Gun, fullAuto),
+            'gun': create(Gun, shotgun),
             'color': '#4D90FE'
         },
         enemySpecs = {

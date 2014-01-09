@@ -36,6 +36,5 @@ Gun.prototype.fire = function() {
                 }
                 break;
         }
-        // console.log(crosshairs.kickCounter);
     }
 };

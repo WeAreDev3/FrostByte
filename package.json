@@ -1,0 +1,17 @@
+{
+    "name": "top-down-shooter",
+    "version": "0.0.0",
+    "description": "A top down shooter",
+    "main": "server.js",
+    "repository": "https://github.com/talbenari1/Top-Down-Shooter.git",
+    "author": "talbenari1",
+    "contributors": [{
+        "name": "mkeedlinger"
+    }, {
+        "name": "janka102"
+    }],
+    "dependencies": {
+        "express": "~3.2.4",
+        "socket.io": "~0.9.14"
+    }
+}

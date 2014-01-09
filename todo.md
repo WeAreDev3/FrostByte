@@ -18,7 +18,7 @@
         - Coin/Power-up/etc.??
 
 # Misc. (order of importance)
-- ~~Get a server running on Nitrous! It doesn't have to be anything fancy, just serve up game.html~~
+- ~~Get a server running on Cloud9! It doesn't have to be anything fancy, just serve up game.html~~
 - Fix the bloated crosshairs stuff. Some of that code belongs in the input object.
-- Use the new class system and the inheritance by John Resig.
+- Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
 - ~~MODULARIZE THE DAMN JS FILE!!!!! (put each object in a separate file)~~
