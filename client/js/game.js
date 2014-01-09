@@ -48,7 +48,7 @@ function startGame () {
             'x': canvas.width / 2,
             'y': canvas.height / 2,
             'direction': Math.PI / 2,
-            'gun': create(Gun, shotgun),
+            'gun': create(Gun, fullAuto),
             'color': '#4D90FE'
         },
         enemySpecs = {
