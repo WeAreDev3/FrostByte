@@ -19,7 +19,7 @@ body {
 	text-align: center;
 	color: #AAAAAA;
 	margin: 0;
-	animation: subtitle-start 3s;
+	animation: subtitle-start 2.5s;
 }
 
 #button-container {
@@ -53,7 +53,7 @@ button#play:hover {
 	padding: 20px;
 	color: #360009;
 	left: 0;
-	animation: footer-start 4s;
+	animation: footer-start 3s;
 }
 
 #follow h3 {
@@ -84,7 +84,7 @@ button#play:hover {
 	color: #00362D;
 	right: 0;
 	text-align: right;
-	animation: footer-start 4s;
+	animation: footer-start 3s;
 }
 
 #info h3 {
@@ -105,4 +105,16 @@ button#play:hover {
 #info a:hover {
 	background: #00362D;
 	color: #FFFFFF;
+}
+
+#follow a:first-of-type, #info a:first-of-type {
+	animation: footer-1-start 3s;
+}
+
+#follow a:nth-of-type(2), #info a:nth-of-type(2) {
+	animation: footer-2-start 3s;
+}
+
+#follow a:last-of-type, #info a:last-of-type {
+	animation: footer-3-start 3s;
 }
