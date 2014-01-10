@@ -1,4 +1,103 @@
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
 #title {
-    font-family: 'Open Sans';
-    font-weight: 800;
+	font-family: 'Roboto Condensed';
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 80px;
+    margin: 10px auto 0;
+    text-align: center;
+    color: #19004A;
+}
+
+#subtitle {
+	font-size: 20px;
+	font-weight: 300;
+	text-align: center;
+	color: #AAAAAA;
+	margin: 0;
+}
+
+#button-container {
+	text-align: center;
+	margin: 40px auto 0;
+}
+
+button#play {
+	font-family: 'Roboto', sans-serif;
+	background: #FFFFFF;
+	border: 1px solid #19004A;
+	color: #19004A;
+	font-size: 25px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	transition: .5s;
+}
+
+button#play:hover {
+	background: #19004A;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
+#follow {
+	font-family: 'Roboto Condensed';
+	position: fixed;
+	bottom: 0;
+	padding: 20px;
+	color: #360009;
+	left: 0;
+}
+
+#follow h3 {
+	text-transform: uppercase;
+	border-bottom: 1px solid #360009;
+	margin: 0;
+}
+
+#follow a {
+	color: #360009;
+	text-decoration: none;
+	display: block;
+	padding: 5px;
+	border-bottom: 1px solid #FFFFFF;
+	transition: .5s;
+}
+
+#follow a:hover {
+	background: #360009;
+	color: #FFFFFF;
+}
+
+#info {
+	font-family: 'Roboto Condensed';
+	position: fixed;
+	bottom: 0;
+	padding: 20px;
+	color: #00362D;
+	right: 0;
+	text-align: right;
+}
+
+#info h3 {
+	text-transform: uppercase;
+	border-bottom: 1px solid #00362D;
+	margin: 0;
+}
+
+#info a {
+	color: #00362D;
+	text-decoration: none;
+	display: block;
+	padding: 5px;
+	border-bottom: 1px solid #FFFFFF;
+	transition: .5s;
+}
+
+#info a:hover {
+	background: #00362D;
+	color: #FFFFFF;
 }
