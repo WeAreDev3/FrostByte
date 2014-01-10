@@ -1,4 +1,4 @@
-# Goals (in order))
+# Goals (in order)
 - multiplayer
 - Fix the bloated crosshairs stuff. Some of that code belongs in the input object
 - Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
