@@ -35,9 +35,9 @@ function startGame() {
       rate: Higher is WORSE
     */
 
-    var semiAuto = ['semi-auto', 5, 30, 5, 2, 140],
-        fullAuto = ['full-auto', 8, 20, 2, 15, 100],
-        shotgun = ['shotgun', 13, 10, 7, 17, 220],
+    var semiAuto = ['semi-auto', 5, 40, 5, 2, 140],
+        fullAuto = ['full-auto', 8, 30, 2, 15, 100],
+        shotgun = ['shotgun', 13, 20, 7, 17, 220],
         playerSpecs = {
             'type': 'player',
             'name': 'Bob',
@@ -55,7 +55,7 @@ function startGame() {
             'type': 'enemy',
             'name': null,
             'hp': 50,
-            'size': 12,
+            'size': 10,
             'speed': 55,
             'mobility': 10,
             'x': null,
@@ -173,11 +173,11 @@ function draw(context) {
     clearScreen();
 
     //Step 2: Draw all items on the screen
-    player.draw();
-
     for (i = 0, len = enemies.length; i < len; i++) {
         enemies[i].draw();
     }
+
+    player.draw();
 
     for (i = 0, len = bullets.length; i < len; i++) {
         bullets[i].draw();
