@@ -1,17 +1,19 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>Top Down Shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
     <canvas id="frame">
         Sorry, your browser does not support the HTML5 Canvas Element.
     </canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io.connect('https://top-down-shooter-c9-janka102.c9.io');
+    var socket = io.connect('localhost');
     </script>
     <script src="js/class.js"></script>
     <script src="js/crosshairs.js"></script>
@@ -21,4 +23,5 @@
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
