@@ -62,7 +62,7 @@ function startGame() {
             'y': null,
             'direction': 0,
             'gun': null,
-            'color': 'rbg(0,255,0)'
+            'color': 'rbg(255,0,0)'
         };
 
     //Create the player!

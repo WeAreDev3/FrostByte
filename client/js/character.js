@@ -21,18 +21,21 @@ Character.prototype.draw = function() {
     // Draws Body
     context.fillStyle = this.color;
 
-    // Square
-    context.save();
-    context.translate(this.x, this.y);
-    context.rotate(this.direction);
-    context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
-    context.restore();
+    if (this.type == 'player') {
+        // Square
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.direction);
+        context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
+        context.restore();
+    } else {
+        // Circle
+        context.beginPath();
+        context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
+        context.fill();
+        context.closePath();
 
-    // Circle
-    // context.beginPath();
-    // context.arc(this.x, this.y, 15, 0, 2 * Math.PI, false);
-    // context.fill();
-    // context.closePath();
+    }
 
     // Draws health
     context.fillStyle = '#000';
@@ -86,6 +89,6 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgb(' + parseInt(255 * (100 - this.health) / 100) + ',' + parseInt(255 * this.health / 100) + ',0)';
+        this.color = 'rgb(' + parseInt(255 * (this.health * 2) / 200) + ',' + parseInt(255 * (100 - this.health * 2) / 200) + ',' + parseInt(255 * (100 - this.health * 2) / 200) + ')';
     }
 };
