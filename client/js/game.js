@@ -72,6 +72,7 @@ function startGame() {
     crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
 
     //defines the function that creates enemies
+
     function createEnemies(howMany) {
         for (var i = 0; i < howMany; i++) {
             enemySpecs.name = i;
