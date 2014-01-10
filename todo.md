@@ -4,7 +4,7 @@
 - make sprites final (look nice)
 
 ## game logic goals
-- make dead enemies disapear after some time (fade away?)
+- make dead enemies fade away instantly on death (bullets go through fading phase)
 
 # What do we need in the gun object?
 - Accuracy
