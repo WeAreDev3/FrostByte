@@ -1,4 +1,4 @@
-function startGame () {
+function startGame() {
     canvas = document.getElementById('frame');
     context = canvas.getContext('2d');
 
@@ -70,29 +70,18 @@ function startGame () {
 
     //Create the crosshairs!
     crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
-    /*
-    Create the enemies!
-    for (var i = 0; i < 3; i++) {
-        enemySpecs.name = i;
-        enemySpecs.x = Math.random() * canvas.width;
-        enemySpecs.y = Math.random() * canvas.height;
-        enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
-        enemySpecs.gun = create(Gun, fullAuto);
 
-        enemies.push(new Character(enemySpecs));
-    }
-    */ //mkeedlinger comment out
+    //defines the function that creates enemies
+    function createEnemies(howMany) {
+        for (var i = 0; i < howMany; i++) {
+            enemySpecs.name = i;
+            enemySpecs.x = Math.random() * canvas.width;
+            enemySpecs.y = Math.random() * canvas.height;
+            enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
+            enemySpecs.gun = create(Gun, fullAuto);
 
-    //function to create enemies    //mkeedlinger
-    function createEnemies (howMany) {
-        for (var i = 0; i < howMany ; i++){
-        enemySpecs.name = i;
-        enemySpecs.x = Math.random() * canvas.width;
-        enemySpecs.y = Math.random() * canvas.height;
-        enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
-        enemySpecs.gun = create(Gun, fullAuto);
-
-        enemies.push(new Character(enemySpecs));}
+            enemies.push(new Character(enemySpecs));
+        }
     }
 
     // actually creates enemies
@@ -103,6 +92,7 @@ function startGame () {
     console.log('Enemies:', enemies);
 
     //We use a loop to keep the entire program synchronous
+
     function startLoop() {
         var frameId = 0,
             lastFrame = Date.now(),
@@ -131,6 +121,7 @@ function startGame () {
 };
 
 //Expands the canvas to the full width and height of the browser window
+
 function initCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -151,9 +142,10 @@ enemies = [];
 /*Every frame, update will run commands and call functions to update
   the necessary game variables so that the draw function can draw them
   out properly.*/
+
 function update(timeElapsed) {
     var i;
-    
+
 
     // Can't cache the length of the arrays b/c they can change mid-loop.
     for (i = 0; i < enemies.length; i++) {
@@ -171,6 +163,7 @@ function update(timeElapsed) {
 
 /*Every frame, draw will clear the frame and redraw all
   of the onscreen elements with the updated variables.*/
+
 function draw(context) {
     var i,
         len;
@@ -194,6 +187,7 @@ function draw(context) {
 }
 
 //Record the needed keys in the input object
+
 function handleKeyDown(event) {
     switch (event.keyCode) {
         case 87: // w
@@ -212,6 +206,7 @@ function handleKeyDown(event) {
 }
 
 //Remove the keys recorded from the input object
+
 function handleKeyUp(event) {
     switch (event.keyCode) {
         case 87: // w
@@ -230,6 +225,7 @@ function handleKeyUp(event) {
 }
 
 //Record the location of the cursor in the input object
+
 function handleMouseMove(event) {
     input.mouse.x = event.x;
     input.mouse.y = event.y;
@@ -239,11 +235,13 @@ function handleMouseMove(event) {
 }
 
 //Record a mouse button press in the input object
+
 function handleMouseDown() {
     input.mouseDown = true;
 }
 
 //Record the    
+
 function handleMouseUp() {
     input.mouseDown = false;
 }
