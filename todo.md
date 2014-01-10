@@ -1,7 +1,8 @@
 # Goals (in order)
 - multiplayer
 - actual game logic (massive map or lobby style?)
-- make sprites final (look nice)
+- make sprites final (look nice):
+	- main sprite should be about 2x the sixe of the smaller ones
 
 ## game logic goals
 - make dead enemies fade away instantly on death (bullets go through fading phase)
