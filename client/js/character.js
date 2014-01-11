@@ -29,21 +29,17 @@ Character.prototype.draw = function() {
         context.rotate(this.direction);
         context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
         context.restore();
+
+        // draws health
+        context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
+        // draws name
+        context.fillText(this.name, namePositionX, namePositionY);
     } else {
         // Circle
         context.beginPath();
         context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
-    }
-
-    // Draws health
-    context.fillStyle = 'rgba(0,0,0,' + this.transparency + ')';
-    if (this.type == 'player') {
-        context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
-
-        // Draws Name
-        context.fillText(this.name, namePositionX, namePositionY);
     }
 };
 
