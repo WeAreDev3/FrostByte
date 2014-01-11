@@ -2,10 +2,6 @@ function startGame() {
     canvas = document.getElementById('frame');
     context = canvas.getContext('2d');
 
-    document.addEventListener('contextmenu', function(event) {
-        event.preventDefault();
-    }, false);
-
     initCanvas(); //Sets up the canvas so that it looks right on the screen
 
     //Event handlers, pretty straightforward stuff
@@ -15,6 +11,10 @@ function startGame() {
     window.onmousedown = handleMouseDown;
     window.onmouseup = handleMouseUp;
     window.onresize = initCanvas; //Re-set-up the canvas every time the browser is resized
+    // Disable right-click
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    }, false);
 
     //Some environment input variables, updated by the event handlers from above
     input = {
