@@ -13,7 +13,11 @@
     </canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-    var socket = io.connect('localhost');
+    var socket = io.connect('/');
+    socket.on('onconnected', function(data) {
+        // Note that the data is the object we sent from the server, as is. So we can assume its id exists. 
+        console.log('Connected successfully to the socket.io server. My server side ID is ' + data.id);
+    });
     </script>
     <script src="js/class.js"></script>
     <script src="js/crosshairs.js"></script>

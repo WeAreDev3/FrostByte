@@ -22,13 +22,26 @@ var io = socketio.listen(server);
 router.use(express.static(path.resolve(__dirname, 'client')));
 var sockets = [];
 
+io.configure(function() {
+
+    io.set('log level', 0);
+
+    io.set('authorization', function(handshakeData, callback) {
+        callback(null, true); // error first callback style
+    });
+
+});
+
 io.on('connection', function(socket) {
-    console.log('Client connected', socket);
+    console.log('Client connected:', socket.id);
+    socket.emit('onconnected', {
+        id: socket.id
+    });
     sockets.push(socket);
 
     socket.on('disconnect', function() {
         sockets.splice(sockets.indexOf(socket), 1);
-        console.log('Client disconnected', socket);
+        console.log('Client disconnected:', socket.id);
     });
 });
 
