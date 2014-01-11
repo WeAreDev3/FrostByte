@@ -1,10 +1,32 @@
-# Top Down Shooter
+#Top Down Shooter
 
-Here are the current dynamics of the game (subject to change):
-- The player(s) will eliminate waves of enemies incoming from all directions, and each wave will get progressively more difficult
-- The player will be highly customizable; they may have attributes which can be ‘upgradeable’ by earning points from defeating waves
-- By requesting to join a lobby, the character can play online with other players
-- The player’s gun will have several attributes:
-    - The type of weapon can be selected: semi-auto, full-auto, or shotgun (and maybe 3-round burst?)
-    - By determining the type of weapon, the gun’s accuracy, damage, kick, bullet speed, and the rate of fire
-    - The gun will have unlimited ‘clips’, but will be limited by the size of the clip
+##Goals
+
+###Game Logic
+- Multiplayer!
+- Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
+- Lobbies
+
+###Game Efficiency
+- Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
+- Some of the crosshair logic can be moved into the mouse input object.
+
+###Game Aesthetics
+- Create sprites
+
+### Proposed class system by janka102:
+ - Entity
+    - Character
+        - Player
+        - Other Players in Lobby
+        - Enemy/Mob
+	    - Item
+	        - Gun
+	        - Inventory
+	        - Currency
+    - Bullet
+    - Wall/Barrier
+
+##Bugs
+- Homescreen animations fail in Chrome.
+- Game struggles to render in Firefox (due to cursor logic).
