@@ -30,18 +30,18 @@ function startGame() {
     };
 
     var playerSpecs = {
-            'type': 'player',
-            'name': 'ME :)',
-            'hp': 100,
-            'size': 12,
-            'speed': 100,
-            'mobility': 10,
-            'x': canvas.width / 2,
-            'y': canvas.height / 2,
-            'direction': Math.PI / 2,
-            'gun': create(Gun, 'shotgun'),
-            'color': '#4D90FE'
-        },
+        'type': 'player',
+        'name': 'ME :)',
+        'hp': 100,
+        'size': 12,
+        'speed': 100,
+        'mobility': 10,
+        'x': canvas.width / 2,
+        'y': canvas.height / 2,
+        'direction': Math.PI / 2,
+        'gun': create(Gun, 'full-auto'),
+        'color': '#4D90FE'
+    },
         enemySpecs = {
             'type': 'enemy',
             'name': null,
@@ -221,7 +221,7 @@ function handleKeyUp(event) {
 function handleMouseMove(event) {
     input.mouse.x = event.pageX;
     input.mouse.y = event.pageY;
-    
+
     cursor.style.left = (event.pageX - cursor.width / 2).toString(10) + 'px';
     cursor.style.top = (event.pageY - cursor.height / 2).toString(10) + 'px';
 }
