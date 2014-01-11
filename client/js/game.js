@@ -215,11 +215,11 @@ function handleKeyUp(event) {
 //Record the location of the cursor in the input object
 
 function handleMouseMove(event) {
-    input.mouse.x = event.x;
-    input.mouse.y = event.y;
-
-    cursor.style.left = event.x - cursor.width / 2 + 'px';
-    cursor.style.top = event.y - cursor.height / 2 + 'px';
+    input.mouse.x = event.pageX;
+    input.mouse.y = event.pageY;
+    
+    cursor.style.left = (event.pageX - cursor.width / 2).toString(10) + 'px';
+    cursor.style.top = (event.pageY - cursor.height / 2).toString(10) + 'px';
 }
 
 //Record a mouse button press in the input object
