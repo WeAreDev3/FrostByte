@@ -25,20 +25,7 @@ function startGame() {
         'mouseDown': false
     };
 
-    /*
-      (In order)
-      type: Name of gun
-      accuracy: Higher is WORSE
-      damage: Higher is BETTER
-      kick: Higher is WORSE
-      bulletSpeed: Higher is BETTER
-      rate: Higher is WORSE
-    */
-
-    var semiAuto = ['semi-auto', 5, 40, 5, 15, 140],
-        fullAuto = ['full-auto', 8, 30, 2, 15, 100],
-        shotgun = ['shotgun', 13, 20, 7, 17, 220],
-        playerSpecs = {
+    var playerSpecs = {
             'type': 'player',
             'name': 'Bob',
             'hp': 100,
@@ -48,7 +35,7 @@ function startGame() {
             'x': canvas.width / 2,
             'y': canvas.height / 2,
             'direction': Math.PI / 2,
-            'gun': create(Gun, shotgun),
+            'gun': create(Gun, 'shotgun'),
             'color': '#4D90FE'
         },
         enemySpecs = {
@@ -79,7 +66,7 @@ function startGame() {
             enemySpecs.x = Math.random() * canvas.width;
             enemySpecs.y = Math.random() * canvas.height;
             enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
-            enemySpecs.gun = create(Gun, fullAuto);
+            enemySpecs.gun = create(Gun, 'full-auto');
 
             enemies.push(new Character(enemySpecs));
         }
@@ -130,7 +117,7 @@ function initCanvas() {
 
 function create(constructor, args) {
     function F() {
-        return constructor.apply(this, args);
+        return constructor.call(this, args);
     }
     F.prototype = constructor.prototype;
     return new F();
