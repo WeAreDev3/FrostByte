@@ -31,7 +31,7 @@ Character.prototype.draw = function() {
         context.restore();
 
         // draws health
-        context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
+        // context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
         // draws name
         context.fillText(this.name, namePositionX, namePositionY);
     } else {
