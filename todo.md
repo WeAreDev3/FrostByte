@@ -9,14 +9,6 @@
 ## game logic goals
 - make dead enemies fade away instantly on death (bullets go through fading phase)
 
-## What do we need in the gun object?
-- Accuracy
-- ~~Kick~~
-- ~~Damage~~
-- ~~Bullet Speed~~
-- ~~Rate of fire~~
-- ~~Type (Semi-Auto, Auto, Shotgun)~~
-
 ## Proposed class system by janka102:
  - Entity
     - Character
