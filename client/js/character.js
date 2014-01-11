@@ -47,6 +47,8 @@ Character.prototype.draw = function() {
 };
 
 Character.prototype.update = function(timeElapsed) {
+    var damageDone = 100 - this.health;
+    
     if (this.type === 'player') {
         if (input.w) { // Up (Press W)
             this.y -= this.speed * timeElapsed;
@@ -89,6 +91,6 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgb(' + parseInt(255 * (this.health * 2) / 200) + ',' + parseInt(255 * (100 - this.health * 2) / 200) + ',' + parseInt(255 * (100 - this.health * 2) / 200) + ')';
+        this.color = 'rgb(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ')';
     }
 };
