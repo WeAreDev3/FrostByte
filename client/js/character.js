@@ -92,5 +92,17 @@ Character.prototype.update = function(timeElapsed) {
         }
 
         this.color = 'rgb(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ')';
+
+Character.prototype.hit = function(damage) {
+    this.health -= damage;
+
+    if (this.health <= 0) {
+        this.kill();
     }
+};
+
+Character.prototype.kill = function() {
+    this.health = 0;
+    this.speed = 0;
+    this.mobility = 0;
 };

@@ -41,19 +41,8 @@ Bullet.prototype.update = function(timeElapsed) {
         var distanceFromBulletLine = Math.sqrt(Math.pow((enemies[i].x - intersection[0]), 2) + Math.pow((enemies[i].y - intersection[1]), 2)),
             isIntersectionOnBullet = this.x2 > this.prevX ? intersection[0] > this.prevX && intersection[0] < this.x2 : intersection[0] < this.prevX && intersection[0] > this.x2;
 
-        if (distanceFromBulletLine <= enemies[i].size && isIntersectionOnBullet) {
-            debugger;
-
-            // Hit
-            enemies[i].health -= this.gun.damage;
-
-            // Kill
-            if (enemies[i].health <= 0) {
-                enemies[i].health = 0;
-                enemies[i].speed = 0;
-                enemies[i].mobility = 0;
-            }
-
+        if (distanceFromBulletLine <= enemies[i].size && isIntersectionOnBullet && enemies[i].health > 0) {
+            enemies[i].hit(this.gun.damage);
             bullets.splice(bullets.indexOf(this), 1);
             return;
         }
