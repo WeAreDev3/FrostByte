@@ -35,7 +35,7 @@ function startGame() {
       rate: Higher is WORSE
     */
 
-    var semiAuto = ['semi-auto', 5, 40, 5, 2, 140],
+    var semiAuto = ['semi-auto', 5, 40, 5, 15, 140],
         fullAuto = ['full-auto', 8, 30, 2, 15, 100],
         shotgun = ['shotgun', 13, 20, 7, 17, 220],
         playerSpecs = {
@@ -48,7 +48,7 @@ function startGame() {
             'x': canvas.width / 2,
             'y': canvas.height / 2,
             'direction': Math.PI / 2,
-            'gun': create(Gun, fullAuto),
+            'gun': create(Gun, shotgun),
             'color': '#4D90FE'
         },
         enemySpecs = {
@@ -86,7 +86,7 @@ function startGame() {
     }
 
     // actually creates enemies
-    createEnemies(5);
+    createEnemies(10);
 
     console.log(player);
     console.log(crosshairs);
