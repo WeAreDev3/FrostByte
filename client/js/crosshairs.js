@@ -14,6 +14,7 @@ Crosshairs = function(x, y, character) {
     var curs = document.createElement('img');
     curs.src = 'img/crosshairs.png';
     curs.id = 'cursor';
+    curs.ondragstart = (function(){return false});
     curs.draggable = false;
     document.getElementsByTagName('body')[0].appendChild(curs);
 
