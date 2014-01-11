@@ -12,6 +12,7 @@ Character = function(specs) {
     this.gun = specs.gun;
     this.gun.character = this;
     this.color = specs.color;
+    this.transparency = 1;
 };
 
 Character.prototype.draw = function() {
@@ -38,17 +39,16 @@ Character.prototype.draw = function() {
     }
 
     // Draws health
-    context.fillStyle = '#000';
+    context.fillStyle = 'rgba(0,0,0,' + this.transparency + ')';
     context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
 
     // Draws Name
-    context.fillStyle = '#000';
     context.fillText(this.name, namePositionX, namePositionY);
 };
 
 Character.prototype.update = function(timeElapsed) {
     var damageDone = 100 - this.health;
-    
+
     if (this.type === 'player') {
         if (input.w) { // Up (Press W)
             this.y -= this.speed * timeElapsed;
@@ -91,7 +91,16 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgb(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ')';
+        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + this.transparency + ')';
+
+        if (this.health <= 0) {
+            this.transparency -= timeElapsed * 2;
+        }
+        if (this.transparency <= 0) {
+            enemies.splice(enemies.indexOf(this), 1);
+        }
+    }
+};
 
 Character.prototype.hit = function(damage) {
     this.health -= damage;
