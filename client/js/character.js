@@ -35,15 +35,16 @@ Character.prototype.draw = function() {
         context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
-
     }
 
     // Draws health
     context.fillStyle = 'rgba(0,0,0,' + this.transparency + ')';
-    context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
+    if (this.type == 'player') {
+        context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
 
-    // Draws Name
-    context.fillText(this.name, namePositionX, namePositionY);
+        // Draws Name
+        context.fillText(this.name, namePositionX, namePositionY);
+    }
 };
 
 Character.prototype.update = function(timeElapsed) {
