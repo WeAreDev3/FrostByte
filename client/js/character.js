@@ -30,6 +30,7 @@ Character.prototype.draw = function() {
         context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
         context.restore();
 
+        context.fillStyle = '#000';
         // draws health
         context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
         // draws name
