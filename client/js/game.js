@@ -27,7 +27,7 @@ function startGame() {
 
     var playerSpecs = {
             'type': 'player',
-            'name': 'Bob',
+            'name': 'ME :)',
             'hp': 100,
             'size': 12,
             'speed': 100,
@@ -73,7 +73,7 @@ function startGame() {
     }
 
     // actually creates enemies
-    createEnemies(10);
+    createEnemies(100);
 
     console.log(player);
     console.log(crosshairs);
