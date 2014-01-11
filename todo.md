@@ -8,6 +8,7 @@
 
 ## game logic goals
 - make dead enemies fade away instantly on death (bullets go through fading phase)
+- Add enemy hit and kill functions from bullet.js
 
 ## What do we need in the gun object?
 - Accuracy
