@@ -2,6 +2,10 @@ function startGame() {
     canvas = document.getElementById('frame');
     context = canvas.getContext('2d');
 
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    }, false);
+
     initCanvas(); //Sets up the canvas so that it looks right on the screen
 
     //Event handlers, pretty straightforward stuff
