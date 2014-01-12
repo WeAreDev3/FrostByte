@@ -1,23 +1,11 @@
-//
-// # SimpleServer
-//
-// A simple server using Socket.IO, Express, and Async.
-//
-var http = require('http');
-var path = require('path');
-
-var socketio = require('socket.io');
-var express = require('express');
-
-//
-// ## SimpleServer `SimpleServer(obj)`
-//
-// Creates a new instance of SimpleServer with the following options:
-//  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
-//
-var router = express();
-var server = http.createServer(router);
-var io = socketio.listen(server);
+var http = require('http'),
+    path = require('path'),
+    socketio = require('socket.io'),
+    express = require('express'),
+    lobby = require('./server/lobby')
+    router = express(),
+    server = http.createServer(router),
+    io = socketio.listen(server);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 
@@ -37,6 +25,8 @@ io.on('connection', function(client) {
     client.emit('onconnected', {
         id: client.id
     });
+
+    lobby.join(client);
 
     client.on('input', function(input) {
         console.log(client.id, input);
