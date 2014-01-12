@@ -3,13 +3,13 @@ var Character = require('./character');
 var Game = function() {
     this.width = 1600;
     this.height = 1000;
-    this.players = [];
+    this.players = {};
 
     this.startLoop();
 };
 
 Game.prototype.addChar = function(client) {
-    this.players.push(new Character(client));
+    this.players[client.id] = new Character(client);
 };
 
 Game.prototype.startLoop = function() {
@@ -24,10 +24,23 @@ Game.prototype.startLoop = function() {
 
     function serveUpdate(timeElapsed) {
         //Serve the update to the clients
-        for (var i = self.players.length - 1; i >= 0; i--) {
-            // self.players[i].client.emit('update', {
-            //     'players': self.players
-            // });
+        var update = {};
+
+
+        for (var player in self.players) {
+            if (self.players.hasOwnProperty(player)) {
+                update[player] = [];
+                update[player].push(self.players[player].x);
+                update[player].push(self.players[player].y);
+            }
+        }
+
+        for (var player in self.players) {
+            if (self.players.hasOwnProperty(player)) {
+                self.players[player].client.emit('update', {
+                    'u': update
+                });
+            }
         }
     }
 

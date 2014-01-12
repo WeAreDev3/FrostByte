@@ -59,6 +59,8 @@ function startGame() {
     //Create the player!
     player = new Character(playerSpecs);
 
+    otherPlayers = {};
+
     //Create the crosshairs!
     crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
 
@@ -169,6 +171,12 @@ function draw(context) {
     }
 
     player.draw();
+
+    for (var others in otherPlayers) {
+        if (otherPlayers.hasOwnProperty(others)) {
+            otherPlayers[others].draw();
+        }
+    }
 
     for (i = 0, len = bullets.length; i < len; i++) {
         bullets[i].draw();
