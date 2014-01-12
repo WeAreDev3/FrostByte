@@ -1,68 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<hea>
     <title>Top Down Shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
-</head>
+    </head>
 
-<body>
-    <canvas id="frame">
-        Sorry, your browser does not support the HTML5 Canvas Element.
-    </canvas>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="js/polyfill.js"></script>
-    <script type="text/javascript" src="js/class.js"></script>
-    <script type="text/javascript" src="js/crosshairs.js"></script>
-    <script type="text/javascript" src="js/character.js"></script>
-    <script type="text/javascript" src="js/gun.js"></script>
-    <script type="text/javascript" src="js/bullet.js"></script>
-    <script type="text/javascript" src="js/game.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
-
-    <script>
-    var otherPlayersStates = {
-        'type': 'player',
-        'name': 'others',
-        'hp': 100,
-        'size': 12,
-        'speed': 100,
-        'mobility': 10,
-        'x': 200,
-        'y': 200,
-        'direction': Math.PI / 2,
-        'gun': create(Gun, 'full-auto'),
-        'color': '#90FE4D'
-    };
-
-    socket = io.connect('/');
-    socket.on('onconnected', function(data) {
-        console.log('Connected successfully to the socket.io server. My server-side ID is ' + data.id);
-    });
-
-    socket.on('joinedGame', function(data) {
-        console.log('Joined the lobby:' + data.id);
-        player.id = data.id;
-    });
-
-    socket.on('update', function(data) {
-        // console.log(data.u);
-        for (var userID in data.u) {
-            // console.log(userID);
-            if (data.hasOwnProperty(userID) && userID !== player.id) {
-                console.log('new player:', data[userID]);
-                if (!otherPlayers[userID]) {
-                    console.log('new new player');
-                    otherPlayers[userID] = new Character(otherPlayersStates);
-                }
-
-                otherPlayers[userID].x = data[userID].x;
-                otherPlayers[userID].y = data[userID].y;
-            }
-        }
-    });
-    </script>
-</body>
+    <body>
+        <canvas id="frame">
+            Sorry, your browser does not support the HTML5 Canvas Element.
+        </canvas>
+        <!-- Required for websocket to work -->
+        <script src="/socket.io/socket.io.js"></script>
+        <!-- Our polyfills -->
+        <script src="js/polyfill.js"></script>
+        <!-- John Resig's JS Inheritance Model -->
+        <script src="js/class.js"></script>
+        <!-- Game objects and entities -->
+        <script src="js/crosshairs.js"></script>
+        <script src="js/character.js"></script>
+        <script src="js/gun.js"></script>
+        <script src="js/bullet.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/main.js"></script>
+        <!-- Connecting to the server -->
+        <script src="js/socket.js"></script>
+    </body>
 
 </html>
