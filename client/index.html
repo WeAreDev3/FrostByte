@@ -11,16 +11,20 @@
     <canvas id="frame">
         Sorry, your browser does not support the HTML5 Canvas Element.
     </canvas>
-    
-    <script src="/socket.io/socket.io.js"></script> 
+    <!-- Required for websocket to work -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Our polyfills -->
     <script type="text/javascript" src="js/polyfill.js"></script>
+    <!-- John Resig's JS Inheritance Model -->
     <script type="text/javascript" src="js/class.js"></script>
+    <!-- Game objects and entities -->
     <script type="text/javascript" src="js/crosshairs.js"></script>
     <script type="text/javascript" src="js/character.js"></script>
     <script type="text/javascript" src="js/gun.js"></script>
     <script type="text/javascript" src="js/bullet.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <!-- Connecting to the server -->
     <script type="text/javascript" src="js/socket.js"></script>
 </body>
 
