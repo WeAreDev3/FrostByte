@@ -70,8 +70,9 @@ Character.prototype.update = function(timeElapsed) {
         }
 
         if (inputs.move.length) {
-            // console.log('sending input:', inputs.move.join(''));
-            socket.send('i' + inputs.move.join(''));
+            inputs.move = inputs.move.join(',')
+            // console.log('sending input:', inputs.move);
+            socket.send('i' + inputs.move);
         }
 
         this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;

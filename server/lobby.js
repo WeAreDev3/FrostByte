@@ -26,9 +26,7 @@ Lobby.prototype.join = function(client) {
 
 Lobby.prototype.onMessage = function(client, message) {
     var command = message[0],
-        parameters = message.substring(1, message.length).split('');
-
-    // console.log('command:', command, 'parameters:', parameters);
+        parameters = message.substring(1, message.length).split(',');
 
     switch (command) {
         case 'i': // input
