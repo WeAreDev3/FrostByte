@@ -8,21 +8,21 @@
 var types = {
     'semi-auto': {
         'accuracy': 5,
-        'damage': 40, 
+        'damage': 40,
         'kick': 5,
         'bulletSpeed': 15,
         'rate': 140
     },
     'full-auto': {
         'accuracy': 8,
-        'damage': 30, 
+        'damage': 30,
         'kick': 2,
         'bulletSpeed': 15,
         'rate': 100
     },
     'shotgun': {
         'accuracy': 13,
-        'damage': 20, 
+        'damage': 20,
         'kick': 7,
         'bulletSpeed': 17,
         'rate': 220
@@ -41,6 +41,7 @@ var Gun = function(type) {
     this.character = null;
 };
 
+// Just comment out for now so i dont have get bullet working yet also
 // Gun.prototype.fire = function() {
 //     if (this.timeSinceLastFire >= this.rate) {
 //         this.timeSinceLastFire -= this.rate;
