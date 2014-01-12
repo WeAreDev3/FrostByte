@@ -77,7 +77,7 @@ function startGame() {
     }
 
     // actually creates enemies
-    createEnemies(100);
+    createEnemies(5);
 
     console.log(player);
     console.log(crosshairs);

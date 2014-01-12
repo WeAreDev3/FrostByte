@@ -45,20 +45,33 @@ Character.prototype.draw = function() {
 };
 
 Character.prototype.update = function(timeElapsed) {
-    var damageDone = 100 - this.health;
+    var damageDone = 100 - this.health,
+        inputs = {
+            'move': [],
+            'mouse': {}
+        };
 
     if (this.type === 'player') {
         if (input.w) { // Up (Press W)
             this.y -= this.speed * timeElapsed;
+            inputs.move.push('u');
         }
         if (input.s) { // Down (Press S)
             this.y += this.speed * timeElapsed;
+            inputs.move.push('d');
         }
         if (input.a) { // Left (Press A)
             this.x -= this.speed * timeElapsed;
+            inputs.move.push('l');
         }
         if (input.d) { // Right (Press D)
             this.x += this.speed * timeElapsed;
+            inputs.move.push('r');
+        }
+
+        if (inputs.move.length) {
+            // console.log('sending input:', inputs.move.join(''));
+            socket.send('i' + inputs.move.join(''));
         }
 
         this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;

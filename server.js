@@ -28,8 +28,12 @@ io.on('connection', function(client) {
 
     lobby.join(client);
 
-    client.on('input', function(input) {
-        console.log(client.id, input);
+    client.on('message', function(message) {
+        var playerLobby = lobby.findPlayer(client);
+
+        if (playerLobby) {
+            playerLobby.onMessage(client, message);
+        }
     });
 
     client.on('disconnect', function() {
