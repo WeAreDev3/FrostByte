@@ -46,6 +46,7 @@ button#play {
 	transition: background .5s, color .5s;
 	animation: play-button-start 2s;
 	-webkit-animation: play-button-start 2s;
+	outline: none;
 }
 
 /*Make it look awesome on hover*/
