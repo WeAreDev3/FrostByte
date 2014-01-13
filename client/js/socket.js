@@ -38,4 +38,10 @@ socket.on('update', function(data) {
             otherPlayers[userID].y = data[userID][1];
         }
     }
+
+    for (userID in otherPlayers) {
+        if (otherPlayers.hasOwnProperty(userID) && !userID in data) {
+            delete otherPlayers[userID];
+        }
+    }
 });
