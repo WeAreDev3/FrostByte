@@ -50,6 +50,7 @@ io.on('connection', function(client) {
     client.on('disconnect', function() {
         // Log the client's disconnection w/ ID to the console
         console.log('Client disconnected:', client.id);
+        lobby.findPlayer(client).leave(client);
     });
 });
 

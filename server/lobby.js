@@ -34,6 +34,8 @@ Lobby.prototype.leave = function(client) {
     this.clients.splice(this.clients.indexOf(client.id), 1);
     // Remove the client's character from the game
     this.game.removeChar(client);
+
+    console.log('Removed', client.id, 'from lobby', this.id);
 };
 
 // Handle the different messages that clients send to the lobby
