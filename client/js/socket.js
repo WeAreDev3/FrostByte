@@ -36,6 +36,14 @@ socket.on('update', function(data) {
 
             otherPlayers[userID].x = data[userID][0];
             otherPlayers[userID].y = data[userID][1];
+            otherPlayers[userID].name = userID;
+        }
+    }
+
+    for (userID in otherPlayers) {
+        if (otherPlayers.hasOwnProperty(userID) && !(userID in data)) {
+            console.log('user deleted:', userID);
+            delete otherPlayers[userID];
         }
     }
 });
