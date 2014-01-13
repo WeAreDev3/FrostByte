@@ -28,7 +28,6 @@
     - Wall/Barrier
 
 ##Bugs
-- Homescreen animations fail in Chrome.
 - Game struggles to render in Firefox (due to cursor logic).
 - Enemies disappear off-screen when game is offscreen.
 - WASD sometimes sticks. No pattern found yet.
