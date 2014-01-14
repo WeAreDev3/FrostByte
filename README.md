@@ -28,7 +28,4 @@
     - Wall/Barrier
 
 ## Bugs
-- Homescreen animations fail in Chrome.
-- Game struggles to render in Firefox (due to cursor logic).
-- Enemies disappear off-screen when game is offscreen.
-- WASD sometimes sticks. No pattern found yet.
+Can now be found at http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues
