@@ -1,8 +1,8 @@
-#Top Down Shooter
+# Top Down Shooter
 
-##Goals
+## Goals
 
-###Game Logic
+### Game Logic
 - Multiplayer:
     - ~Get each player to show up on the other player's screen~
     - Get each player's position to accurately reflect their position
@@ -11,13 +11,13 @@
 - Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
 - Lobbies
 
-###Game Efficiency & Organization
+### Game Efficiency & Organization
 - Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
 - Some of the crosshair logic can be moved into the mouse input object.
 - Move the onMessage switch handler from the lobby class to the game class.
 - The onMessage switch handler needs to be 
 
-###Game Aesthetics
+### Game Aesthetics
 - Create sprites
 
 ### Proposed class system by janka102:
@@ -33,7 +33,7 @@
     - Bullet
     - Wall/Barrier
 
-##Bugs
+## Bugs
 - Homescreen animations fail in Chrome.
 - Game struggles to render in Firefox (due to cursor logic).
 - Enemies disappear off-screen when game is offscreen.
