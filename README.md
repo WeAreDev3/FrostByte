@@ -4,7 +4,7 @@
 
 ### Game Logic
 - Multiplayer:
-    - ~Get each player to show up on the other player's screen~
+    - ~~Get each player to show up on the other player's screen~~
     - Get each player's position to accurately reflect their position
         - Make each client have a 16:10 aspect ratio
         - Make each client send data based on a 1600x1000 screen
