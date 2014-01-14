@@ -1,17 +1,17 @@
-#Top Down Shooter
+# Top Down Shooter
 
-##Goals
+## Goals
 
-###Game Logic
+### Game Logic
 - Multiplayer!
 - Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
 - Lobbies
 
-###Game Efficiency
+### Game Efficiency
 - Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
 - Some of the crosshair logic can be moved into the mouse input object.
 
-###Game Aesthetics
+### Game Aesthetics
 - Create sprites
 
 ### Proposed class system by janka102:
@@ -27,7 +27,7 @@
     - Bullet
     - Wall/Barrier
 
-##Bugs
+## Bugs
 - Homescreen animations fail in Chrome.
 - Game struggles to render in Firefox (due to cursor logic).
 - Enemies disappear off-screen when game is offscreen.
