@@ -16,8 +16,12 @@ Character = function(specs) {
 };
 
 Character.prototype.draw = function() {
-    var namePositionX = this.x - (context.measureText(this.name).width / 2),
-        namePositionY = this.y + (this.size * 2);
+    var x = this.x * scale,
+        y = this.y * scale,
+        size = this.size * scale;
+
+    var namePositionX = x - (context.measureText(this.name).width / 2),
+        namePositionY = y + (size * 2);
 
     // Draws Body
     context.fillStyle = this.color;
@@ -25,20 +29,18 @@ Character.prototype.draw = function() {
     if (this.type == 'player') {
         // Square
         context.save();
-        context.translate(this.x, this.y);
+        context.translate(x, y);
         context.rotate(this.direction);
-        context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
+        context.fillRect(-1 * size, -1 * size, size * 2, size * 2);
         context.restore();
 
         context.fillStyle = '#000';
-        // draws health
-        // context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
-        // draws name
+        context.font = 'normal ' + this.size * scale + 'pt Roboto'
         context.fillText(this.name, namePositionX, namePositionY);
     } else {
         // Circle
         context.beginPath();
-        context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
+        context.arc(x, y, size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
     }
@@ -95,7 +97,7 @@ Character.prototype.update = function(timeElapsed) {
         this.x += this.speed * Math.cos(this.direction) * timeElapsed;
         this.y += this.speed * Math.sin(this.direction) * timeElapsed;
 
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        if (this.x < 0 || this.x > 1600 || this.y < 0 || this.y > 1000) {
             this.direction += Math.PI;
         }
 
