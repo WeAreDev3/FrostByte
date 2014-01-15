@@ -23,8 +23,10 @@ function startGame() {
         's': false,
         'd': false,
         'mouse': {
-            'x': canvas.width / 2,
-            'y': canvas.height / 2
+            'x': 800,
+            'y': 500,
+            'drawnX': 800 * scale,
+            'drawnY': 500 * scale
         },
         'mouseDown': false
     };
@@ -36,8 +38,8 @@ function startGame() {
         'size': 12,
         'speed': 100,
         'mobility': 10,
-        'x': canvas.width / 2,
-        'y': canvas.height / 2,
+        'x': 800,
+        'y': 500,
         'direction': Math.PI / 2,
         'gun': create(Gun, 'full-auto'),
         'color': '#4D90FE'
@@ -62,15 +64,15 @@ function startGame() {
     otherPlayers = {};
 
     //Create the crosshairs!
-    crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
+    crosshairs = new Crosshairs(800, 500, player);
 
     //defines the function that creates enemies
 
     function createEnemies(howMany) {
         for (var i = 0; i < howMany; i++) {
             enemySpecs.name = i;
-            enemySpecs.x = Math.random() * canvas.width;
-            enemySpecs.y = Math.random() * canvas.height;
+            enemySpecs.x = Math.random() * 1600;
+            enemySpecs.y = Math.random() * 1000;
             enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
             enemySpecs.gun = create(Gun, 'full-auto');
 
@@ -226,11 +228,14 @@ function handleKeyUp(event) {
 //Record the location of the cursor in the input object
 
 function handleMouseMove(event) {
-    input.mouse.x = event.pageX;
-    input.mouse.y = event.pageY;
+    input.mouse.x = event.pageX - leftOff;
+    input.mouse.y = event.pageY - topOff;
 
-    cursor.style.left = (event.pageX - cursor.width / 2 + leftOff).toString(10) + 'px';
-    cursor.style.top = (event.pageY - cursor.height / 2 + topOff).toString(10) + 'px';
+    cursor.style.left = (event.pageX - cursor.width / 2).toString(10) + 'px';
+    cursor.style.top = (event.pageY - cursor.height / 2).toString(10) + 'px';
+
+    input.mouse.drawnX = input.mouse.x / scale;
+    input.mouse.drawnY = input.mouse.y / scale;
 }
 
 //Record a mouse button press in the input object
@@ -246,5 +251,5 @@ function handleMouseUp() {
 }
 
 function clearScreen() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, 1600 * scale, 1000 * scale);
 }
