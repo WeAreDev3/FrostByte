@@ -56,9 +56,9 @@ socket.on('update', function(data) {
                 'character': {
                     'x': data.bullets[i].x,
                     'y': data.bullets[i].y,
-                    'size': data.bullets[i].size,
-                    'damage': data.bullets[i].damage
-                }
+                    'size': data.bullets[i].size
+                },
+                'damage': data.bullets[i].damage
             },
             data.bullets[i].speed,
             data.bullets[i].direction
