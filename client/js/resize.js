@@ -3,7 +3,6 @@ function resizeBrowser() {
     var width = window.innerWidth,
         height = window.innerHeight;
 
-
     if (width / height >= 1.6) {
         width = height * 1.6;
     } else {
