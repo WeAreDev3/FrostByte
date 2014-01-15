@@ -34,6 +34,9 @@ Crosshairs.prototype.draw = function() {
     context.strokeStyle = '#FE634D';
     context.stroke();
     context.closePath();
+
+    cursor.width = (this.size + 3) * scale * 2;
+    cursor.height = cursor.width;
 };
 
 Crosshairs.prototype.update = function(timeElapsed) {
