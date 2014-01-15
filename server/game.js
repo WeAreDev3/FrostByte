@@ -28,7 +28,7 @@ Game.prototype.removeChar = function(client) {
     delete this.players[client.id];
 };
 
-Game.prototype.addBullet = function(x, y, size, damage, speed, direction) {
+Game.prototype.addBullet = function(x, y, size, damage, speed, direction, playerId) {
     this.bullets.push({
         'sent': false,
         'x': parseFloat(x).toFixed(3),
@@ -36,7 +36,8 @@ Game.prototype.addBullet = function(x, y, size, damage, speed, direction) {
         'size': parseInt(size),
         'speed': parseInt(speed),
         'damage': parseInt(damage),
-        'direction': parseFloat(direction).toFixed(7)
+        'direction': parseFloat(direction).toFixed(2),
+        'playerId': playerId
     });
 };
 
