@@ -35,9 +35,7 @@ Character.prototype.draw = function() {
         context.restore();
 
         context.fillStyle = '#000';
-        // draws health
-        // context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
-        // draws name
+        context.font = 'normal ' + this.size * scale + 'pt Roboto'
         context.fillText(this.name, namePositionX, namePositionY);
     } else {
         // Circle
