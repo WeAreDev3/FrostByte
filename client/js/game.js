@@ -117,8 +117,7 @@ function startGame() {
 //Expands the canvas to the full width and height of the browser window
 
 function initCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    resizeBrowser();
 }
 
 function create(constructor, args) {
