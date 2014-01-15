@@ -99,7 +99,7 @@ Character.prototype.update = function(timeElapsed) {
         this.x += this.speed * Math.cos(this.direction) * timeElapsed;
         this.y += this.speed * Math.sin(this.direction) * timeElapsed;
 
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        if (this.x < 0 || this.x > 1600 || this.y < 0 || this.y > 1000) {
             this.direction += Math.PI;
         }
 
