@@ -52,13 +52,13 @@ Gun.prototype.fire = function() {
                 if (!this.wasFired) {
                     this.wasFired = true;
                     new Bullet(this, this.bulletSpeed, this.character.direction);
-                    command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction;
+                    command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
                     crosshairs.kickCounter++;
                 }
                 break;
             case 'full-auto':
                 new Bullet(this, this.bulletSpeed, this.character.direction);
-                command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction;
+                command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
                 crosshairs.kickCounter++;
                 break;
             case 'shotgun':
@@ -66,7 +66,7 @@ Gun.prototype.fire = function() {
                     this.wasFired = true;
                     for (var i = 0; i < 15; i++) {
                         new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
-                        command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction;
+                        command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
                     }
                     crosshairs.kickCounter++;
                 }
