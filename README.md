@@ -11,12 +11,6 @@
 - Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
 - Lobbies
 
-### Game Efficiency & Organization
-- Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
-- Some of the crosshair logic can be moved into the mouse input object.
-- Move the onMessage switch handler from the lobby class to the game class.
-- The onMessage switch handler needs to be 
-
 ### Game Aesthetics
 - Create sprites
 
