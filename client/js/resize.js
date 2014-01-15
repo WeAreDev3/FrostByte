@@ -11,5 +11,8 @@ function resizeBrowser() {
         canvas.height = width / 1.6;
     }
 
+    leftOff = canvas.offsetLeft;
+    topOff = canvas.offsetTop;
+
     scale = height / 1000;
 }
