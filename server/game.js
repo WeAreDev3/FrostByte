@@ -11,6 +11,8 @@ var Game = function() {
     // An object containing all of the players in the game
     this.players = {};
 
+    this.bullets = [];
+
     // Start the game loop
     this.startLoop();
 };
@@ -26,6 +28,18 @@ Game.prototype.removeChar = function(client) {
     delete this.players[client.id];
 };
 
+Game.prototype.addBullet = function(x, y, size, damage, speed, direction) {
+    this.bullets.push({
+        'sent': false,
+        'x': parseFloat(x).toFixed(3),
+        'y': parseFloat(y).toFixed(3),
+        'size': parseInt(size),
+        'speed': parseInt(speed),
+        'damage': parseInt(damage),
+        'direction': parseFloat(direction).toFixed(7)
+    });
+};
+
 // Start the synchronized game loop
 Game.prototype.startLoop = function() {
     var lastFrame = 0, // Initialize the game loop
@@ -33,25 +47,38 @@ Game.prototype.startLoop = function() {
         self = this; // Capture the game object for usage below
 
     // Update the physics of the game
-    function physUpdate(timeElapsed) {
-    }
+
+    function physUpdate(timeElapsed) {}
 
     // Serve the updated game to the clients
+
     function serveUpdate(timeElapsed) {
         // The object containing the information the clients use to update
-        var update = {};
+        var update = {
+            'players': {},
+            'bullets': []
+        };
 
         // For each player,
         for (var player in self.players) {
             if (self.players.hasOwnProperty(player)) {
                 // Add their array to the update object
-                update[player] = [];
-                // Add their x and y position to their array
-                update[player].push(self.players[player].x);
-                update[player].push(self.players[player].y);
+                update.players[player] = [];
+                // Add their x and y position and direction to their array
+                update.players[player].push(self.players[player].x);
+                update.players[player].push(self.players[player].y);
+                update.players[player].push(self.players[player].direction);
             }
         }
-        
+
+        for (var i = self.bullets.length - 1; i >= 0; i--) {
+            if (!self.bullets[i].sent) {
+                // console.log(self.bullets[i]);
+                update.bullets.push(self.bullets[i]);
+                self.bullets[i].sent = true;
+            }
+        }
+
         // Send the data to each client
         for (var player in self.players) {
             if (self.players.hasOwnProperty(player)) {

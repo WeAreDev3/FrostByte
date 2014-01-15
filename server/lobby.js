@@ -43,6 +43,8 @@ Lobby.prototype.onMessage = function(client, message) {
     var command = message[0],
         parameters = message.substring(1, message.length).split(',');
 
+    // console.log(command, parameters);
+
     // Handle each command that we know
     switch (command) {
         // Handle the command i (input)
@@ -84,6 +86,11 @@ Lobby.prototype.onMessage = function(client, message) {
             client.y = parseFloat(parameters[1]);
             joinNewLobby(client);
             break;
+
+        case 'b': // Handle the command b (add bullet)
+            // console.log(parameters);
+            this.game.addBullet.apply(this.game, parameters);
+            // console.log(this.game.bullets);
     }
 };
 
