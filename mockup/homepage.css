@@ -13,6 +13,7 @@ body {
     text-align: center;
     color: #19004A;
     animation: title-start 2s;
+    -webkit-animation: title-start 2s;
 }
 
 /*The text below the title*/
@@ -23,6 +24,7 @@ body {
 	color: #AAAAAA;
 	margin: 0;
 	animation: subtitle-start 2.5s;
+	-webkit-animation: subtitle-start 2.5s;
 }
 
 /*The wrapper that contains the setup buttons*/
@@ -43,6 +45,8 @@ button#play {
 	letter-spacing: 1px;
 	transition: background .5s, color .5s;
 	animation: play-button-start 2s;
+	-webkit-animation: play-button-start 2s;
+	outline: none;
 }
 
 /*Make it look awesome on hover*/
@@ -83,6 +87,7 @@ input[type="radio"]:checked + label {
 	display: inline;
 	opacity: 1;
 	animation: labels-2 linear .5s;
+	-webkit-animation: labels-2 linear .5s;
 }
 
 /*The 'Follow Us' section in the bottom left*/
@@ -94,6 +99,7 @@ input[type="radio"]:checked + label {
 	color: #360009;
 	left: 0;
 	animation: footer-start 3s;
+	-webkit-animation: footer-start 3s;
 }
 
 /*The header in that section*/
@@ -129,6 +135,7 @@ input[type="radio"]:checked + label {
 	right: 0;
 	text-align: right;
 	animation: footer-start 3s;
+	-webkit-animation: footer-start 3s;
 }
 
 #info h3 {
@@ -154,14 +161,17 @@ input[type="radio"]:checked + label {
 /*Delay each link in the 'footer' by a bit*/
 #follow a:first-of-type, #info a:first-of-type {
 	animation: footer-1-start 3s;
+	-webkit-animation: footer-1-start 3s;
 }
 
 #follow a:nth-of-type(2), #info a:nth-of-type(2) {
 	animation: footer-2-start 3s;
+	-webkit-animation: footer-2-start 3s;
 }
 
 #follow a:last-of-type, #info a:last-of-type {
 	animation: footer-3-start 3s;
+	-webkit-animation: footer-3-start 3s;
 }
 
 /*Hide some content when 'PLAY' is pressed*/
