@@ -170,13 +170,13 @@ function draw(context) {
         enemies[i].draw();
     }
 
-    player.draw();
-
     for (var others in otherPlayers) {
         if (otherPlayers.hasOwnProperty(others)) {
             otherPlayers[others].draw();
         }
     }
+
+    player.draw();
 
     for (i = 0, len = bullets.length; i < len; i++) {
         bullets[i].draw();
