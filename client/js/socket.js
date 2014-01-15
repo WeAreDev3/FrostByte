@@ -27,23 +27,41 @@ socket.on('joinedGame', function(data) {
 
 socket.on('update', function(data) {
     // console.log(data);
-    for (var userID in data) {
-        if (data.hasOwnProperty(userID) && userID !== player.id) {
+    for (var userID in data.players) {
+        if (data.players.hasOwnProperty(userID) && userID !== player.id) {
             if (!otherPlayers[userID]) {
                 otherPlayers[userID] = new Character(otherPlayersStates);
                 console.log('new player:', otherPlayers[userID]);
             }
 
-            otherPlayers[userID].x = data[userID][0];
-            otherPlayers[userID].y = data[userID][1];
+            otherPlayers[userID].x = data.players[userID][0];
+            otherPlayers[userID].y = data.players[userID][1];
+            otherPlayers[userID].direction = data.players[userID][2];
+
             otherPlayers[userID].name = userID;
         }
     }
 
     for (userID in otherPlayers) {
-        if (otherPlayers.hasOwnProperty(userID) && !(userID in data)) {
+        if (otherPlayers.hasOwnProperty(userID) && !(userID in data.players)) {
             console.log('user deleted:', userID);
             delete otherPlayers[userID];
         }
+    }
+
+    // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
+    for (var i = data.bullets.length - 1; i >= 0; i--) {
+        // console.log(data.bullets);
+        new Bullet({
+                'character': {
+                    'x': data.bullets[i].x,
+                    'y': data.bullets[i].y,
+                    'size': data.bullets[i].size,
+                    'damage': data.bullets[i].damage
+                }
+            },
+            data.bullets[i].speed,
+            data.bullets[i].direction
+        );
     }
 });
