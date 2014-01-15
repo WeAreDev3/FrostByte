@@ -4,9 +4,11 @@ function resizeBrowser() {
         height = window.innerHeight;
 
     if (width / height >= 1.6) {
-        width = height * 1.6;
+        canvas.height = height;
+        canvas.width = height * 1.6;
     } else {
-        height = width / 1.6;
+        canvas.width = width;
+        canvas.height = width / 1.6;
     }
 
     scale = height / 1000;
