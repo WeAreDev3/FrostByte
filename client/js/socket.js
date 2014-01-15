@@ -18,7 +18,7 @@ socket.on('onconnected', function(data) {
     player.id = data.id;
 
     // Send that we are ready to join
-    socket.send('j' + player.x + ',' + player.y);
+    socket.send('j' + player.x + ',' + player.y + ',' + player.direction);
 });
 
 socket.on('joinedGame', function(data) {

@@ -100,10 +100,15 @@ function startGame() {
 
             frameId = window.requestAnimationFrame(loop);
 
-            if (count % 1 === 0) {
-                count = 0;
+            // if (count % 1 === 0) {
+                // count = 0;
                 update(timeElapsed);
                 draw(context);
+            // }
+
+            if (count % 200 === 0) {
+                count = 0
+                createEnemies(2);
             }
 
             lastFrame = thisFrame;

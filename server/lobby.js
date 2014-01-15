@@ -81,10 +81,22 @@ Lobby.prototype.onMessage = function(client, message) {
             }
             break;
 
+        case 'd':
+            if (this.game.players[client.id]) {
+                this.game.players[client.id].direction = parameters[0];
+            }
+            break;
+
         case 'j': // Handle the command j (join)
             client.x = parseFloat(parameters[0]);
             client.y = parseFloat(parameters[1]);
+            client.direction = parseFloat(parameters[2]);
             joinNewLobby(client);
+
+            // Clean up items from the client that aren't needed any more
+            delete client.x;
+            delete client.y;
+            delete client.direction;
             break;
 
         case 'b': // Handle the command b (add bullet)

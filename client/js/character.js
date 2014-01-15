@@ -50,7 +50,7 @@ Character.prototype.update = function(timeElapsed) {
     var damageDone = 100 - this.health,
         inputs = {
             'move': [],
-            'mouse': {}
+            'direction': this.direction
         };
 
     if (this.type === 'player') {
@@ -78,6 +78,10 @@ Character.prototype.update = function(timeElapsed) {
         }
 
         this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
+
+        if (this.direction !== inputs.direction) {
+            socket.send('d' + inputs.direction);
+        }
 
         if (input.mouseDown) {
             this.gun.fire();
