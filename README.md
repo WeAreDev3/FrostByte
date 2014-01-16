@@ -20,10 +20,10 @@
         - Player
         - Other Players in Lobby
         - Enemy/Mob
-	    - Item
-	        - Gun
-	        - Inventory
-	        - Currency
+	- Item
+        - Gun
+        - Inventory
+        - Currency
     - Bullet
     - Wall/Barrier
 
