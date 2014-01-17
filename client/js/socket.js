@@ -9,7 +9,7 @@ var otherPlayersStates = {
     'y': 200,
     'direction': Math.PI / 2,
     'gun': create(Gun, 'full-auto'),
-    'color': '#90FE4D'
+    'color': '#90EE4D'
 };
 
 socket = io.connect('/');
@@ -51,15 +51,15 @@ socket.on('update', function(data) {
 
     // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
     for (var i = data.bullets.length - 1; i >= 0; i--) {
-        // console.log(data.bullets);
+        // console.log(data.bullets[i]);
         if (data.bullets[i].playerId !== player.id) {
             new Bullet({
                     'character': {
-                        'x': data.bullets[i].x,
-                        'y': data.bullets[i].y,
-                        'size': data.bullets[i].size
+                        'x': data.bullets[i].gun.character.x,
+                        'y': data.bullets[i].gun.character.y,
+                        'size': data.bullets[i].gun.character.size
                     },
-                    'damage': data.bullets[i].damage
+                    'damage': data.bullets[i].gun.damage
                 },
                 data.bullets[i].speed,
                 data.bullets[i].direction

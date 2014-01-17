@@ -13,6 +13,7 @@ Character = function(specs) {
     this.gun.character = this;
     this.color = specs.color;
     this.transparency = 1;
+    this.id = '';
 };
 
 Character.prototype.draw = function() {
@@ -22,7 +23,7 @@ Character.prototype.draw = function() {
 
     var namePositionX = x - (context.measureText(this.name).width / 2),
         namePositionY = y + (size * 2);
-
+ 
     // Draws Body
     context.fillStyle = this.color;
 
@@ -80,7 +81,7 @@ Character.prototype.update = function(timeElapsed) {
         this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
 
         if (this.direction !== inputs.direction) {
-            socket.send('d' + inputs.direction);
+            socket.send('d' + this.direction);
         }
 
         if (input.mouseDown) {

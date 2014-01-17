@@ -1,5 +1,6 @@
 // Link our files together
-var Character = require('./character');
+var Character = require('./character'),
+    Bullet = require('./bullet');
 
 // The Game class's definition
 var Game = function() {
@@ -11,6 +12,7 @@ var Game = function() {
     // An object containing all of the players in the game
     this.players = {};
 
+    // An array of all the bullets currently on the map
     this.bullets = [];
 
     // Start the game loop
@@ -29,16 +31,19 @@ Game.prototype.removeChar = function(client) {
 };
 
 Game.prototype.addBullet = function(x, y, size, damage, speed, direction, playerId) {
-    this.bullets.push({
-        'sent': false,
-        'x': parseFloat(x).toFixed(3),
-        'y': parseFloat(y).toFixed(3),
-        'size': parseInt(size),
-        'speed': parseInt(speed),
-        'damage': parseInt(damage),
-        'direction': parseFloat(direction).toFixed(2),
-        'playerId': playerId
-    });
+    this.bullets.push(new Bullet({
+            'character': {
+                'x': parseFloat(x).toFixed(2),
+                'y': parseFloat(y).toFixed(2),
+                'size': parseInt(size),
+                'id': playerId
+            },
+            'damage': parseInt(damage)
+        },
+        parseInt(speed),
+        parseFloat(direction),
+        playerId
+    ));
 };
 
 // Start the synchronized game loop
@@ -49,7 +54,13 @@ Game.prototype.startLoop = function() {
 
     // Update the physics of the game
 
-    function physUpdate(timeElapsed) {}
+    function physUpdate(timeElapsed) {
+        for (var player in self.players) {
+            if (self.players.hasOwnProperty(player)) {
+                self.players[player].update(timeElapsed);
+            }
+        }
+    }
 
     // Serve the updated game to the clients
 

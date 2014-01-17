@@ -106,13 +106,8 @@ function startGame() {
                 draw(context);
             // }
 
-            if (count % 200 === 0) {
-                count = 0
-                createEnemies(2);
-            }
-
             lastFrame = thisFrame;
-            count++;
+            // count++;
         }
 
         loop();

@@ -11,7 +11,7 @@
 //     bullets.push(this);
 // };
 
-Bullet = function(gun, speed, direction) {
+Bullet = function(gun, speed, direction, playerId) {
     this.gun = gun;
     this.speed = speed;
     this.direction = direction;
@@ -20,8 +20,7 @@ Bullet = function(gun, speed, direction) {
     this.x2 = this.x1 - 10 * Math.cos(this.direction);
     this.y2 = this.y1 - 10 * Math.sin(this.direction);
     this.prevX = this.x1;
-
-    bullets.push(this);
+    this.playerId = playerId;
 };
 
 // Bullet.prototype.update = function(timeElapsed) {

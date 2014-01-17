@@ -3,7 +3,7 @@ var Gun = require('./gun');
 var Character = function(client) {
     this.client = client;
     this.type = 'player';
-    this.name = this.client.id;
+    this.name = client.id;
     this.hp = 100;
     this.health = 100; // Percent
     this.size = 12;
@@ -17,6 +17,7 @@ var Character = function(client) {
     this.color = '#4D90FE';
     this.transparency = 1;
 
+    this.moveChanges = [];
 };
 
 Character.prototype.update = function(timeElapsed) {
@@ -24,6 +25,32 @@ Character.prototype.update = function(timeElapsed) {
 
     if (this.type === 'player') {
         this.gun.timeSinceLastFire += timeElapsed;
+
+        for (var i = this.moveChanges.length - 1; i >= 0; i--) {
+            console.log(this.moveChanges[i]);
+            switch (this.moveChanges[i]) {
+                // If the client sent 'u' (up)
+                case 'u':
+                    // Move the player up
+                    this.y -= this.speed * timeElapsed;
+                    break;
+                    // If the client sent 'd' (down)
+                case 'd':
+                    // Move the player down
+                    this.y += this.speed * timeElapsed;
+                    break;
+                    // If the client sent 'l' (left)
+                case 'l':
+                    // Move the player left
+                    this.x -= this.speed * timeElapsed;
+                    break;
+                    // If the client sent 'r' (right)
+                case 'r':
+                    // Move the player right
+                    this.x += this.speed * timeElapsed;
+                    break;
+            }
+        }
     } else {
         this.x += this.speed * Math.cos(this.direction) * timeElapsed;
         this.y += this.speed * Math.sin(this.direction) * timeElapsed;

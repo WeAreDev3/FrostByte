@@ -41,49 +41,24 @@ Lobby.prototype.leave = function(client) {
 // Handle the different messages that clients send to the lobby
 Lobby.prototype.onMessage = function(client, message) {
     var command = message[0],
-        parameters = message.substring(1, message.length).split(',');
+        parameters = message.substring(1, message.length).split(','),
+        currentPlayer;
 
     // console.log(command, parameters);
 
     // Handle each command that we know
     switch (command) {
-        // Handle the command i (input)
-        case 'i':
-            // Figure out which client sent the input, based on the ID
-            for (var player in this.game.players) {
-                if (this.game.players.hasOwnProperty(player) && player === client.id) {
-                    for (var i = parameters.length - 1; i >= 0; i--) {
-                        // Analyze each of the parameters passed to the lobby
-                        switch (parameters[i]) {
-                            // If the client sent 'u' (up)
-                            case 'u':
-                                // Move the player up
-                                this.game.players[player].y -= this.game.players[player].speed * 0.016666667;
-                                break;
-                                // If the client sent 'd' (down)
-                            case 'd':
-                                // Move the player down
-                                this.game.players[player].y += this.game.players[player].speed * 0.016666667;
-                                break;
-                                // If the client sent 'l' (left)
-                            case 'l':
-                                // Move the player left
-                                this.game.players[player].x -= this.game.players[player].speed * 0.016666667;
-                                break;
-                                // If the client sent 'r' (right)
-                            case 'r':
-                                // Move the player right
-                                this.game.players[player].x += this.game.players[player].speed * 0.016666667;
-                                break;
-                        }
-                    }
-                }
+        case 'i': // Handle the command i (input)
+            currentPlayer = this.game.players[client.id];
+            if (currentPlayer) {
+                currentPlayer.moveChanges.concat(parameters);
             }
             break;
 
-        case 'd':
-            if (this.game.players[client.id]) {
-                this.game.players[client.id].direction = parameters[0];
+        case 'd': // Handle the command d (direction)
+            currentPlayer = this.game.players[client.id];
+            if (currentPlayer) {
+                currentPlayer.direction = parameters[0];
             }
             break;
 
