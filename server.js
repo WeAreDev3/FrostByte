@@ -27,7 +27,7 @@ io.configure(function() {
 
 });
 
-var lob = new Lobby();
+var lobby = new Lobby();
 
 // Define what happens when a user connects to the server
 io.on('connection', function(client) {
@@ -35,22 +35,19 @@ io.on('connection', function(client) {
     console.log('Client connected:', client.id);
 
     // Pass the client's ID to them
-    client.emit('onconnected', {
-        id: client.id
-    });
+    // client.emit('onconnected', {
+    //     id: client.id
+    // });
 
-    client.on('play', function(location) {
-        lob.join(client.id, location.x, location.y, location.direction, client);
+    client.on('play', function(state) {
+        lobby.addPlayer(client, state.x, state.y, state.direction, lobby);
     });
-
-    // Find and place the client in an open lobby
-    // lobby.join(client);
 
     // Process data received from the client
     // So far just input and join
     client.on('message', function(message) {
         // console.log('Recieved:', message);
-        lob.parseMessage(client, message);
+        lobby.parseMessage(client, message);
         // lobby.findPlayer(client).onMessage(client, message);
     });
 
@@ -58,8 +55,7 @@ io.on('connection', function(client) {
     client.on('disconnect', function() {
         // Log the client's disconnection w/ ID to the console
         console.log('Client disconnected:', client.id);
-        // lobby.findPlayer(client).leave(client);
-        lob.leave(client);
+        lobby.removePlayer(client);
     });
 });
 

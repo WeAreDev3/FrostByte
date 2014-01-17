@@ -1,3 +1,4 @@
+var cls = require('./class');
 /*
   accuracy: Higher is WORSE
   damage: Higher is BETTER
@@ -29,17 +30,58 @@ var types = {
     }
 };
 
-var Gun = function(type) {
-    this.type = type;
-    this.accuracy = types[type].accuracy;
-    this.damage = types[type].damage;
-    this.kick = types[type].kick;
-    this.bulletSpeed = types[type].bulletSpeed;
-    this.wasFired = false;
-    this.rate = types[type].rate / 1000;
-    this.timeSinceLastFire = 0;
-    this.character = null;
-};
+var Gun = cls.Class.extend({
+    init: function(type, player) {
+        this.type = type;
+
+        this.accuracy = types[type].accuracy;
+        this.damage = types[type].damage;
+        this.kick = types[type].kick;
+        this.bulletSpeed = types[type].bulletSpeed;
+
+        this.wasFired = false;
+        this.rate = types[type].rate / 1000;
+        this.timeSinceLastFire = 0;
+        this.player = player;
+    },
+    fire: function(lobby) {
+        if (this.timeSinceLastFire >= this.rate) {
+            this.timeSinceLastFire -= this.rate;
+
+            switch (this.type) {
+                case 'semi-auto':
+                    if (!this.wasFired) {
+                        this.wasFired = true;
+                        lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction, this));
+                    }
+                    break;
+                case 'full-auto':
+                    lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction, this));
+                    break;
+                case 'shotgun':
+                    if (!this.wasFired) {
+                        this.wasFired = true;
+                        for (var i = 0; i < 15; i++) {
+                            lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction + (Math.random() * 2 - 1) * this.player.gun.accuracy / 100, this));
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+});
+
+// var Gun = function(type) {
+//     this.type = type;
+//     this.accuracy = types[type].accuracy;
+//     this.damage = types[type].damage;
+//     this.kick = types[type].kick;
+//     this.bulletSpeed = types[type].bulletSpeed;
+//     this.wasFired = false;
+//     this.rate = types[type].rate / 1000;
+//     this.timeSinceLastFire = 0;
+//     this.character = null;
+// };
 
 // Just comment out for now so i dont have get bullet working yet also
 // Gun.prototype.fire = function() {

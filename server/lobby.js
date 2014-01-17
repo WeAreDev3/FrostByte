@@ -24,17 +24,24 @@ var Lobby = cls.Class.extend({
 
         this.start();
     },
-    join: function(id, x, y, direction, socket) {
+    addPlayer: function(socket, x, y, direction) {
         if (!this.full) {
-            this.players[id] = new Player(id, x, y, direction, socket);
+            this.players[socket.id] = new Player(socket, x, y, direction);
 
             if (Object.keys(this.players).length >= this.size) {
                 this.full = true;
             }
         }
     },
-    leave: function(player) {
+    removePlayer: function(player) {
         delete this.players[player.id];
+    },
+    addBullet: function(bullet) {
+        this.bullets.push(bullet);
+        console.log('bullet');
+    },
+    removeBullet: function(bullet) {
+        this.bullets.splice(this.bullets.indexOf(bullet), 1);
     },
     spawnEnemy: function() {
         var location = {
@@ -103,10 +110,12 @@ var Lobby = cls.Class.extend({
                 //     delete player.direction;
                 //     break;
 
-                // case 'b': // Handle the command b (add bullet)
-                //     // console.log(parameters);
-                //     this.addBullet.apply(this.game, parameters);
-                //     // console.log(this.game.bullets);
+            case 'b': // Handle the command b (add bullet)
+                // console.log(parameters);
+                if (this.players[player.id]) {
+                    this.players[player.id].gun.fire(this);
+                }
+                // console.log(this.game.bullets);
         }
 
     },
@@ -127,6 +136,10 @@ var Lobby = cls.Class.extend({
             for (var i = self.enemies.length - 1; i >= 0; i--) {
                 self.enemies[i].update(timeElapsed);
             }
+
+            for (var i = self.bullets.length - 1; i >= 0; i--) {
+                self.bullets[i].update();
+            };
         }
 
         // Serve the updated game to the clients
@@ -142,17 +155,13 @@ var Lobby = cls.Class.extend({
             // For each player,
             for (var player in self.players) {
                 if (self.players.hasOwnProperty(player)) {
-                    // Add their array to the update object
-                    update.players[player] = [];
-                    // Add their x and y position and direction to their array
-                    update.players[player].push(self.players[player].x);
-                    update.players[player].push(self.players[player].y);
-                    update.players[player].push(self.players[player].direction);
+                    // Add their current state (x, y, direction)
+                    update.players[player] = self.players[player].getState();
                 }
             }
 
             for (var i = self.enemies.length - 1; i >= 0; i--) {
-                update.enemies.push(self.enemies[i].getState());   
+                update.enemies.push(self.enemies[i].getState());
             }
 
             for (var i = self.bullets.length - 1; i >= 0; i--) {

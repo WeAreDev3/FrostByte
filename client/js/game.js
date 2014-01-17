@@ -64,7 +64,7 @@ function startGame() {
     otherPlayers = {};
 
     //Create the crosshairs!
-    crosshairs = new Crosshairs(800, 500, player);
+    crosshairs = new Crosshairs(player);
 
     //defines the function that creates enemies
 

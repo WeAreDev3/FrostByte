@@ -12,10 +12,11 @@ var otherPlayersStates = {
     'color': '#90EE4D'
 };
 
-socket = io.connect('/');
-socket.on('onconnected', function(data) {
-    console.log('Connected successfully to the socket.io server. My server-side ID is ' + data.id);
-    player.id = data.id;
+socket = io.connect();
+socket.on('connect', function() {
+    player.id = socket.socket.sessionid;
+
+    console.log('Connected successfully as', player.id);
 
     // Send that we are ready to join
     socket.emit('play', {
@@ -31,25 +32,28 @@ socket.on('joinedGame', function(data) {
 
 socket.on('update', function(data) {
     // console.log(data);
-    for (var userID in data.players) {
-        if (data.players.hasOwnProperty(userID) && userID !== player.id) {
-            if (!otherPlayers[userID]) {
-                otherPlayers[userID] = new Character(otherPlayersStates);
-                console.log('new player:', otherPlayers[userID]);
+    for (var playerId in data.players) {
+        if (data.players.hasOwnProperty(playerId)) {
+            if (playerId !== player.id) {
+                if (!otherPlayers[playerId]) {
+                    otherPlayers[playerId] = new Character(otherPlayersStates);
+                    otherPlayers[playerId].name = playerId;
+                    console.log('new player:', otherPlayers[playerId]);
+                }
+
+                otherPlayers[playerId].x = data.players[playerId].x;
+                otherPlayers[playerId].y = data.players[playerId].y;
+                otherPlayers[playerId].direction = data.players[playerId].direction;
+            } else {
+                player.setState(data.players[playerId]);
             }
-
-            otherPlayers[userID].x = data.players[userID][0];
-            otherPlayers[userID].y = data.players[userID][1];
-            otherPlayers[userID].direction = data.players[userID][2];
-
-            otherPlayers[userID].name = userID;
         }
     }
 
-    for (userID in otherPlayers) {
-        if (otherPlayers.hasOwnProperty(userID) && !(userID in data.players)) {
-            console.log('user deleted:', userID);
-            delete otherPlayers[userID];
+    for (playerId in otherPlayers) {
+        if (otherPlayers.hasOwnProperty(playerId) && !(playerId in data.players)) {
+            console.log('user deleted:', playerId);
+            delete otherPlayers[playerId];
         }
     }
 

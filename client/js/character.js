@@ -47,6 +47,12 @@ Character.prototype.draw = function() {
     }
 };
 
+Character.prototype.setState = function(state) {
+    this.x = state.x;
+    this.y = state.y;
+    this.direction = state.direction;
+};
+
 Character.prototype.update = function(timeElapsed) {
     var damageDone = 100 - this.health,
         inputs = {

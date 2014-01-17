@@ -1,13 +1,14 @@
-Crosshairs = function(x, y, character) {
-    this.x = x;
-    this.y = y;
+Crosshairs = function(character) {
     this.character = character;
+
+    this.x = this.character.x;
+    this.y = this.character.y;
     this.size = 13;
     this.distFromPlayer = 0;
     this.distFromMouse = 0;
-    this.angle = 0; // The angle that the crosshairs make (with the origin
+    this.angle = this.character.direction; // The angle that the crosshairs make (with the origin
     // being @ the player's location)
-    this.mouseAngle = 0; // The angle that the mouse makes (with the origin
+    this.mouseAngle = this.character.direction; // The angle that the mouse makes (with the origin
     // being @ the player's location)
     this.mouseDistFromPlayer = 0;
     this.kickCounter = 0;

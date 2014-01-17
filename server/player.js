@@ -1,10 +1,12 @@
-var Character = require('./character');
+var Character = require('./character'),
+    Gun = require('./gun');
 
 var Player = Character.extend({
-    init: function(id, x, y, direction, socket) {
-        this._super(id, 'player', x, y);
-
+    init: function(socket, x, y, direction, lobby) {
         this.socket = socket;
+        this.lobby = lobby;
+
+        this._super(this.socket.id, 'player', x, y);
 
         this.setHitPoints(100);
         this.setSize(12);
@@ -12,7 +14,7 @@ var Player = Character.extend({
         this.setMobility(10);
         this.setDirection(direction);
         this.setColor('#4D90FE');
-        // this.setGun(gun);
+        this.setGun(new Gun('full-auto', this));
 
         // Input from clients
         this.movments = [];
@@ -21,7 +23,7 @@ var Player = Character.extend({
         this.gun = gun;
     },
     addInput: function(movments) {
-        this.movments.concat(movments);
+        this.movments = this.movments.concat(movments);
     },
     update: function(timeElapsed) {
         for (var i = this.movments.length - 1; i >= 0; i--) {
