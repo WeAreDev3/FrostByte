@@ -81,7 +81,7 @@ function startGame() {
     }
 
     // actually creates enemies
-    createEnemies(50);
+    // createEnemies(50);
 
     console.log(player);
     console.log(crosshairs);
@@ -143,9 +143,9 @@ function update(timeElapsed) {
 
 
     // Can't cache the length of the arrays b/c they can change mid-loop.
-    for (i = 0; i < enemies.length; i++) {
-        enemies[i].update(timeElapsed);
-    }
+    // for (i = 0; i < enemies.length; i++) {
+    //     enemies[i].update(timeElapsed);
+    // }
 
     for (i = 0; i < bullets.length; i++) {
         bullets[i].update(timeElapsed);
@@ -168,7 +168,11 @@ function draw(context) {
 
     //Step 2: Draw all items on the screen
     for (i = 0, len = enemies.length; i < len; i++) {
-        enemies[i].draw();
+        context.fillStyle = enemies[i].color;
+        context.beginPath();
+        context.arc(enemies[i].x, enemies[i].y, enemies[i].size, 0, 2 * Math.PI, false);
+        context.fill();
+        context.closePath();
     }
 
     for (var others in otherPlayers) {

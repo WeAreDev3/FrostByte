@@ -12,6 +12,9 @@ var Game = function() {
     // An object containing all of the players in the game
     this.players = {};
 
+    // An array of all the enemies
+    this.enemies = [];
+
     // An array of all the bullets currently on the map
     this.bullets = [];
 
@@ -28,6 +31,10 @@ Game.prototype.addChar = function(client) {
 Game.prototype.removeChar = function(client) {
     // console.log('Deleting:', this.players[client.id]);
     delete this.players[client.id];
+};
+
+Game.prototype.addEnemy = function() {
+    this.enemies.push(new Character());
 };
 
 Game.prototype.addBullet = function(x, y, size, damage, speed, direction, playerId) {

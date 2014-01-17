@@ -4,7 +4,7 @@ var http = require('http'),
     socketio = require('socket.io'),
     express = require('express'),
     // Link all of our files together
-    lobby = require('./server/lobby'),
+    Lobby = require('./server/lobby'),
     // Create a working node app
     router = express(),
     server = http.createServer(router),
@@ -27,6 +27,8 @@ io.configure(function() {
 
 });
 
+var lob = new Lobby();
+
 // Define what happens when a user connects to the server
 io.on('connection', function(client) {
     // Log the new client's ID to the server's console
@@ -37,20 +39,27 @@ io.on('connection', function(client) {
         id: client.id
     });
 
+    client.on('play', function(location) {
+        lob.join(client.id, location.x, location.y, location.direction, client);
+    });
+
     // Find and place the client in an open lobby
     // lobby.join(client);
 
     // Process data received from the client
     // So far just input and join
     client.on('message', function(message) {
-        lobby.findPlayer(client).onMessage(client, message);
+        // console.log('Recieved:', message);
+        lob.parseMessage(client, message);
+        // lobby.findPlayer(client).onMessage(client, message);
     });
 
     // Define what happens when a user disconnects
     client.on('disconnect', function() {
         // Log the client's disconnection w/ ID to the console
         console.log('Client disconnected:', client.id);
-        lobby.findPlayer(client).leave(client);
+        // lobby.findPlayer(client).leave(client);
+        lob.leave(client);
     });
 });
 

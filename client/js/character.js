@@ -78,7 +78,7 @@ Character.prototype.update = function(timeElapsed) {
             socket.send('i' + inputs.move);
         }
 
-        this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
+        this.direction = (Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI).toFixed(5);
 
         if (this.direction !== inputs.direction) {
             socket.send('d' + this.direction);

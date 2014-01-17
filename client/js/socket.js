@@ -18,7 +18,11 @@ socket.on('onconnected', function(data) {
     player.id = data.id;
 
     // Send that we are ready to join
-    socket.send('j' + player.x + ',' + player.y + ',' + player.direction);
+    socket.emit('play', {
+        'x': player.x,
+        'y': player.y,
+        'direction': player.direction
+    });
 });
 
 socket.on('joinedGame', function(data) {
@@ -48,6 +52,8 @@ socket.on('update', function(data) {
             delete otherPlayers[userID];
         }
     }
+
+    enemies = data.enemies;
 
     // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
     for (var i = data.bullets.length - 1; i >= 0; i--) {
