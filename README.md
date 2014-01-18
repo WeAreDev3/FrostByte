@@ -1,18 +1,10 @@
 # Top Down Shooter
 
+## Version
+Can be found at ./package.json
+
 ## Goals
-
-### Game Logic
-- Multiplayer!
-- Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
-- Lobbies
-
-### Game Efficiency
-- Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
-- Some of the crosshair logic can be moved into the mouse input object.
-
-### Game Aesthetics
-- Create sprites
+moved to http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues
 
 ### Proposed class system by janka102:
  - Entity
