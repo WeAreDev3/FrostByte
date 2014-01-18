@@ -11,7 +11,7 @@ var Enemy = Character.extend({
         this.setDirection(direction);
         this.setColor('#FF0000');
 
-        console.log(direction);
+        // console.log(direction);
     },
     hit: function(damage) {
         this.hitPoints -= damage;

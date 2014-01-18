@@ -1,6 +1,6 @@
-var cls = require('./class');
+var Class = require('./class');
 
-var Entity = cls.Class.extend({
+var Entity = Class.extend({
     init: function(id, type, x, y) {
         this.id = id;
         this.type = type;

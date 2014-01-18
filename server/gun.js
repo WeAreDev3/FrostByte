@@ -1,4 +1,4 @@
-var cls = require('./class');
+var Class = require('./class');
 /*
   accuracy: Higher is WORSE
   damage: Higher is BETTER
@@ -30,7 +30,7 @@ var types = {
     }
 };
 
-var Gun = cls.Class.extend({
+var Gun = Class.extend({
     init: function(type, player) {
         this.type = type;
 

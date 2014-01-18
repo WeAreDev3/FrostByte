@@ -1,5 +1,5 @@
 // Include all of the necessary node modules
-var cls = require('./class'),
+var Class = require('./class'),
     Player = require('./player'),
     Enemy = require('./enemy'),
     Utils = require('./utils'),
@@ -7,11 +7,13 @@ var cls = require('./class'),
 // Link our files together
 // Game = require('./game');
 
-var Lobby = cls.Class.extend({
+var Lobby = Class.extend({
     init: function(size) {
         this.id = UUID();
         this.size = size;
         this.full = false;
+
+        // this.game = new Game();
 
         this.players = {};
         this.enemies = [];
