@@ -14,20 +14,13 @@ var otherPlayersStates = {
 
 socket = io.connect();
 socket.on('connect', function() {
-    player.id = socket.socket.sessionid;
-
-    console.log('Connected successfully as', player.id);
-
-    // Send that we are ready to join
-    socket.emit('play', {
-        'x': player.x,
-        'y': player.y,
-        'direction': player.direction
-    });
+    console.log('Connected successfully as', socket.socket.sessionid);
 });
 
-socket.on('joinedGame', function(data) {
-    console.log('Joined the lobby:' + data.id);
+socket.on('joinedLobby', function(data) {
+    console.log('Joined the lobby:', data.id);
+    startGame();
+    player.id = socket.socket.sessionid;
 });
 
 socket.on('update', function(data) {

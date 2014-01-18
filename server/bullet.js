@@ -1,6 +1,6 @@
-var cls = require('./class');
+var Class = require('./class');
 
-var Bullet = cls.Class({
+var Bullet = Class.extend({
     init: function(speed, direction, gun) {
         this.gun = gun;
         this.speed = speed;

@@ -16,6 +16,10 @@ var Character = Entity.extend({
     setDirection: function(direction) {
         this.direction = direction;
     },
+    setPosition: function(x, y) {
+        this.x = x;
+        this.y = y;
+    },
     setColor: function(color) {
         this.color = color;
     },

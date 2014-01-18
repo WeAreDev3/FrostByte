@@ -170,7 +170,7 @@ function draw(context) {
     for (i = 0, len = enemies.length; i < len; i++) {
         context.fillStyle = enemies[i].color;
         context.beginPath();
-        context.arc(enemies[i].x, enemies[i].y, enemies[i].size, 0, 2 * Math.PI, false);
+        context.arc(enemies[i].x * scale, enemies[i].y * scale, enemies[i].size * scale, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
     }

@@ -1,11 +1,8 @@
 // Include all of the necessary node modules
 var Class = require('./class'),
     Player = require('./player'),
-    Enemy = require('./enemy'),
-    Utils = require('./utils'),
-    UUID = require('node-uuid'); //,
-// Link our files together
-// Game = require('./game');
+    Game = require('./game'),
+    UUID = require('node-uuid');
 
 var Lobby = Class.extend({
     init: function(size) {
@@ -13,194 +10,25 @@ var Lobby = Class.extend({
         this.size = size;
         this.full = false;
 
-        // this.game = new Game();
+        this.clients = {};
 
-        this.players = {};
-        this.enemies = [];
-        this.bullets = [];
-
-        this.width = 1600; // = 16 * 100
-        this.height = 1000; // = 10 * 100
-
-        this.spawnEnemy();
-
-        this.start();
+        this.game = new Game();
     },
-    addPlayer: function(socket, x, y, direction) {
-        if (!this.full) {
-            this.players[socket.id] = new Player(socket, x, y, direction);
+    addPlayer: function(socket) {
+        socket.emit('joinedLobby', {
+            id: this.id
+        });
 
-            if (Object.keys(this.players).length >= this.size) {
-                this.full = true;
-            }
+        this.clients[socket.id] = socket;
+        this.game.players[socket.id] = new Player(socket, this);
+        // console.log(this.game.players);
+        
+        if (Object.keys(this.clients).length >= this.size) {
+            this.full = true;
         }
     },
     removePlayer: function(player) {
-        delete this.players[player.id];
-    },
-    addBullet: function(bullet) {
-        this.bullets.push(bullet);
-        console.log('bullet');
-    },
-    removeBullet: function(bullet) {
-        this.bullets.splice(this.bullets.indexOf(bullet), 1);
-    },
-    spawnEnemy: function() {
-        var location = {
-            'x': null,
-            'y': null,
-            'direction': null
-        };
-
-        switch (Utils.randomInt(4)) {
-            case 0: // Start at top
-                location.y = 0;
-                location.x = Utils.randomInt(this.width);
-                location.direction = -1 * Utils.randomRange(Math.PI / 4, 3 * Math.PI / 4);
-                break;
-
-            case 1: // Start from the right
-                location.x = this.width;
-                location.y = Utils.randomInt(this.height);
-                location.direction = -1 * Utils.randomRange(-1 * Math.PI / 4, Math.PI / 4);
-                break;
-
-            case 2: // Start at the bottom
-                location.y = this.height;
-                location.x = Utils.randomInt(this.width);
-                location.direction = Utils.randomRange(Math.PI / 4, 3 * Math.PI / 4);
-                break;
-
-            case 3: // Start from the left
-                location.x = 0;
-                location.y = Utils.randomInt(this.height);
-                location.direction = Utils.randomRange(-1 * Math.PI / 4, Math.PI / 4);
-                break;
-        }
-
-        this.enemies.push(new Enemy(UUID(), 0, location.x, location.y, location.direction));
-    },
-    parseMessage: function(player, message) {
-        var command = message[0],
-            parameters = message.substring(1, message.length).split(',');
-
-        // console.log(command, parameters);
-
-        // Handle each command that we know
-        switch (command) {
-            case 'i': // Handle the command i (input)
-                if (this.players[player.id]) {
-                    this.players[player.id].addInput(parameters);
-                }
-                break;
-
-            case 'd': // Handle the command d (direction)
-                if (this.players[player.id]) {
-                    this.players[player.id].setDirection(parameters[0]);
-                }
-                break;
-
-                // case 'j': // Handle the command j (join)
-                //     player.x = parseFloat(parameters[0]);
-                //     player.y = parseFloat(parameters[1]);
-                //     player.direction = parseFloat(parameters[2]);
-                //     joinNewLobby(player);
-
-                //     // Clean up items from the player that aren't needed any more
-                //     delete player.x;
-                //     delete player.y;
-                //     delete player.direction;
-                //     break;
-
-            case 'b': // Handle the command b (add bullet)
-                // console.log(parameters);
-                if (this.players[player.id]) {
-                    this.players[player.id].gun.fire(this);
-                }
-                // console.log(this.game.bullets);
-        }
-
-    },
-    start: function() {
-        var lastFrame = Date.now(), // Initialize the game loop
-            count = 0, // Initialize the interval counter
-            self = this; // Capture the lobby object for usage below
-
-        // Update the physics of the game
-
-        function physUpdate(timeElapsed) {
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    self.players[player].update(timeElapsed);
-                }
-            }
-
-            for (var i = self.enemies.length - 1; i >= 0; i--) {
-                self.enemies[i].update(timeElapsed);
-            }
-
-            for (var i = self.bullets.length - 1; i >= 0; i--) {
-                self.bullets[i].update();
-            };
-        }
-
-        // Serve the updated game to the clients
-
-        function serveUpdate(timeElapsed) {
-            // The object containing the information the clients use to update
-            var update = {
-                'players': {},
-                'enemies': [],
-                'bullets': []
-            };
-
-            // For each player,
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    // Add their current state (x, y, direction)
-                    update.players[player] = self.players[player].getState();
-                }
-            }
-
-            for (var i = self.enemies.length - 1; i >= 0; i--) {
-                update.enemies.push(self.enemies[i].getState());
-            }
-
-            for (var i = self.bullets.length - 1; i >= 0; i--) {
-                if (!self.bullets[i].sent) {
-                    // console.log(self.bullets[i]);
-                    update.bullets.push(self.bullets[i]);
-                    self.bullets[i].sent = true;
-                }
-            }
-
-            // Send the data to each client
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    self.players[player].socket.emit('update', update);
-                }
-            }
-        }
-
-        // Set the update interval to 15ms (see end of call)
-        setInterval(function() {
-            // Define the time elapsed since the last frame
-            var thisFrame = Date.now(),
-                timeElapsed = (thisFrame - lastFrame) / 1000;
-
-            // Update the physics of the game
-            physUpdate(timeElapsed);
-
-            // Every 3 intervals (45ms),
-            if (count % 3 == 0) {
-                count = 0;
-                // Serve the update to the clients
-                serveUpdate(timeElapsed);
-            };
-
-            lastFrame = thisFrame;
-            count++;
-        }, 15);
+        delete this.clients[player.id];
     }
 });
 
