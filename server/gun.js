@@ -1,4 +1,5 @@
-var Class = require('./class');
+var Class = require('./class'),
+    Bullet = require('./bullet');
 /*
   accuracy: Higher is WORSE
   damage: Higher is BETTER
@@ -31,7 +32,7 @@ var types = {
 };
 
 var Gun = Class.extend({
-    init: function(type, player) {
+    init: function(player, type) {
         this.type = type;
 
         this.accuracy = types[type].accuracy;
@@ -44,7 +45,7 @@ var Gun = Class.extend({
         this.timeSinceLastFire = 0;
         this.player = player;
     },
-    fire: function(lobby) {
+    fire: function() {
         if (this.timeSinceLastFire >= this.rate) {
             this.timeSinceLastFire -= this.rate;
 
@@ -62,8 +63,9 @@ var Gun = Class.extend({
                 case 'shotgun':
                     if (!this.wasFired) {
                         this.wasFired = true;
-                        for (var i = 0; i < 15; i++) {
-                            lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction + (Math.random() * 2 - 1) * this.player.gun.accuracy / 100, this));
+
+                        for (var i = 0, n = 3, halfN = (n - 1) / 2; i < n; i++) {
+                            this.player.lobby.game.addBullet(new Bullet(this, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100));
                         }
                     }
                     break;
