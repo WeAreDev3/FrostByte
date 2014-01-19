@@ -1,9 +1,9 @@
 // Link our files together
 var Class = require('./class'),
-    Enemy = require('./enemy'),
     Bullet = require('./bullet'),
-    UUID = require('node-uuid'),
-    Utils = require('./utils');
+    Enemy = require('./enemy'),
+    Utils = require('./utils'),
+    UUID = require('node-uuid');
 
 var Game = Class.extend({
     init: function() {
