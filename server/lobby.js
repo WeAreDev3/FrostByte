@@ -22,13 +22,14 @@ var Lobby = Class.extend({
         this.clients[socket.id] = socket;
         this.game.players[socket.id] = new Player(socket, this);
         // console.log(this.game.players);
-        
+
         if (Object.keys(this.clients).length >= this.size) {
             this.full = true;
         }
     },
-    removePlayer: function(player) {
-        delete this.clients[player.id];
+    removePlayer: function(socket) {
+        delete this.clients[socket.id];
+        delete this.game.players[socket.id];
     }
 });
 
