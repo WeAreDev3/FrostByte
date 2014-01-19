@@ -1,23 +1,20 @@
-# Top Down Shooter
+# FrostByte
+This is a simple game (top-down-shooter) written in javascript served by node.js.
+This project is hosted [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter)
 
-## Version
-Can be found at ./package.json
+### Version
+Can be found at ./package.json:3
 
-## Goals
-moved [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
+### Resources
+Dev3 FrostByte wiki:  [Home](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/home)  |  [Installing/Using](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/How-to-install)
+Play on our servers: _Coming soon_
+Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 
-### Proposed class system by janka102:
- - Entity
-    - Character
-        - Player
-        - Other Players in Lobby
-        - Enemy/Mob
-	    - Item
-	        - Gun
-	        - Inventory
-	        - Currency
-    - Bullet
-    - Wall/Barrier
+A *nix machine will probably make this easier, and lets be frank, they're better anyways
 
-## Bugs
-Can now be found at http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues
+### Future/Goals
+This project is very new, we have far to go. Our goals can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
+
+### Bugs
+Can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues)
+Found a bug? Submit it [on GitHub](https://github.com/WeAreDev3/FrostByte/issues). We'll probably check it someday.
