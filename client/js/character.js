@@ -121,7 +121,6 @@ Character.prototype.update = function(timeElapsed) {
         }
 
         this.color = 'rgba(' + parseInt(255 - (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 196)) + ',' + this.transparency + ')';
-        console.log(this.color);
 
         if (this.health <= 0) {
             this.transparency -= timeElapsed * 2;

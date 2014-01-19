@@ -135,9 +135,9 @@ function update(timeElapsed) {
 
 
     // Can't cache the length of the arrays b/c they can change mid-loop.
-    // for (i = 0; i < enemies.length; i++) {
-    //     enemies[i].update(timeElapsed);
-    // }
+    for (i = 0; i < enemies.length; i++) {
+        enemies[i].update(timeElapsed);
+    }
 
     for (i = 0; i < bullets.length; i++) {
         bullets[i].update(timeElapsed);
