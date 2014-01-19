@@ -3,12 +3,11 @@ var Character = require('./character'),
 
 var Player = Character.extend({
     init: function(socket, lobby) {
-        var x = lobby.game.width / 2,
-            y = lobby.game.height / 2;
-
-
         this.socket = socket;
         this.lobby = lobby;
+
+        var x = this.lobby.game.width / 2,
+            y = this.lobby.game.height / 2;
 
         this._super(this.socket.id, 'player', x, y);
 
@@ -23,9 +22,8 @@ var Player = Character.extend({
 
         socket.player = this;
 
-        // Input from clients
+        // Input from client
         this.movements = [];
-        // console.log(this)
     },
     setGun: function(gun) {
         this.gun = gun;
@@ -49,24 +47,10 @@ var Player = Character.extend({
                 this.setDirection(parameters[0]);
                 break;
 
-                // case 'j': // Handle the command j (join)
-                //     player.x = parseFloat(parameters[0]);
-                //     player.y = parseFloat(parameters[1]);
-                //     player.direction = parseFloat(parameters[2]);
-                //     joinNewLobby(player);
-
-                //     // Clean up items from the player that aren't needed any more
-                //     delete player.x;
-                //     delete player.y;
-                //     delete player.direction;
-                //     break;
-
-            case 'b': // Handle the command b (add bullet)
-                // console.log(parameters);
-                if (this) {
-                    this.gun.fire(this);
-                }
-                // console.log(this.game.bullets);
+            case 'f': // Handle the command f (fire)
+                this.gun.fire();
+                // console.log(this.lobby.game.bullets);
+                break;
         }
 
     },
