@@ -47,7 +47,7 @@ var Bullet = Class.extend({
             var distanceFromBulletLine = Math.sqrt(Math.pow((game.enemies[i].x - intersection[0]), 2) + Math.pow((game.enemies[i].y - intersection[1]), 2)),
                 isIntersectionOnBullet = this.x2 > this.prevX ? intersection[0] > this.prevX && intersection[0] < this.x2 : intersection[0] < this.prevX && intersection[0] > this.x2;
 
-            if (distanceFromBulletLine <= game.enemies[i].size && isIntersectionOnBullet && game.enemies[i].health > 0) {
+            if (isIntersectionOnBullet && distanceFromBulletLine <= game.enemies[i].size && game.enemies[i].health() > 0) {
                 game.enemies[i].hit(this.gun.damage);
                 game.removeBullet(this);
                 return;
