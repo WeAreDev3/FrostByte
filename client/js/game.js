@@ -18,10 +18,10 @@ function startGame() {
 
     //Some environment input variables, updated by the event handlers from above
     input = {
-        'w': false,
-        'a': false,
-        's': false,
+        'u': false,
         'd': false,
+        'l': false,
+        'r': false,
         'mouse': {
             'x': 800,
             'y': 500,
@@ -180,40 +180,81 @@ function draw(context) {
     crosshairs.draw();
 }
 
-//Record the needed keys in the input object
+// Record the needed keys in the input object
 
 function handleKeyDown(event) {
     switch (event.keyCode) {
         case 87: // w
-            input.w = true;
-            break;
-        case 65: // a
-            input.a = true;
+        case 38: // up arrow
+            // Only update if we have to
+            if (!input.u) {
+                input.u = true;
+
+                // Send the sever Input that the Up key is True
+                socket.send('iut');
+            }
             break;
         case 83: // s
-            input.s = true;
+        case 40: // down arrow
+            if (!input.d) {
+                input.d = true;
+
+                // Send the sever Input that the Left key is True
+                socket.send('idt');
+            }
+            break;
+        case 65: // a
+        case 37: // left arrow
+            if (!input.l) {
+                input.l = true;
+
+                // Send the sever Input that the Down key is True
+                socket.send('ilt');
+            }
             break;
         case 68: // d
-            input.d = true;
+        case 39: // right arrow
+            if (!input.r) {
+                input.r = true;
+
+                // Send the sever Input that the Right key is True
+                socket.send('irt');
+            }
             break;
     }
 }
 
-//Remove the keys recorded from the input object
+// Remove the keys recorded from the input object
 
 function handleKeyUp(event) {
     switch (event.keyCode) {
         case 87: // w
-            input.w = false;
-            break;
-        case 65: // a
-            input.a = false;
+        case 38: // up arrow
+            input.u = false;
+
+            // Send the sever Input that the Up key is False
+            socket.send('iuf');
             break;
         case 83: // s
-            input.s = false;
+        case 40: // down arrow
+            input.d = false;
+
+            // Send the sever Input that the Left key is False
+            socket.send('idf');
+            break;
+        case 65: // a
+        case 37: // left arrow
+            input.l = false;
+
+            // Send the sever Input that the Down key is False
+            socket.send('ilf');
             break;
         case 68: // d
-            input.d = false;
+        case 39: // right arrow
+            input.r = false;
+
+            // Send the sever Input that the Right key is False
+            socket.send('irf');
             break;
     }
 }
@@ -235,12 +276,18 @@ function handleMouseMove(event) {
 
 function handleMouseDown() {
     input.mouseDown = true;
+
+    // Send the server Input that the Mouse is True
+    socket.send('imt');
 }
 
 //Record the    
 
 function handleMouseUp() {
     input.mouseDown = false;
+
+    // Send the server Input that the Mouse is false
+    socket.send('imf');
 }
 
 function clearScreen() {

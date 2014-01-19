@@ -23,7 +23,7 @@ Character.prototype.draw = function() {
 
     var namePositionX = x - (context.measureText(this.name).width / 2),
         namePositionY = y + (size * 2);
- 
+
     // Draws Body
     context.fillStyle = this.color;
 
@@ -55,38 +55,27 @@ Character.prototype.setState = function(state) {
 
 Character.prototype.update = function(timeElapsed) {
     var damageDone = 100 - this.health,
-        inputs = {
-            'move': [],
-            'direction': this.direction
-        };
+        dir = this.direction;
 
     if (this.type === 'player') {
-        if (input.w) { // Up (Press W)
+        if (input.u) { // Up (Press W or Up)
             this.y -= this.speed * timeElapsed;
-            inputs.move.push('u');
         }
-        if (input.s) { // Down (Press S)
+        if (input.d) { // Down (Press S or Down)
             this.y += this.speed * timeElapsed;
-            inputs.move.push('d');
         }
-        if (input.a) { // Left (Press A)
+        if (input.l) { // Left (Press A or Left)
             this.x -= this.speed * timeElapsed;
-            inputs.move.push('l');
         }
-        if (input.d) { // Right (Press D)
+        if (input.r) { // Right (Press D or Right)
             this.x += this.speed * timeElapsed;
-            inputs.move.push('r');
         }
 
-        if (inputs.move.length) {
-            inputs.move = inputs.move.join(',')
-            // console.log('sending input:', inputs.move);
-            socket.send('m' + inputs.move);
-        }
+        // Number.toFixed() returns a string, so make sure to turn it back into a number
+        this.direction = (Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI); //.toFixed(3);
 
-        this.direction = (Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI).toFixed(5);
-
-        if (this.direction !== inputs.direction) {
+        // If the player direction changes, send the new direction to the server
+        if (dir !== this.direction) {
             socket.send('d' + this.direction);
         }
 
@@ -96,11 +85,11 @@ Character.prototype.update = function(timeElapsed) {
 
         this.gun.timeSinceLastFire += timeElapsed;
 
-        if (!input.mouseDown && this.gun.timeSinceLastFire >= this.gun.rate) {
+        if (!input.mouseDown && this.gun.timeSinceLastFire > this.gun.rate) {
             this.gun.timeSinceLastFire = this.gun.rate;
         }
 
-        if (!input.mouseDown) {
+        if (!input.mouseDown && this.gun.wasFired) {
             this.gun.wasFired = false;
         }
 

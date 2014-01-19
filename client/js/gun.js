@@ -45,9 +45,6 @@ Gun.prototype.fire = function() {
     if (this.timeSinceLastFire >= this.rate) {
         this.timeSinceLastFire -= this.rate;
 
-        // Send the 'f' command (fire);
-        socket.send('f');
-
         switch (this.type) {
             case 'semi-auto':
                 if (!this.wasFired) {
