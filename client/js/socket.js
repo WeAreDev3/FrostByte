@@ -75,21 +75,13 @@ socket.on('update', function(data) {
         enemies.push(new Character(enemySpecs));
     }
 
-    // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
+    bullets = [];
+
     for (var i = data.bullets.length - 1; i >= 0; i--) {
-        // console.log(data.bullets[i]);
-        if (data.bullets[i].playerId !== player.id) {
-            new Bullet({
-                    'character': {
-                        'x': data.bullets[i].gun.character.x,
-                        'y': data.bullets[i].gun.character.y,
-                        'size': data.bullets[i].gun.character.size
-                    },
-                    'damage': data.bullets[i].gun.damage
-                },
-                data.bullets[i].speed,
-                data.bullets[i].direction
-            );
-        }
+        // if (data.bullets[i].playerId !== player.id) {
+        // console.log(JSON.stringify(data.bullets[i]));
+
+        new Bullet(data.bullets[i].gun, data.bullets[i].direction);
+        // }
     }
 });
