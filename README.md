@@ -4,7 +4,7 @@
 Can be found at ./package.json
 
 ## Goals
-moved to http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues
+moved [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
 
 ### Proposed class system by janka102:
  - Entity
