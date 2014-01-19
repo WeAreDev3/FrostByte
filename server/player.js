@@ -25,7 +25,7 @@ var Player = Character.extend({
         this.setSpeed(100);
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor('#4D90FE');
+        this.setColor(77, 144, 254);
         this.setGun('full-auto');
 
         // Add the player onto the socket to be used elsewhere
@@ -97,6 +97,20 @@ var Player = Character.extend({
         }
         if (this.input.r) { // Right
             this.x += this.speed * timeElapsed;
+        }
+
+        // If the player goes off the screen
+        if (this.x < 0) {
+            this.setPosition(0, this.y);
+        }
+        if (this.x > this.lobby.game.width) {
+            this.setPosition(this.lobby.game.width, this.y);
+        }
+        if (this.y < 0) {
+            this.setPosition(this.x, 0);
+        }
+        if (this.y > this.lobby.game.height) {
+            this.setPosition(this.x, this.lobby.game.height);
         }
 
         // Handle the gun firing
