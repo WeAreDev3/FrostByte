@@ -58,9 +58,9 @@ var Game = Class.extend({
                     location.direction = 0;
                     break;
             }
-        }
 
-        this.enemies.push(new Enemy(UUID(), 0, location.x, location.y, location.direction, this));
+            this.enemies.push(new Enemy(UUID(), 0, location.x, location.y, location.direction, this));
+        }
     },
     start: function() {
         var lastFrame = Date.now(), // Initialize the game loop
