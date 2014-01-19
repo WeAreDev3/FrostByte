@@ -6,9 +6,9 @@ var Enemy = Character.extend({
 
         this.game = game;
 
-        this.setHitPoints(70 + (level * 10));
+        this.setHitPoints(70 + (level * Math.random() * 20));
         this.setSize(10);
-        this.setSpeed(50 + (level * 5));
+        this.setSpeed(50 + (level * Math.random() * 10));
         this.setMobility(10);
         this.setDirection(0);
         this.setColor(255, 0, 0);
