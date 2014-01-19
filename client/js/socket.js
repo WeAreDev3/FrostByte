@@ -10,7 +10,20 @@ var otherPlayersStates = {
     'direction': Math.PI / 2,
     'gun': new Gun('full-auto'),
     'color': '#90EE4D'
-};
+},
+    enemySpecs = {
+        'type': 'enemy',
+        'name': null,
+        'hp': 50,
+        'size': 10,
+        'speed': 55,
+        'mobility': 10,
+        'x': null,
+        'y': null,
+        'direction': 0,
+        'gun': null,
+        'color': 'rbg(255,0,0)'
+    };
 
 socket = io.connect();
 socket.on('connect', function() {
@@ -55,7 +68,14 @@ socket.on('update', function(data) {
         }
     }
 
-    enemies = data.enemies;
+    enemies = [];
+
+    for (var i = data.enemies.length - 1; i >= 0; i--) {
+        enemySpecs.name = i;
+        enemySpecs.gun = new Gun('full-auto');
+
+        enemies.push(new Character(enemySpecs));
+    }
 
     // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
     for (var i = data.bullets.length - 1; i >= 0; i--) {
