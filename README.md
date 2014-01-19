@@ -13,7 +13,7 @@ Play on our servers: _Coming soon_
 
 Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 
-A *nix machine will probably make this easier, and lets be frank, they're better anyways
+_A *nix machine will probably make this easier, and lets be frank, they're better anyways_
 
 ### Future/Goals
 This project is very new, we have far to go. Our goals can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
