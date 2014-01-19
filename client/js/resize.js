@@ -5,10 +5,12 @@ function resizeBrowser() {
 
     if (width / height >= 1.6) {
         canvas.height = height;
-        canvas.width = height * 1.6;
+        width = height * 1.6;
+        canvas.width = width;
     } else {
         canvas.width = width;
-        canvas.height = width / 1.6;
+        height = width / 1.6;
+        canvas.height = height;
     }
 
     leftOff = canvas.offsetLeft;
