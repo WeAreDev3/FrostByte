@@ -71,43 +71,4 @@ var Gun = Class.extend({
     }
 });
 
-// var Gun = function(type) {
-//     this.type = type;
-//     this.accuracy = types[type].accuracy;
-//     this.damage = types[type].damage;
-//     this.kick = types[type].kick;
-//     this.bulletSpeed = types[type].bulletSpeed;
-//     this.wasFired = false;
-//     this.rate = types[type].rate / 1000;
-//     this.timeSinceLastFire = 0;
-//     this.character = null;
-// };
-
-// Just comment out for now so i dont have get bullet working yet also
-// Gun.prototype.fire = function() {
-//     if (this.timeSinceLastFire >= this.rate) {
-//         this.timeSinceLastFire -= this.rate;
-
-//         switch (this.type) {
-//             case 'semi-auto':
-//                 if (!this.wasFired) {
-//                     this.wasFired = true;
-//                     new Bullet(this, this.bulletSpeed, this.character.direction);
-//                 }
-//                 break;
-//             case 'full-auto':
-//                 new Bullet(this, this.bulletSpeed, this.character.direction);
-//                 break;
-//             case 'shotgun':
-//                 if (!this.wasFired) {
-//                     this.wasFired = true;
-//                     for (var i = 0; i < 15; i++) {
-//                         new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
-//                     }
-//                 }
-//                 break;
-//         }
-//     }
-// };
-
 module.exports = Gun;
