@@ -10,7 +10,7 @@ var Enemy = Character.extend({
         this.setSize(10);
         this.setSpeed(50);
         this.setMobility(10);
-        this.setDirection(direction);
+        this.setDirection(0);
         this.setColor('#FF0000');
 
         // console.log(direction);
@@ -27,23 +27,25 @@ var Enemy = Character.extend({
     },
     update: function(timeElapsed) {
         var nearestPlayer,
+            prevDistance,
             offScreen = false,
             players = [];
 
         // Create an array of all the players to loop through them with Array.reduce()
-        for (var player in this.game.players) {
-            if (this.game.players.hasOwnProperty(player)) {
-                players.push(this.game.players[player]);
-            }
-        }
+        this.game.forEachPlayer(function(player, id) {
+            players.push(player);
+        });
 
         // Go through all the players and check who is the closest
         if (players.length) {
             nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
-                var prevDistance = Math.sqrt(Math.pow(prevPlayer.x - this.x, 2) + Math.pow(prevPlayer.y - this.y, 2)),
-                    currDistance = Math.sqrt(Math.pow(currPlayer.x - this.x, 2) + Math.pow(currPlayer.y - this.y, 2));
+                var currDistance = Math.sqrt(Math.pow(currPlayer.x - this.x, 2) + Math.pow(currPlayer.y - this.y, 2));
+                if (prevDistance === undefined) {
+                    prevDistance = Math.sqrt(Math.pow(prevPlayer.x - this.x, 2) + Math.pow(prevPlayer.y - this.y, 2));
+                }
                 // console.log(prevDistance, currDistance);
                 if (prevDistance > currDistance) {
+                    prevDistance = currDistance;
                     return currPlayer;
                 }
 
@@ -52,7 +54,7 @@ var Enemy = Character.extend({
         }
 
         if (nearestPlayer) {
-            this.setDirection(Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x)).toFixed(3));
+            this.setDirection(+Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
 
         }
 
