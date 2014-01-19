@@ -52,12 +52,12 @@ Gun.prototype.fire = function() {
             case 'semi-auto':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    new Bullet(this, this.bulletSpeed, this.player.direction);
+                    new Bullet(this);
                     crosshairs.kickCounter++;
                 }
                 break;
             case 'full-auto':
-                new Bullet(this, this.bulletSpeed, this.player.direction);
+                new Bullet(this);
                 crosshairs.kickCounter++;
                 break;
             case 'shotgun':
@@ -65,7 +65,7 @@ Gun.prototype.fire = function() {
                     this.wasFired = true;
 
                     for (var i = 0, n = 3, halfN = (n - 1) / 2; i < n; i++) {
-                        new Bullet(this.player.gun, this.bulletSpeed, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100);
+                        new Bullet(this, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100);
                     }
                     crosshairs.kickCounter++;
                 }
