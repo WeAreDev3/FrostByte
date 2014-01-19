@@ -52,11 +52,12 @@ var Gun = Class.extend({
                 case 'semi-auto':
                     if (!this.wasFired) {
                         this.wasFired = true;
-                        lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction, this));
+
+                        this.player.lobby.game.addBullet(new Bullet(this));
                     }
                     break;
                 case 'full-auto':
-                    lobby.addBullet(new Bullet(this.bulletSpeed, this.player.direction, this));
+                    this.player.lobby.game.addBullet(new Bullet(this));
                     break;
                 case 'shotgun':
                     if (!this.wasFired) {
