@@ -49,7 +49,7 @@ socket.on('update', function(data) {
                 if (!otherPlayers[playerId]) {
                     otherPlayers[playerId] = new Character(otherPlayersStates);
                     otherPlayers[playerId].name = playerId;
-                    console.log('new player:', otherPlayers[playerId]);
+                    console.log('New player:', otherPlayers[playerId]);
                 }
 
                 otherPlayers[playerId].setState(data.players[playerId]);
@@ -61,7 +61,7 @@ socket.on('update', function(data) {
 
     for (playerId in otherPlayers) {
         if (otherPlayers.hasOwnProperty(playerId) && !(playerId in data.players)) {
-            console.log('user deleted:', playerId);
+            console.log('User deleted:', playerId);
             delete otherPlayers[playerId];
         }
     }
