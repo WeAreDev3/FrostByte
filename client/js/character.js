@@ -51,6 +51,7 @@ Character.prototype.setState = function(state) {
     this.x = state.x;
     this.y = state.y;
     this.direction = state.direction;
+    this.color = state.color;
 };
 
 Character.prototype.update = function(timeElapsed) {
@@ -69,6 +70,20 @@ Character.prototype.update = function(timeElapsed) {
         }
         if (input.r) { // Right (Press D or Right)
             this.x += this.speed * timeElapsed;
+        }
+
+        // If the player goes off the screen
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x > 1600) {
+            this.x = 1600;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+        if (this.y > 1000) {
+            this.y = 1000;
         }
 
         // Number.toFixed() returns a string, so make sure to turn it back into a number
@@ -105,7 +120,8 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.56)) + ',' + this.transparency + ')';
+        this.color = 'rgba(' + parseInt(255 - (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 196)) + ',' + this.transparency + ')';
+        console.log(this.color);
 
         if (this.health <= 0) {
             this.transparency -= timeElapsed * 2;
