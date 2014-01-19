@@ -1,64 +1,62 @@
-var Gun = require('./gun');
+var Class = require('./class');
 
-var Character = function(client) {
-    this.client = client;
-    this.type = 'player';
-    this.name = this.client.id;
-    this.hp = 100;
-    this.health = 100; // Percent
-    this.size = 12;
-    this.speed = 100;
-    this.mobility = 10;
-    this.x = client.x;
-    this.y = client.y;
-    this.direction = client.direction;
-    this.gun = new Gun('full-auto');
-    this.gun.character = this;
-    this.color = '#4D90FE';
-    this.transparency = 1;
-
-};
-
-Character.prototype.update = function(timeElapsed) {
-    var damageDone = 100 - this.health;
-
-    if (this.type === 'player') {
-        this.gun.timeSinceLastFire += timeElapsed;
-    } else {
-        this.x += this.speed * Math.cos(this.direction) * timeElapsed;
-        this.y += this.speed * Math.sin(this.direction) * timeElapsed;
-
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-            this.direction += Math.PI;
+var Character = Class.extend({
+    init: function(id, x, y) {
+        this.id = id;
+        this.setPosition(x, y);
+    },
+    setSize: function(size) {
+        this.size = size;
+    },
+    setSpeed: function(speed) {
+        this.speed = speed;
+    },
+    setMobility: function(mobility) {
+        this.mobility = mobility;
+    },
+    setDirection: function(direction) {
+        this.direction = direction;
+    },
+    setPosition: function(x, y) {
+        this.x = x;
+        this.y = y;
+    },
+    setColor: function(r, g, b, a) {
+        // Assuming giving Red and Green and Blue seperatly and optionaly Alpha
+        a = a !== undefined ? a : '1';
+        this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+    },
+    setHitPoints: function(maxHitPoints) {
+        this.maxHitPoints = maxHitPoints;
+        this.hitPoints = this.maxHitPoints;
+    },
+    health: function(hitPoints) {
+        if (hitPoints !== undefined) {
+            this.hitPoints = hitPoints;
         }
+        return this.hitPoints / this.maxHitPoints;
+    },
+    hit: function(damage) {
+        this.hitPoints -= damage;
 
-        if (this.mobility < 0) {
-            this.direction += Math.PI / this.mobility * timeElapsed;
+        if (this.hitPoints <= 0) {
+            this.kill();
         }
-
-        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + this.transparency + ')';
-
-        if (this.health <= 0) {
-            this.transparency -= timeElapsed * 2;
-        }
-        if (this.transparency <= 0) {
-            enemies.splice(enemies.indexOf(this), 1);
-        }
-    }
-};
-
-Character.prototype.hit = function(damage) {
-    this.health -= damage;
-
-    if (this.health <= 0) {
-        this.kill();
-    }
-};
-
-Character.prototype.kill = function() {
-    this.health = 0;
-    this.speed = 0;
-    this.mobility = 0;
-};
+    },
+    kill: function() {
+        this.health(0);
+        this.setSpeed(0);
+        this.setMobility(0);
+    },
+    getState: function() {
+        return {
+            'x': this.x,
+            'y': this.y,
+            'direction': this.direction,
+            'color': this.color
+        };
+    },
+    update: function(timeElapsed) {}
+});
 
 module.exports = Character;

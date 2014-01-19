@@ -1,112 +1,171 @@
 // Link our files together
-var Character = require('./character');
+var Class = require('./class'),
+    Bullet = require('./bullet'),
+    Enemy = require('./enemy'),
+    Utils = require('./utils'),
+    UUID = require('node-uuid');
 
-// The Game class's definition
-var Game = function() {
-    // Define the width and height of the server's viewport -
-    // we will be using a 16:10 aspect ratio
-    this.width = 1600; // = 16 * 100
-    this.height = 1000; // = 10 * 100
+var Game = Class.extend({
+    init: function() {
+        this.width = 1600; // = 16 * 100
+        this.height = 1000; // = 10 * 100
 
-    // An object containing all of the players in the game
-    this.players = {};
+        this.players = {};
+        this.enemies = [];
+        this.bullets = [];
 
-    this.bullets = [];
+        this.level = 0;
+        this.nextLevel();
 
-    // Start the game loop
-    this.startLoop();
-};
-
-// Add the client's character to the game
-Game.prototype.addChar = function(client) {
-    this.players[client.id] = new Character(client);
-};
-
-// Remove the client's character from the game
-Game.prototype.removeChar = function(client) {
-    // console.log('Deleting:', this.players[client.id]);
-    delete this.players[client.id];
-};
-
-Game.prototype.addBullet = function(x, y, size, damage, speed, direction, playerId) {
-    this.bullets.push({
-        'sent': false,
-        'x': parseFloat(x).toFixed(3),
-        'y': parseFloat(y).toFixed(3),
-        'size': parseInt(size),
-        'speed': parseInt(speed),
-        'damage': parseInt(damage),
-        'direction': parseFloat(direction).toFixed(2),
-        'playerId': playerId
-    });
-};
-
-// Start the synchronized game loop
-Game.prototype.startLoop = function() {
-    var lastFrame = 0, // Initialize the game loop
-        count = 0, // Initialize the interval counter
-        self = this; // Capture the game object for usage below
-
-    // Update the physics of the game
-
-    function physUpdate(timeElapsed) {}
-
-    // Serve the updated game to the clients
-
-    function serveUpdate(timeElapsed) {
-        // The object containing the information the clients use to update
-        var update = {
-            'players': {},
-            'bullets': []
+        this.start();
+    },
+    addBullet: function(bullet) {
+        this.bullets.push(bullet);
+    },
+    removeBullet: function(bullet) {
+        this.bullets.splice(this.bullets.indexOf(bullet), 1);
+    },
+    addEnemy: function(enemy) {
+        this.enemies.push(enemy);
+    },
+    nextLevel: function() {
+        this.spawnEnemies(16 * ((this.level + 1) / 2), this.level);
+        this.level++;
+    },
+    removeEnemy: function(enemy) {
+        this.enemies.splice(this.enemies.indexOf(enemy), 1);
+    },
+    spawnEnemies: function(number, level) {
+        var location = {
+            'x': 0,
+            'y': 0
         };
 
-        // For each player,
-        for (var player in self.players) {
-            if (self.players.hasOwnProperty(player)) {
-                // Add their array to the update object
-                update.players[player] = [];
-                // Add their x and y position and direction to their array
-                update.players[player].push(self.players[player].x);
-                update.players[player].push(self.players[player].y);
-                update.players[player].push(self.players[player].direction);
+        for (var i = number - 1; i >= 0; i--) {
+            switch (Utils.randomInt(4)) {
+                case 0: // Start at top
+                    location.x = Utils.randomInt(this.width);
+                    location.y = 0;
+                    break;
+
+                case 1: // Start from the right
+                    location.x = this.width;
+                    location.y = Utils.randomInt(this.height);
+                    break;
+
+                case 2: // Start at the bottom
+                    location.x = Utils.randomInt(this.width);
+                    location.y = this.height;
+                    break;
+
+                case 3: // Start from the left
+                    location.x = 0;
+                    location.y = Utils.randomInt(this.height);
+                    break;
+            }
+
+            this.addEnemy(new Enemy(UUID(), location.x, location.y, level, this));
+        }
+    },
+    forEachPlayer: function(callback) {
+        for (var player in this.players) {
+            if (this.players.hasOwnProperty(player)) {
+                callback(this.players[player], player);
             }
         }
-
-        for (var i = self.bullets.length - 1; i >= 0; i--) {
-            if (!self.bullets[i].sent) {
-                // console.log(self.bullets[i]);
-                update.bullets.push(self.bullets[i]);
-                self.bullets[i].sent = true;
-            }
+    },
+    forEachEnemy: function(callback) {
+        for (var i = 0; i < this.enemies.length; i++) {
+            callback(this.enemies[i], i);
         }
+    },
+    forEachBullet: function(callback) {
 
-        // Send the data to each client
-        for (var player in self.players) {
-            if (self.players.hasOwnProperty(player)) {
-                self.players[player].client.emit('update', update);
-            }
+        // Can't cache the length of bullets b/c it could change midway through the loop
+        for (var i = 0; i < this.bullets.length; i++) {
+            callback(this.bullets[i], i);
         }
-    }
-
-    // Set the update interval to 15ms (see end of call)
-    setInterval(function() {
-        // Define the time elapsed since the last frame
-        var thisFrame = Date.now(),
-            timeElapsed = (thisFrame - lastFrame) / 1000;
+    },
+    start: function() {
+        var lastFrame = Date.now(), // Initialize the game loop
+            count = 0, // Initialize the interval counter
+            self = this; // Capture the lobby object for usage below
 
         // Update the physics of the game
-        physUpdate(timeElapsed);
 
-        // Every 3 intervals (45ms),
-        if (count % 3 == 0) {
-            count = 0;
-            // Serve the update to the clients
-            serveUpdate(timeElapsed);
-        };
+        function physUpdate(timeElapsed) {
+            self.forEachPlayer(function(player, id) {
+                player.update(timeElapsed);
+            });
 
-        lastFrame = thisFrame;
-        count++;
-    }, 15);
-};
+            self.forEachEnemy(function(enemy, id) {
+                enemy.update(timeElapsed);
+            });
+
+            self.forEachBullet(function(bullet, index) {
+                bullet.update(timeElapsed);
+            });
+
+            if (!self.enemies.length) {
+                self.nextLevel();
+            }
+        }
+
+        // Serve the updated game to the clients
+
+        function serveUpdate() {
+            // The object containing the information the clients use to update
+            var update = {
+                'players': {},
+                'enemies': [],
+                'bullets': []
+            };
+
+            // Add the players state to the update: (x, y, direction)
+            self.forEachPlayer(function(player, id) {
+                update.players[id] = player.getState();
+            });
+
+            // Add all the enemy states to the update: (x, y, direction)
+            self.forEachEnemy(function(enemy, index) {
+                update.enemies.push(enemy.getState());
+            })
+
+            // Add all the bullet states to the update: (gun, )
+            self.forEachBullet(function(bullet, index) {
+                // if (!bullet.sent) {
+                update.bullets.push(bullet.getState());
+
+                // bullet.sent = true;
+                // }
+            });
+
+            // Send the data to each client
+            self.forEachPlayer(function(player, id) {
+                player.socket.emit('update', update);
+            });
+        }
+
+        // Set the update interval to 15ms (see end of call)
+        setInterval(function() {
+            // Define the time elapsed since the last frame
+            var thisFrame = Date.now(),
+                timeElapsed = (thisFrame - lastFrame) / 1000;
+
+            // Update the physics of the game
+            physUpdate(timeElapsed);
+
+            // Every 3 intervals (45ms),
+            if (count % 3 == 0) {
+                count = 0;
+                // Serve the update to the clients
+                serveUpdate();
+            };
+
+            lastFrame = thisFrame;
+            count++;
+        }, 15);
+    }
+});
 
 module.exports = Game;

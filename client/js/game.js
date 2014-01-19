@@ -18,10 +18,10 @@ function startGame() {
 
     //Some environment input variables, updated by the event handlers from above
     input = {
-        'w': false,
-        'a': false,
-        's': false,
+        'u': false,
         'd': false,
+        'l': false,
+        'r': false,
         'mouse': {
             'x': 800,
             'y': 500,
@@ -41,7 +41,7 @@ function startGame() {
         'x': 800,
         'y': 500,
         'direction': Math.PI / 2,
-        'gun': create(Gun, 'full-auto'),
+        'gun': new Gun('full-auto'),
         'color': '#4D90FE'
     },
         enemySpecs = {
@@ -64,7 +64,7 @@ function startGame() {
     otherPlayers = {};
 
     //Create the crosshairs!
-    crosshairs = new Crosshairs(800, 500, player);
+    crosshairs = new Crosshairs(player);
 
     //defines the function that creates enemies
 
@@ -74,14 +74,14 @@ function startGame() {
             enemySpecs.x = Math.random() * 1600;
             enemySpecs.y = Math.random() * 1000;
             enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
-            enemySpecs.gun = create(Gun, 'full-auto');
+            enemySpecs.gun = new Gun('full-auto');
 
             enemies.push(new Character(enemySpecs));
         }
     }
 
     // actually creates enemies
-    createEnemies(50);
+    // createEnemies(50);
 
     console.log(player);
     console.log(crosshairs);
@@ -101,18 +101,13 @@ function startGame() {
             frameId = window.requestAnimationFrame(loop);
 
             // if (count % 1 === 0) {
-                // count = 0;
-                update(timeElapsed);
-                draw(context);
+            // count = 0;
+            update(timeElapsed);
+            draw(context);
             // }
 
-            if (count % 200 === 0) {
-                count = 0
-                createEnemies(2);
-            }
-
             lastFrame = thisFrame;
-            count++;
+            // count++;
         }
 
         loop();
@@ -125,14 +120,6 @@ function startGame() {
 
 function initCanvas() {
     resizeBrowser();
-}
-
-function create(constructor, args) {
-    function F() {
-        return constructor.call(this, args);
-    }
-    F.prototype = constructor.prototype;
-    return new F();
 }
 
 //Initalize the arrays of bullets and enemies
@@ -148,9 +135,9 @@ function update(timeElapsed) {
 
 
     // Can't cache the length of the arrays b/c they can change mid-loop.
-    for (i = 0; i < enemies.length; i++) {
-        enemies[i].update(timeElapsed);
-    }
+    // for (i = 0; i < enemies.length; i++) {
+    //     enemies[i].update(timeElapsed);
+    // }
 
     for (i = 0; i < bullets.length; i++) {
         bullets[i].update(timeElapsed);
@@ -166,17 +153,18 @@ function update(timeElapsed) {
 
 function draw(context) {
     var i,
-        len;
+        others;
 
     //Step 1: Clear the screen
     clearScreen();
 
     //Step 2: Draw all items on the screen
-    for (i = 0, len = enemies.length; i < len; i++) {
+
+    for (i = enemies.length - 1; i >= 0; i--) {
         enemies[i].draw();
     }
 
-    for (var others in otherPlayers) {
+    for (others in otherPlayers) {
         if (otherPlayers.hasOwnProperty(others)) {
             otherPlayers[others].draw();
         }
@@ -184,7 +172,7 @@ function draw(context) {
 
     player.draw();
 
-    for (i = 0, len = bullets.length; i < len; i++) {
+    for (i = bullets.length - 1; i >= 0; i--) {
         bullets[i].draw();
     }
 
@@ -192,40 +180,81 @@ function draw(context) {
     crosshairs.draw();
 }
 
-//Record the needed keys in the input object
+// Record the needed keys in the input object
 
 function handleKeyDown(event) {
     switch (event.keyCode) {
         case 87: // w
-            input.w = true;
-            break;
-        case 65: // a
-            input.a = true;
+        case 38: // up arrow
+            // Only update if we have to
+            if (!input.u) {
+                input.u = true;
+
+                // Send the sever Input that the Up key is True
+                socket.send('iut');
+            }
             break;
         case 83: // s
-            input.s = true;
+        case 40: // down arrow
+            if (!input.d) {
+                input.d = true;
+
+                // Send the sever Input that the Left key is True
+                socket.send('idt');
+            }
+            break;
+        case 65: // a
+        case 37: // left arrow
+            if (!input.l) {
+                input.l = true;
+
+                // Send the sever Input that the Down key is True
+                socket.send('ilt');
+            }
             break;
         case 68: // d
-            input.d = true;
+        case 39: // right arrow
+            if (!input.r) {
+                input.r = true;
+
+                // Send the sever Input that the Right key is True
+                socket.send('irt');
+            }
             break;
     }
 }
 
-//Remove the keys recorded from the input object
+// Remove the keys recorded from the input object
 
 function handleKeyUp(event) {
     switch (event.keyCode) {
         case 87: // w
-            input.w = false;
-            break;
-        case 65: // a
-            input.a = false;
+        case 38: // up arrow
+            input.u = false;
+
+            // Send the sever Input that the Up key is False
+            socket.send('iuf');
             break;
         case 83: // s
-            input.s = false;
+        case 40: // down arrow
+            input.d = false;
+
+            // Send the sever Input that the Left key is False
+            socket.send('idf');
+            break;
+        case 65: // a
+        case 37: // left arrow
+            input.l = false;
+
+            // Send the sever Input that the Down key is False
+            socket.send('ilf');
             break;
         case 68: // d
-            input.d = false;
+        case 39: // right arrow
+            input.r = false;
+
+            // Send the sever Input that the Right key is False
+            socket.send('irf');
             break;
     }
 }
@@ -247,12 +276,18 @@ function handleMouseMove(event) {
 
 function handleMouseDown() {
     input.mouseDown = true;
+
+    // Send the server Input that the Mouse is True
+    socket.send('imt');
 }
 
 //Record the    
 
 function handleMouseUp() {
     input.mouseDown = false;
+
+    // Send the server Input that the Mouse is false
+    socket.send('imf');
 }
 
 function clearScreen() {

@@ -1,18 +1,18 @@
 // Include all of the required node modules
 var http = require('http'),
     path = require('path'),
-    socketio = require('socket.io'),
     express = require('express'),
-    // Link all of our files together
-    Lobby = require('./server/lobby'),
     // Create a working node app
-    router = express(),
-    server = http.createServer(router),
+    app = express(),
+    server = http.createServer(app),
     // Instantiate a websocket server
-    io = socketio.listen(server);
+    io = require('socket.io').listen(server),
+    // Link all of our files together
+    router = require('./server/router'),
+    lobbies = {};
 
 // Set the main directory for client files to the client directory
-router.use(express.static(path.resolve(__dirname, 'client')));
+app.use(express.static(path.resolve(__dirname, 'client')));
 
 // Configure the socket
 io.configure(function() {
@@ -28,25 +28,32 @@ io.configure(function() {
 });
 
 // Define what happens when a user connects to the server
-io.on('connection', function(client) {
-    // Log the new client's ID to the server's console
-    console.log('Client connected:', client.id);
+io.on('connection', function(socket) {
+    // Log the new socket's ID to the server's console
+    console.log('Socket connected:', socket.id);
 
-    client.on('play', function(state) {
-        lobby.addPlayer(client, state.x, state.y, state.direction, lobby);
+    socket.on('play', function() {
+        router.findOpenLobby(lobbies).addPlayer(socket);
     });
 
-    // Process data received from the client
+    // Process data received from the socket
     // So far just input and join
-    client.on('message', function(message) {
-        lobby.parseMessage(client, message);
+    socket.on('message', function(message) {
+        if (!socket.player) {
+            router.findOpenLobby(lobbies).addPlayer(socket);
+        }
+
+        socket.player.parseMessage(message);
     });
 
     // Define what happens when a user disconnects
-    client.on('disconnect', function() {
-        // Log the client's disconnection w/ ID to the console
-        console.log('Client disconnected:', client.id);
-        lobby.removePlayer(client);
+    socket.on('disconnect', function() {
+        // Log the socket's disconnection w/ ID to the console
+        console.log('Socket disconnected:', socket.id);
+        if (socket.player) {
+            console.log('And left the lobby:', socket.player.lobby.id);
+            socket.player.lobby.removePlayer(socket);
+        }
     });
 });
 

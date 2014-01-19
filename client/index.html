@@ -4,10 +4,33 @@
 <head>
     <title>Top Down Shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,700|Roboto+Condensed:400,700|PT+Serif:400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
+    <div id="intro">
+        <h1 id="title">The Game</h1>
+        <h2 id="subtitle">(damn it, I lost the game)</h2>
+        <div id="button-container">
+            <button id="play">Play</button>
+        </div>
+
+        <!-- The page 'footer' -->
+        <div id="follow">
+            <h3>Follow Us</h3>
+            <a href="#">+Jesse Smick</a>
+            <a href="#">+Mikey Edlinger</a>
+            <a href="#">+Tal Ben-Ari</a>
+        </div>
+        <div id="info">
+            <h3>Info</h3>
+            <a href="#" id="first">Contact Us</a>
+            <a href="#">About this Game</a>
+            <a href="#">View Source</a>
+        </div>
+    </div>
     <canvas id="frame">
         Sorry, your browser does not support the HTML5 Canvas Element.
     </canvas>
@@ -23,10 +46,10 @@
     <script src="js/gun.js"></script>
     <script src="js/bullet.js"></script>
     <script src="js/game.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/resize.js"></script>
     <!-- Connecting to the server -->
     <script src="js/socket.js"></script>
+    <script src="js/homepage.js"></script>
 </body>
 
 </html>

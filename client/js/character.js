@@ -10,9 +10,10 @@ Character = function(specs) {
     this.y = specs.y;
     this.direction = specs.direction;
     this.gun = specs.gun;
-    this.gun.character = this;
+    this.gun.player = this;
     this.color = specs.color;
     this.transparency = 1;
+    this.id = '';
 };
 
 Character.prototype.draw = function() {
@@ -46,41 +47,51 @@ Character.prototype.draw = function() {
     }
 };
 
+Character.prototype.setState = function(state) {
+    this.x = state.x;
+    this.y = state.y;
+    this.direction = state.direction;
+    this.color = state.color;
+};
+
 Character.prototype.update = function(timeElapsed) {
     var damageDone = 100 - this.health,
-        inputs = {
-            'move': [],
-            'direction': this.direction
-        };
+        dir = this.direction;
 
     if (this.type === 'player') {
-        if (input.w) { // Up (Press W)
+        if (input.u) { // Up (Press W or Up)
             this.y -= this.speed * timeElapsed;
-            inputs.move.push('u');
         }
-        if (input.s) { // Down (Press S)
+        if (input.d) { // Down (Press S or Down)
             this.y += this.speed * timeElapsed;
-            inputs.move.push('d');
         }
-        if (input.a) { // Left (Press A)
+        if (input.l) { // Left (Press A or Left)
             this.x -= this.speed * timeElapsed;
-            inputs.move.push('l');
         }
-        if (input.d) { // Right (Press D)
+        if (input.r) { // Right (Press D or Right)
             this.x += this.speed * timeElapsed;
-            inputs.move.push('r');
         }
 
-        if (inputs.move.length) {
-            inputs.move = inputs.move.join(',')
-            // console.log('sending input:', inputs.move);
-            socket.send('i' + inputs.move);
+        // If the player goes off the screen
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x > 1600) {
+            this.x = 1600;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+        if (this.y > 1000) {
+            this.y = 1000;
         }
 
-        this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
+        // Number.toFixed() returns a string, so make sure to turn it back into a number
+        this.direction = (Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI); //.toFixed(3);
 
-        if (this.direction !== inputs.direction) {
-            socket.send('d' + inputs.direction);
+        // If the player direction changes, send the new direction to the server
+        if (dir !== this.direction) {
+            socket.send('d' + this.direction);
         }
 
         if (input.mouseDown) {
@@ -89,11 +100,11 @@ Character.prototype.update = function(timeElapsed) {
 
         this.gun.timeSinceLastFire += timeElapsed;
 
-        if (!input.mouseDown && this.gun.timeSinceLastFire >= this.gun.rate) {
+        if (!input.mouseDown && this.gun.timeSinceLastFire > this.gun.rate) {
             this.gun.timeSinceLastFire = this.gun.rate;
         }
 
-        if (!input.mouseDown) {
+        if (!input.mouseDown && this.gun.wasFired) {
             this.gun.wasFired = false;
         }
 
@@ -109,7 +120,8 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + this.transparency + ')';
+        this.color = 'rgba(' + parseInt(255 - (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 196)) + ',' + this.transparency + ')';
+        console.log(this.color);
 
         if (this.health <= 0) {
             this.transparency -= timeElapsed * 2;

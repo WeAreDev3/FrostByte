@@ -8,62 +8,83 @@ var otherPlayersStates = {
     'x': 200,
     'y': 200,
     'direction': Math.PI / 2,
-    'gun': create(Gun, 'full-auto'),
-    'color': '#90FE4D'
-};
+    'gun': new Gun('full-auto'),
+    'color': '#90EE4D'
+},
+    enemySpecs = {
+        'type': 'enemy',
+        'name': null,
+        'hp': 50,
+        'size': 10,
+        'speed': 55,
+        'mobility': 10,
+        'x': null,
+        'y': null,
+        'direction': 0,
+        'gun': null,
+        'color': 'rbg(255,0,0)'
+    };
 
-socket = io.connect('/');
-socket.on('onconnected', function(data) {
-    console.log('Connected successfully to the socket.io server. My server-side ID is ' + data.id);
-    player.id = data.id;
-
-    // Send that we are ready to join
-    socket.send('j' + player.x + ',' + player.y + ',' + player.direction);
+socket = io.connect();
+socket.on('connect', function() {
+    console.log('Connected successfully as', socket.socket.sessionid);
 });
 
-socket.on('joinedGame', function(data) {
-    console.log('Joined the lobby:' + data.id);
+socket.on('joinedLobby', function(data) {
+    console.log('Joined the lobby:', data.id);
+
+    // If player reconnects, don't start another game
+    if (typeof player === 'undefined') {
+        startGame();
+    }
+
+    player.id = socket.socket.sessionid;
 });
 
 socket.on('update', function(data) {
     // console.log(data);
-    for (var userID in data.players) {
-        if (data.players.hasOwnProperty(userID) && userID !== player.id) {
-            if (!otherPlayers[userID]) {
-                otherPlayers[userID] = new Character(otherPlayersStates);
-                console.log('new player:', otherPlayers[userID]);
+    for (var playerId in data.players) {
+        if (data.players.hasOwnProperty(playerId)) {
+            if (playerId !== player.id) {
+                if (!otherPlayers[playerId]) {
+                    otherPlayers[playerId] = new Character(otherPlayersStates);
+                    otherPlayers[playerId].name = playerId;
+                    console.log('New player:', otherPlayers[playerId]);
+                }
+
+                otherPlayers[playerId].setState(data.players[playerId]);
+            } else {
+                player.setState(data.players[playerId]);
             }
-
-            otherPlayers[userID].x = data.players[userID][0];
-            otherPlayers[userID].y = data.players[userID][1];
-            otherPlayers[userID].direction = data.players[userID][2];
-
-            otherPlayers[userID].name = userID;
         }
     }
 
-    for (userID in otherPlayers) {
-        if (otherPlayers.hasOwnProperty(userID) && !(userID in data.players)) {
-            console.log('user deleted:', userID);
-            delete otherPlayers[userID];
+    for (playerId in otherPlayers) {
+        if (otherPlayers.hasOwnProperty(playerId) && !(playerId in data.players)) {
+            console.log('User deleted:', playerId);
+            delete otherPlayers[playerId];
         }
     }
 
-    // socket.send('b' + this.gun.character.x + ',' + this.gun.character.y + ',' + this.gun.character.size + ',' + this.speed + ',' + this.direction);
+    enemies = [];
+
+    for (var i = data.enemies.length - 1, newEnemy; i >= 0; i--) {
+        enemySpecs.name = i;
+        enemySpecs.gun = new Gun('full-auto');
+
+        newEnemy = new Character(enemySpecs);
+        newEnemy.setState(data.enemies[i]);
+
+        enemies.push(newEnemy);
+    }
+
+    bullets = [];
+
     for (var i = data.bullets.length - 1; i >= 0; i--) {
-        // console.log(data.bullets);
-        if (data.bullets[i].playerId !== player.id) {
-            new Bullet({
-                    'character': {
-                        'x': data.bullets[i].x,
-                        'y': data.bullets[i].y,
-                        'size': data.bullets[i].size
-                    },
-                    'damage': data.bullets[i].damage
-                },
-                data.bullets[i].speed,
-                data.bullets[i].direction
-            );
-        }
+        // if (data.bullets[i].playerId !== player.id) {
+        // console.log(JSON.stringify(data.bullets[i]));
+
+        new Bullet(data.bullets[i].gun, data.bullets[i].direction);
+        // }
     }
 });

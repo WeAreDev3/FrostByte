@@ -38,12 +38,10 @@ Gun = function(type) {
     this.wasFired = false;
     this.rate = types[type].rate / 1000;
     this.timeSinceLastFire = 0;
-    this.character = null;
+    this.player = null;
 };
 
 Gun.prototype.fire = function() {
-    var command = '';
-
     if (this.timeSinceLastFire >= this.rate) {
         this.timeSinceLastFire -= this.rate;
 
@@ -51,31 +49,24 @@ Gun.prototype.fire = function() {
             case 'semi-auto':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    new Bullet(this, this.bulletSpeed, this.character.direction);
-                    command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
+                    new Bullet(this);
                     crosshairs.kickCounter++;
                 }
                 break;
             case 'full-auto':
-                new Bullet(this, this.bulletSpeed, this.character.direction);
-                command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
+                new Bullet(this);
                 crosshairs.kickCounter++;
                 break;
             case 'shotgun':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    for (var i = 0; i < 15; i++) {
-                        new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
-                        command = 'b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id;
+
+                    for (var i = 0, n = 3, halfN = (n - 1) / 2; i < n; i++) {
+                        new Bullet(this, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100);
                     }
                     crosshairs.kickCounter++;
                 }
                 break;
-        }
-
-        if (command) {
-            // console.log(command);
-            socket.send(command);
         }
     }
 };
