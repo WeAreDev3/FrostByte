@@ -25,41 +25,42 @@ var Game = Class.extend({
     removeBullet: function(bullet) {
         this.bullets.splice(this.bullets.indexOf(bullet), 1);
     },
+    addEnemy: function(enemy) {
+        this.enemies.push(enemy);
+    },
+    removeEnemy: function(enemy) {
+        this.enemies.splice(this.enemys.indexOf(enemy), 1);
+    },
     spawnEnemy: function(number) {
         var location = {
-            'x': null,
-            'y': null,
-            'direction': null
+            'x': 0,
+            'y': 0
         };
 
         for (var i = number - 1; i >= 0; i--) {
             switch (Utils.randomInt(4)) {
                 case 0: // Start at top
-                    location.y = 0;
                     location.x = Utils.randomInt(this.width);
-                    location.direction = 0;
                     break;
 
                 case 1: // Start from the right
                     location.x = this.width;
                     location.y = Utils.randomInt(this.height);
-                    location.direction = 0;
                     break;
 
                 case 2: // Start at the bottom
                     location.y = this.height;
                     location.x = Utils.randomInt(this.width);
-                    location.direction = 0;
                     break;
 
                 case 3: // Start from the left
-                    location.x = 0;
                     location.y = Utils.randomInt(this.height);
-                    location.direction = 0;
                     break;
             }
 
-            this.enemies.push(new Enemy(UUID(), 0, location.x, location.y, location.direction, this));
+            this.addEnemy(new Enemy(UUID(), location.x, location.y, 0, this));
+        }
+    },
     forEachPlayer: function(callback) {
         for (var player in this.players) {
             if (this.players.hasOwnProperty(player)) {
