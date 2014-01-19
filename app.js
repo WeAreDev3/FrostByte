@@ -39,11 +39,11 @@ io.on('connection', function(socket) {
     // Process data received from the socket
     // So far just input and join
     socket.on('message', function(message) {
-        if (socket.player) {
-            socket.player.parseMessage(message);
-        } else {
+        if (!socket.player) {
             router.findOpenLobby(lobbies).addPlayer(socket);
         }
+
+        socket.player.parseMessage(message);
     });
 
     // Define what happens when a user disconnects
