@@ -17,6 +17,6 @@ Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installin
 This project is very new, we have far to go. Our goals can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
 
 ### Bugs
-Can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues)
+Found a bug? Submit it [on GitHub](https://github.com/WeAreDev3/FrostByte/issues). We'll probably check it someday. 
 
-Found a bug? Submit it [on GitHub](https://github.com/WeAreDev3/FrostByte/issues). We'll probably check it someday.
+We keep all our other bugs [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues) though.
