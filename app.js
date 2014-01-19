@@ -49,8 +49,11 @@ io.on('connection', function(socket) {
     // Define what happens when a user disconnects
     socket.on('disconnect', function() {
         // Log the socket's disconnection w/ ID to the console
-        console.log('socket disconnected:', socket.id);
-        // lobby.removePlayer(socket);
+        console.log('Socket disconnected:', socket.id);
+        if (socket.player) {
+            console.log('And left the lobby:', socket.player.lobby.id);
+            socket.player.lobby.removePlayer(socket);
+        }
     });
 });
 
