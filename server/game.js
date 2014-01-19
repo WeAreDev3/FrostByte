@@ -60,6 +60,23 @@ var Game = Class.extend({
             }
 
             this.enemies.push(new Enemy(UUID(), 0, location.x, location.y, location.direction, this));
+    forEachPlayer: function(callback) {
+        for (var player in this.players) {
+            if (this.players.hasOwnProperty(player)) {
+                callback(this.players[player], player);
+            }
+        }
+    },
+    forEachEnemy: function(callback) {
+        for (var i = 0, length = this.enemies.length; i < length; i++) {
+            callback(this.enemies[i], i);
+        }
+    },
+    forEachBullet: function(callback) {
+
+        // Can't cache the length of bullets b/c it could change midway through the loop
+        for (var i = 0; i < this.bullets.length; i++) {
+            callback(this.bullets[i], i);
         }
     },
     start: function() {
@@ -70,19 +87,17 @@ var Game = Class.extend({
         // Update the physics of the game
 
         function physUpdate(timeElapsed) {
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    self.players[player].update(timeElapsed);
-                }
-            }
+            self.forEachPlayer(function(player, id) {
+                player.update(timeElapsed);
+            });
 
-            for (var i = self.enemies.length - 1; i >= 0; i--) {
-                self.enemies[i].update(timeElapsed);
-            }
+            self.forEachEnemy(function(enemy, id) {
+                enemy.update(timeElapsed);
+            });
 
-            for (var i = self.bullets.length - 1; i >= 0; i--) {
-                self.bullets[i].update();
-            };
+            self.forEachBullet(function(bullet, index) {
+                bullet.update(timeElapsed);
+            });
         }
 
         // Serve the updated game to the clients
@@ -95,32 +110,29 @@ var Game = Class.extend({
                 'bullets': []
             };
 
-            // For each player,
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    // Add their current state (x, y, direction)
-                    update.players[player] = self.players[player].getState();
-                }
-            }
+            // Add the players state to the update: (x, y, direction)
+            self.forEachPlayer(function(player, id) {
+                update.players[id] = player.getState();
+            });
 
-            for (var i = self.enemies.length - 1; i >= 0; i--) {
-                update.enemies.push(self.enemies[i].getState());
-            }
+            // Add all the enemy states to the update: (x, y, direction)
+            self.forEachEnemy(function(enemy, index) {
+                update.enemies.push(enemy.getState());
+            })
 
-            for (var i = self.bullets.length - 1; i >= 0; i--) {
-                if (!self.bullets[i].sent) {
-                    // console.log(self.bullets[i]);
-                    update.bullets.push(self.bullets[i]);
-                    self.bullets[i].sent = true;
-                }
-            }
+            // Add all the bullet states to the update: (gun, )
+            self.forEachBullet(function(bullet, index) {
+                // if (!bullet.sent) {
+                update.bullets.push(bullet.getState());
+
+                // bullet.sent = true;
+                // }
+            });
 
             // Send the data to each client
-            for (var player in self.players) {
-                if (self.players.hasOwnProperty(player)) {
-                    self.players[player].socket.emit('update', update);
-                }
-            }
+            self.forEachPlayer(function(player, id) {
+                player.socket.emit('update', update);
+            });
         }
 
         // Set the update interval to 15ms (see end of call)
