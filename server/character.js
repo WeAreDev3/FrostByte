@@ -50,14 +50,13 @@ var Character = Class.extend({
         return {
             'x': this.x,
             'y': this.y,
-            'direction': this.direction,
+            'direction': this.direction
+            /*,
             'size': this.size,
-            'color': this.color
+            'color': this.color*/
         };
     },
-    update: function(timeElapsed) {
-
-    }
+    update: function(timeElapsed) {}
 });
 
 module.exports = Character;
