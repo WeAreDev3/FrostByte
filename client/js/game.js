@@ -101,9 +101,9 @@ function startGame() {
             frameId = window.requestAnimationFrame(loop);
 
             // if (count % 1 === 0) {
-                // count = 0;
-                update(timeElapsed);
-                draw(context);
+            // count = 0;
+            update(timeElapsed);
+            draw(context);
             // }
 
             lastFrame = thisFrame;
@@ -153,21 +153,18 @@ function update(timeElapsed) {
 
 function draw(context) {
     var i,
-        len;
+        others;
 
     //Step 1: Clear the screen
     clearScreen();
 
     //Step 2: Draw all items on the screen
-    for (i = 0, len = enemies.length; i < len; i++) {
-        context.fillStyle = enemies[i].color;
-        context.beginPath();
-        context.arc(enemies[i].x * scale, enemies[i].y * scale, enemies[i].size * scale, 0, 2 * Math.PI, false);
-        context.fill();
-        context.closePath();
+
+    for (i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].draw();
     }
 
-    for (var others in otherPlayers) {
+    for (others in otherPlayers) {
         if (otherPlayers.hasOwnProperty(others)) {
             otherPlayers[others].draw();
         }
@@ -175,7 +172,7 @@ function draw(context) {
 
     player.draw();
 
-    for (i = 0, len = bullets.length; i < len; i++) {
+    for (i = bullets.length - 1; i >= 0; i--) {
         bullets[i].draw();
     }
 
