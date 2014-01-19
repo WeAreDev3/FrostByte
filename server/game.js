@@ -14,7 +14,8 @@ var Game = Class.extend({
         this.enemies = [];
         this.bullets = [];
 
-        this.spawnEnemy(15);
+        this.level = 0;
+        this.nextLevel();
 
         this.start();
     },
@@ -27,10 +28,14 @@ var Game = Class.extend({
     addEnemy: function(enemy) {
         this.enemies.push(enemy);
     },
-    removeEnemy: function(enemy) {
-        this.enemies.splice(this.enemys.indexOf(enemy), 1);
+    nextLevel: function() {
+        this.spawnEnemies(16 * ((this.level + 1) / 2), this.level);
+        this.level++;
     },
-    spawnEnemy: function(number) {
+    removeEnemy: function(enemy) {
+        this.enemies.splice(this.enemies.indexOf(enemy), 1);
+    },
+    spawnEnemies: function(number, level) {
         var location = {
             'x': 0,
             'y': 0
@@ -40,6 +45,7 @@ var Game = Class.extend({
             switch (Utils.randomInt(4)) {
                 case 0: // Start at top
                     location.x = Utils.randomInt(this.width);
+                    location.y = 0;
                     break;
 
                 case 1: // Start from the right
@@ -48,16 +54,17 @@ var Game = Class.extend({
                     break;
 
                 case 2: // Start at the bottom
-                    location.y = this.height;
                     location.x = Utils.randomInt(this.width);
+                    location.y = this.height;
                     break;
 
                 case 3: // Start from the left
+                    location.x = 0;
                     location.y = Utils.randomInt(this.height);
                     break;
             }
 
-            this.addEnemy(new Enemy(UUID(), location.x, location.y, 0, this));
+            this.addEnemy(new Enemy(UUID(), location.x, location.y, level, this));
         }
     },
     forEachPlayer: function(callback) {
@@ -68,7 +75,7 @@ var Game = Class.extend({
         }
     },
     forEachEnemy: function(callback) {
-        for (var i = 0, length = this.enemies.length; i < length; i++) {
+        for (var i = 0; i < this.enemies.length; i++) {
             callback(this.enemies[i], i);
         }
     },
@@ -98,6 +105,10 @@ var Game = Class.extend({
             self.forEachBullet(function(bullet, index) {
                 bullet.update(timeElapsed);
             });
+
+            if (!self.enemies.length) {
+                self.nextLevel();
+            }
         }
 
         // Serve the updated game to the clients
