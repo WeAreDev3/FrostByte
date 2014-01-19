@@ -20,7 +20,6 @@ var Game = Class.extend({
     },
     addBullet: function(bullet) {
         this.bullets.push(bullet);
-        console.log('bullet');
     },
     removeBullet: function(bullet) {
         this.bullets.splice(this.bullets.indexOf(bullet), 1);
@@ -103,7 +102,7 @@ var Game = Class.extend({
 
         // Serve the updated game to the clients
 
-        function serveUpdate(timeElapsed) {
+        function serveUpdate() {
             // The object containing the information the clients use to update
             var update = {
                 'players': {},
@@ -149,7 +148,7 @@ var Game = Class.extend({
             if (count % 3 == 0) {
                 count = 0;
                 // Serve the update to the clients
-                serveUpdate(timeElapsed);
+                serveUpdate();
             };
 
             lastFrame = thisFrame;
