@@ -26,30 +26,56 @@ var Enemy = Character.extend({
         }
     },
     update: function(timeElapsed) {
-        var nearestDist = 5000,
-            nearestPlayer,
-            players = this.game.players;
+        var nearestPlayer,
+            offScreen = false,
+            players = [];
 
-        // Maybe something like Array.sort()?
-        for (var player in players) {
-            if (players.hasOwnProperty(player)) {
-                // console.log(players[player]);
-                var dist = Math.sqrt(Math.pow(players[player].x - this.x, 2) + Math.pow(players[player].y - this.y, 2));
-                if (dist < nearestDist) {
-                    nearestDist = dist;
-                    nearestPlayer = players[player];
-                };
+        // Create an array of all the players to loop through them with Array.reduce()
+        for (var player in this.game.players) {
+            if (this.game.players.hasOwnProperty(player)) {
+                players.push(this.game.players[player]);
             }
         }
 
-        this.setDirection((Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x)) + Math.PI).toFixed(5));
+        // Go through all the players and check who is the closest
+        if (players.length) {
+            nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
+                var prevDistance = Math.sqrt(Math.pow(prevPlayer.x - this.x, 2) + Math.pow(prevPlayer.y - this.y, 2)),
+                    currDistance = Math.sqrt(Math.pow(currPlayer.x - this.x, 2) + Math.pow(currPlayer.y - this.y, 2));
+                // console.log(prevDistance, currDistance);
+                if (prevDistance > currDistance) {
+                    return currPlayer;
+                }
+
+                return prevPlayer;
+            });
+        }
+
+        if (nearestPlayer) {
+            this.setDirection(Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x)).toFixed(3));
+
+        }
+
         this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
 
-        // console.log(this.direction);
+        if (this.x < 0) {
+            this.setPosition(0, this.y);
+            offScreen = true;
+        } else if (this.x > this.game.width) {
+            this.setPosition(this.game.width, this.y);
+            offScreen = true;
+        } else if (this.y < 0) {
+            this.setPosition(this.x, 0);
+            offScreen = true;
+        } else if (this.y > this.game.height) {
+            this.setPosition(this.x, this.game.height);
+            offScreen = true;
+        }
 
-        // if (this.x < 0 || this.x > 1600 || this.y < 0 || this.y > 1000) {
-        //     this.direction += Math.PI;
-        // }
+        if (offScreen) {
+            this.setDirection(this.direction + Math.PI);
+            // console.log(this.direction);
+        }
     }
 });
 
