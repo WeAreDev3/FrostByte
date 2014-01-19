@@ -19,7 +19,12 @@ socket.on('connect', function() {
 
 socket.on('joinedLobby', function(data) {
     console.log('Joined the lobby:', data.id);
-    startGame();
+
+    // If player reconnects, don't start another game
+    if (typeof player === 'undefined') {
+        startGame();
+    }
+
     player.id = socket.socket.sessionid;
 });
 
