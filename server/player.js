@@ -11,25 +11,33 @@ var Player = Character.extend({
 
         this._super(this.socket.id, x, y);
 
-        this.setPosition(x, y);
+        // Input from client
+        this.input = {
+            'u': false, // Up
+            'd': false, // Down
+            'l': false, // Left
+            'r': false, // Right
+            'mouse': false // Mouse down
+        };
+
         this.setHitPoints(100);
         this.setSize(12);
         this.setSpeed(100);
         this.setMobility(10);
         this.setDirection(0);
         this.setColor('#4D90FE');
-        this.setGun(new Gun('full-auto', this));
+        this.setGun('full-auto');
 
-        socket.player = this;
-
-        // Input from client
-        this.movements = [];
+        // Add the player onto the socket to be used elsewhere
+        this.socket.player = this;
     },
     setGun: function(gun) {
-        this.gun = gun;
-    },
-    addMovements: function(movements) {
-        this.movements = this.movements.concat(movements);
+        // Can pass in an actual Gun object or the type of gun
+        if (gun instanceof Gun) {
+            this.gun = gun;
+        } else {
+            this.gun = new Gun(this, gun);
+        }
     },
     parseMessage: function(message) {
         var command = message[0],
@@ -39,40 +47,72 @@ var Player = Character.extend({
 
         // Handle each command that we know
         switch (command) {
-            case 'm': // Handle the command m (move)
-                this.addMovements(parameters);
+            case 'd': // Handle the 'd' command (Direction)
+                this.setDirection(+parameters[0]);
                 break;
 
-            case 'd': // Handle the command d (direction)
-                this.setDirection(parameters[0]);
-                break;
+            case 'i': // Handle the 'i' command (Input)
+                switch (parameters[0]) {
+                    case 'ut':
+                    case 'dt':
+                    case 'lt':
+                    case 'rt':
+                        // The move Up, Down, Left, and Right keys are pressed
+                        this.input[parameters[0][0]] = true;
+                        break;
 
-            case 'f': // Handle the command f (fire)
-                this.gun.fire();
-                // console.log(this.lobby.game.bullets);
+                    case 'uf':
+                    case 'df':
+                    case 'lf':
+                    case 'rf':
+                        // The move Up, Down, Left, and Right keys are released
+                        this.input[parameters[0][0]] = false;
+                        break;
+
+                    case 'mt':
+                        // The Mouse is pressed
+                        this.input.mouse = true;
+                        break;
+
+                    case 'mf':
+                        // The Mouse is released
+                        this.input.mouse = false;
+                        break;
+                }
+                // console.log('i', parameters, this.input);
                 break;
         }
 
     },
     update: function(timeElapsed) {
-        for (var i = this.movements.length - 1; i >= 0; i--) {
-            switch (this.movements[i]) {
-                case 'u': // If the client sent 'u' (up)
-                    this.y -= this.speed * timeElapsed;
-                    break;
-                case 'd': // If the client sent 'd' (down)
-                    this.y += this.speed * timeElapsed;
-                    break;
-                case 'l': // If the client sent 'l' (left)
-                    this.x -= this.speed * timeElapsed;
-                    break;
-                case 'r': // If the client sent 'r' (right)
-                    this.x += this.speed * timeElapsed;
-                    break;
-            }
+        // Move the player if needed
+        if (this.input.u) { // Up
+            this.y -= this.speed * timeElapsed;
+        }
+        if (this.input.d) { // Down
+            this.y += this.speed * timeElapsed;
+        }
+        if (this.input.l) { // Left
+            this.x -= this.speed * timeElapsed;
+        }
+        if (this.input.r) { // Right
+            this.x += this.speed * timeElapsed;
         }
 
-        this.movements = [];
+        // Handle the gun firing
+        if (this.input.mouse) {
+            this.gun.fire();
+        }
+
+        this.gun.timeSinceLastFire += timeElapsed;
+
+        if (!this.input.mouse && this.gun.timeSinceLastFire > this.gun.rate) {
+            this.gun.timeSinceLastFire = this.gun.rate;
+        }
+
+        if (!this.input.mouse && this.gun.wasFired) {
+            this.gun.wasFired = false;
+        }
     }
 });
 
