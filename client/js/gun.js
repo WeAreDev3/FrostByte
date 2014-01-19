@@ -45,18 +45,19 @@ Gun.prototype.fire = function() {
     if (this.timeSinceLastFire >= this.rate) {
         this.timeSinceLastFire -= this.rate;
 
+        // Send the 'f' command (fire);
+        socket.send('f');
+
         switch (this.type) {
             case 'semi-auto':
                 if (!this.wasFired) {
                     this.wasFired = true;
                     new Bullet(this, this.bulletSpeed, this.character.direction);
-                    socket.send('b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id)
                     crosshairs.kickCounter++;
                 }
                 break;
             case 'full-auto':
                 new Bullet(this, this.bulletSpeed, this.character.direction);
-                socket.send('b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id)
                 crosshairs.kickCounter++;
                 break;
             case 'shotgun':
@@ -64,7 +65,6 @@ Gun.prototype.fire = function() {
                     this.wasFired = true;
                     for (var i = 0; i < 15; i++) {
                         new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
-                        socket.send('b' + this.character.x + ',' + this.character.y + ',' + this.character.size + ',' + this.damage + ',' + this.bulletSpeed + ',' + this.character.direction + ',' + player.id)
                     }
                     crosshairs.kickCounter++;
                 }
