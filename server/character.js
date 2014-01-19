@@ -21,8 +21,10 @@ var Character = Class.extend({
         this.x = x;
         this.y = y;
     },
-    setColor: function(color) {
-        this.color = color;
+    setColor: function(r, g, b, a) {
+        // Assuming giving Red and Green and Blue seperatly and optionaly Alpha
+        a = a !== undefined ? a : '1';
+        this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
     },
     setHitPoints: function(maxHitPoints) {
         this.maxHitPoints = maxHitPoints;
@@ -42,7 +44,7 @@ var Character = Class.extend({
         }
     },
     kill: function() {
-        this.hitPoints = 0;
+        this.health(0);
         this.setSpeed(0);
         this.setMobility(0);
     },
@@ -50,10 +52,8 @@ var Character = Class.extend({
         return {
             'x': this.x,
             'y': this.y,
-            'direction': this.direction
-            /*,
-            'size': this.size,
-            'color': this.color*/
+            'direction': this.direction,
+            'color': this.color
         };
     },
     update: function(timeElapsed) {}
