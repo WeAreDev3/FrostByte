@@ -41,7 +41,7 @@ function startGame() {
         'x': 800,
         'y': 500,
         'direction': Math.PI / 2,
-        'gun': create(Gun, 'full-auto'),
+        'gun': new Gun('full-auto'),
         'color': '#4D90FE'
     },
         enemySpecs = {
@@ -74,7 +74,7 @@ function startGame() {
             enemySpecs.x = Math.random() * 1600;
             enemySpecs.y = Math.random() * 1000;
             enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
-            enemySpecs.gun = create(Gun, 'full-auto');
+            enemySpecs.gun = new Gun('full-auto');
 
             enemies.push(new Character(enemySpecs));
         }
@@ -120,14 +120,6 @@ function startGame() {
 
 function initCanvas() {
     resizeBrowser();
-}
-
-function create(constructor, args) {
-    function F() {
-        return constructor.call(this, args);
-    }
-    F.prototype = constructor.prototype;
-    return new F();
 }
 
 //Initalize the arrays of bullets and enemies

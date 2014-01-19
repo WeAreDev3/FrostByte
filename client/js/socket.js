@@ -8,7 +8,7 @@ var otherPlayersStates = {
     'x': 200,
     'y': 200,
     'direction': Math.PI / 2,
-    'gun': create(Gun, 'full-auto'),
+    'gun': new Gun('full-auto'),
     'color': '#90EE4D'
 };
 
