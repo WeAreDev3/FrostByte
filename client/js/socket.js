@@ -68,11 +68,14 @@ socket.on('update', function(data) {
 
     enemies = [];
 
-    for (var i = data.enemies.length - 1; i >= 0; i--) {
+    for (var i = data.enemies.length - 1, newEnemy; i >= 0; i--) {
         enemySpecs.name = i;
         enemySpecs.gun = new Gun('full-auto');
 
-        enemies.push(new Character(enemySpecs));
+        newEnemy = new Character(enemySpecs);
+        newEnemy.setState(data.enemies[i]);
+
+        enemies.push(newEnemy);
     }
 
     bullets = [];
