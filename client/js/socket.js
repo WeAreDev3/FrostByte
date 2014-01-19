@@ -52,9 +52,7 @@ socket.on('update', function(data) {
                     console.log('new player:', otherPlayers[playerId]);
                 }
 
-                otherPlayers[playerId].x = data.players[playerId].x;
-                otherPlayers[playerId].y = data.players[playerId].y;
-                otherPlayers[playerId].direction = data.players[playerId].direction;
+                otherPlayers[playerId].setState(data.players[playerId]);
             } else {
                 player.setState(data.players[playerId]);
             }
