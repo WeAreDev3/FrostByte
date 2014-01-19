@@ -1,8 +1,8 @@
 var Character = require('./character');
 
 var Enemy = Character.extend({
-    init: function(id, level, x, y, direction, game) {
-        this._super(id, 'enemy', x, y);
+    init: function(id, x, y, level, game) {
+        this._super(id, x, y);
 
         this.game = game;
 

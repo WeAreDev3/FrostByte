@@ -1,8 +1,9 @@
-var Entity = require('./entity');
+var Class = require('./class');
 
-var Character = Entity.extend({
-    init: function(id, type, x, y) {
-        this._super(id, type, x, y);
+var Character = Class.extend({
+    init: function(id, x, y) {
+        this.id = id;
+        this.setPosition(x, y);
     },
     setSize: function(size) {
         this.size = size;
