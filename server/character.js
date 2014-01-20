@@ -28,25 +28,34 @@ var Character = Class.extend({
         a = a !== undefined ? a : '1';
         this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
     },
-    setHitPoints: function(maxHitPoints) {
-        this.maxHitPoints = maxHitPoints;
+    resetHitPoints: function(maxHitPoints) {
+        if (maxHitPoints !== undefined) {
+            this.maxHitPoints = maxHitPoints;
+        }
+
         this.hitPoints = this.maxHitPoints;
     },
-    health: function(hitPoints) {
-        if (hitPoints !== undefined) {
+    setHitPoints: function(hitPoints) {
+        if (hitPoints > this.maxHitPoints) {
+            this.hitPoints = this.maxHitPoints;
+        } else if (hitPoints < 0) {
+            this.hitPoints = 0;
+        } else {
             this.hitPoints = hitPoints;
         }
+    },
+    health: function() {
         return this.hitPoints / this.maxHitPoints;
     },
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.hitPoints <= 0) {
+        if (this.health() <= 0) {
             this.kill();
         }
     },
     kill: function() {
-        this.health(0);
+        this.setHitPoints(0);
         this.setSpeed(0);
         this.setMobility(0);
     },

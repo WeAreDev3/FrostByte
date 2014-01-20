@@ -6,7 +6,7 @@ var Enemy = Character.extend({
 
         this.game = game;
 
-        this.setHitPoints(70 + (level * 10));
+        this.resetHitPoints(70 + (level * 10));
         this.setSize(10);
         this.setSpeed(50 + (level * 5));
         this.setMobility(10);
