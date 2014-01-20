@@ -17,7 +17,7 @@ var Player = Character.extend({
             'd': false, // Down
             'l': false, // Left
             'r': false, // Right
-            'mouse': false // Mouse down
+            'm': false // Mouse
         };
 
         this.setHitPoints(100);
@@ -53,30 +53,20 @@ var Player = Character.extend({
 
             case 'i': // Handle the 'i' command (Input)
                 switch (parameters[0]) {
-                    case 'ut':
-                    case 'dt':
-                    case 'lt':
-                    case 'rt':
-                        // The move Up, Down, Left, and Right keys are pressed
+                    case 'ut': // The Up/W key is pressed
+                    case 'dt': // The Down/S key is pressed
+                    case 'lt': // The Left/A key is pressed
+                    case 'rt': // The Right/D key is pressed
+                    case 'mt': // The Mouse is pressed
                         this.input[parameters[0][0]] = true;
                         break;
 
-                    case 'uf':
-                    case 'df':
-                    case 'lf':
-                    case 'rf':
-                        // The move Up, Down, Left, and Right keys are released
+                    case 'uf': // The Up/W key is released
+                    case 'df': // The Down/S key is released
+                    case 'lf': // The Left/A key is released
+                    case 'rf': // The Right/D key is released
+                    case 'mf': // The Mouse is released
                         this.input[parameters[0][0]] = false;
-                        break;
-
-                    case 'mt':
-                        // The Mouse is pressed
-                        this.input.mouse = true;
-                        break;
-
-                    case 'mf':
-                        // The Mouse is released
-                        this.input.mouse = false;
                         break;
                 }
                 // console.log('i', parameters, this.input);
@@ -99,7 +89,7 @@ var Player = Character.extend({
             this.x += this.speed * timeElapsed;
         }
 
-        // If the player goes off the screen
+        // Make sure the player doesn't go off the screen
         if (this.x < 0) {
             this.setPosition(0, this.y);
         }
@@ -114,17 +104,17 @@ var Player = Character.extend({
         }
 
         // Handle the gun firing
-        if (this.input.mouse) {
+        if (this.input.m) {
             this.gun.fire();
         }
 
         this.gun.timeSinceLastFire += timeElapsed;
 
-        if (!this.input.mouse && this.gun.timeSinceLastFire > this.gun.rate) {
+        if (!this.input.m && this.gun.timeSinceLastFire > this.gun.rate) {
             this.gun.timeSinceLastFire = this.gun.rate;
         }
 
-        if (!this.input.mouse && this.gun.wasFired) {
+        if (!this.input.m && this.gun.wasFired) {
             this.gun.wasFired = false;
         }
     }
