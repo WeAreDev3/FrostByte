@@ -1,8 +1,10 @@
 Bullet = Class.extend({
-    init: function(gun, direction) {
+    init: function(gun, direction, id) {
+        this.id = typeof direction === 'number' ? id : direction;
+
         this.gun = gun;
         this.speed = this.gun.bulletSpeed;
-        this.direction = direction ? direction : this.gun.player.direction;
+        this.direction = typeof direction === 'number' ? direction : this.gun.player.direction;
         this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction);
         this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
