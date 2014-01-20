@@ -2,8 +2,7 @@
 var Class = require('./class'),
     Bullet = require('./bullet'),
     Enemy = require('./enemy'),
-    Utils = require('./utils'),
-    UUID = require('node-uuid');
+    Utils = require('./utils');
 
 var Game = Class.extend({
     init: function() {
@@ -60,7 +59,7 @@ var Game = Class.extend({
                     break;
             }
 
-            this.addEnemy(new Enemy(UUID(), location.x, location.y, this.level, this));
+            this.addEnemy(new Enemy(location.x, location.y, this.level, this));
         }
     },
     nextLevel: function() {

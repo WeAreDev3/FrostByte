@@ -1,8 +1,9 @@
-var Character = require('./character');
+var Character = require('./character'),
+    UUID = require('node-uuid');
 
 var Enemy = Character.extend({
-    init: function(id, x, y, level, game) {
-        this._super(id, x, y);
+    init: function(x, y, level, game) {
+        this._super(UUID(), x, y);
 
         this.game = game;
 
