@@ -126,18 +126,12 @@ var Game = Class.extend({
 
             // Add the players state to the update: (x, y, direction, hitPoints, color)
             self.forEachPlayer(function(player, id) {
-                var state = player.getChangedState();
-                if (Object.keys(state).length) {
-                    update.players[id] = state;
-                }
+                update.players[id] = player.getChangedState();
             });
 
             // Add all the enemy states to the update: (x, y, direction, hitPoints, color)
             self.forEachEnemy(function(enemy, id) {
-                var state = enemy.getChangedState();
-                if (Object.keys(state).length) {
-                    update.enemies[id] = state;
-                }
+                update.enemies[id] = enemy.getChangedState();
             })
 
             // Add all the bullet states to the update: (gun{player{id, x, y, size}, damage, bulletSpeed}, direction)
