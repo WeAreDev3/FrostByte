@@ -23,12 +23,12 @@ var Bullet = Class.extend({
                     'id': this.gun.player.id,
                     'x': this.x1,
                     'y': this.y1,
+                    'direction': this.direction,
                     'size': this.gun.player.size
                 },
                 'damage': this.gun.damage,
                 'bulletSpeed': this.speed
-            },
-            'direction': this.direction
+            }
         },
             changes = {};
 
