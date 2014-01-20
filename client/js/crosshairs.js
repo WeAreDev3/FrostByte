@@ -25,7 +25,7 @@ Crosshairs = function(player) {
     cursor = document.getElementById('cursor');
 };
 
-Crosshairs.prototype.draw = function() {
+Crosshairs.prototype.draw = function(context, scale) {
     var x = this.x * scale,
         y = this.y * scale,
         size = this.size * scale;
@@ -41,17 +41,17 @@ Crosshairs.prototype.draw = function() {
 };
 
 Crosshairs.prototype.update = function(timeElapsed) {
-    var mouseXDiff = input.mouse.drawnX - this.x,
-        mouseYDiff = input.mouse.drawnY - this.y,
+    var mouseXDiff = Game.input.mouse.drawnX - this.x,
+        mouseYDiff = Game.input.mouse.drawnY - this.y,
         playerXDiff = this.player.x - this.x,
         playerYDiff = this.player.y - this.y,
-        mousePlayerXDiff = input.mouse.drawnX - this.player.x,
-        mousePlayerYDiff = input.mouse.drawnY - this.player.y;
+        mousePlayerXDiff = Game.input.mouse.drawnX - this.player.x,
+        mousePlayerYDiff = Game.input.mouse.drawnY - this.player.y;
 
     this.distFromPlayer = Math.sqrt((playerXDiff * playerXDiff) + (playerYDiff * playerYDiff));
     this.distFromMouse = Math.sqrt((mouseXDiff * mouseXDiff) + (mouseYDiff * mouseYDiff));
     this.angle = this.player.direction - Math.PI;
-    this.mouseAngle = Math.atan2((input.mouse.drawnY - this.player.y), (input.mouse.drawnX - this.player.x));
+    this.mouseAngle = Math.atan2((Game.input.mouse.drawnY - this.player.y), (Game.input.mouse.drawnX - this.player.x));
     this.mouseDistFromPlayer = Math.sqrt((mousePlayerXDiff * mousePlayerXDiff) + (mousePlayerYDiff * mousePlayerYDiff));
 
     if (this.angle > Math.PI / 2 || this.angle < Math.PI / -2) {
