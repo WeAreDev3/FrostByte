@@ -10,14 +10,19 @@ Character = function(specs) {
     this.y = specs.y;
     this.direction = specs.direction;
     this.gun = specs.gun;
-    this.gun.character = this;
+    this.gun.player = this;
     this.color = specs.color;
     this.transparency = 1;
+    this.id = '';
 };
 
 Character.prototype.draw = function() {
-    var namePositionX = this.x - (context.measureText(this.name).width / 2),
-        namePositionY = this.y + (this.size * 2);
+    var x = this.x * scale,
+        y = this.y * scale,
+        size = this.size * scale;
+
+    var namePositionX = x - (context.measureText(this.name).width / 2),
+        namePositionY = y + (size * 2);
 
     // Draws Body
     context.fillStyle = this.color;
@@ -25,43 +30,69 @@ Character.prototype.draw = function() {
     if (this.type == 'player') {
         // Square
         context.save();
-        context.translate(this.x, this.y);
+        context.translate(x, y);
         context.rotate(this.direction);
-        context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
+        context.fillRect(-1 * size, -1 * size, size * 2, size * 2);
         context.restore();
 
         context.fillStyle = '#000';
-        // draws health
-        // context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
-        // draws name
+        context.font = 'normal ' + this.size * scale + 'pt Roboto'
         context.fillText(this.name, namePositionX, namePositionY);
     } else {
         // Circle
         context.beginPath();
-        context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
+        context.arc(x, y, size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
     }
 };
 
+Character.prototype.setState = function(state) {
+    this.x = state.x;
+    this.y = state.y;
+    this.direction = state.direction;
+    this.color = state.color;
+};
+
 Character.prototype.update = function(timeElapsed) {
-    var damageDone = 100 - this.health;
+    var damageDone = 100 - this.health,
+        dir = this.direction;
 
     if (this.type === 'player') {
-        if (input.w) { // Up (Press W)
+        if (input.u) { // Up (Press W or Up)
             this.y -= this.speed * timeElapsed;
         }
-        if (input.s) { // Down (Press S)
+        if (input.d) { // Down (Press S or Down)
             this.y += this.speed * timeElapsed;
         }
-        if (input.a) { // Left (Press A)
+        if (input.l) { // Left (Press A or Left)
             this.x -= this.speed * timeElapsed;
         }
-        if (input.d) { // Right (Press D)
+        if (input.r) { // Right (Press D or Right)
             this.x += this.speed * timeElapsed;
         }
 
-        this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
+        // If the player goes off the screen
+        if (this.x < 0) {
+            this.x = 0;
+        }
+        if (this.x > 1600) {
+            this.x = 1600;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+        if (this.y > 1000) {
+            this.y = 1000;
+        }
+
+        // Number.toFixed() returns a string, so make sure to turn it back into a number
+        this.direction = (Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI); //.toFixed(3);
+
+        // If the player direction changes, send the new direction to the server
+        if (dir !== this.direction) {
+            socket.send('d' + this.direction);
+        }
 
         if (input.mouseDown) {
             this.gun.fire();
@@ -69,11 +100,11 @@ Character.prototype.update = function(timeElapsed) {
 
         this.gun.timeSinceLastFire += timeElapsed;
 
-        if (!input.mouseDown && this.gun.timeSinceLastFire >= this.gun.rate) {
+        if (!input.mouseDown && this.gun.timeSinceLastFire > this.gun.rate) {
             this.gun.timeSinceLastFire = this.gun.rate;
         }
 
-        if (!input.mouseDown) {
+        if (!input.mouseDown && this.gun.wasFired) {
             this.gun.wasFired = false;
         }
 
@@ -81,7 +112,7 @@ Character.prototype.update = function(timeElapsed) {
         this.x += this.speed * Math.cos(this.direction) * timeElapsed;
         this.y += this.speed * Math.sin(this.direction) * timeElapsed;
 
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        if (this.x < 0 || this.x > 1600 || this.y < 0 || this.y > 1000) {
             this.direction += Math.PI;
         }
 
@@ -89,7 +120,8 @@ Character.prototype.update = function(timeElapsed) {
             this.direction += Math.PI / this.mobility * timeElapsed;
         }
 
-        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + this.transparency + ')';
+        this.color = 'rgba(' + parseInt(255 - (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 128)) + ',' + parseInt(0 + (damageDone * 196)) + ',' + this.transparency + ')';
+        console.log(this.color);
 
         if (this.health <= 0) {
             this.transparency -= timeElapsed * 2;

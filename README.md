@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FrostByte
 This is a simple game (top-down-shooter) written in javascript served by node.js.
 

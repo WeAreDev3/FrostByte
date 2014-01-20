@@ -1,9 +1,9 @@
-Bullet = function(gun, speed, direction) {
+Bullet = function(gun, direction) {
     this.gun = gun;
-    this.speed = speed;
-    this.direction = direction;
-    this.x1 = this.gun.character.x - (5 + this.gun.character.size) * Math.cos(this.direction);
-    this.y1 = this.gun.character.y - (5 + this.gun.character.size) * Math.sin(this.direction);
+    this.speed = this.gun.bulletSpeed;
+    this.direction = direction ? direction : this.gun.player.direction;
+    this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction);
+    this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
     this.x2 = this.x1 - 10 * Math.cos(this.direction);
     this.y2 = this.y1 - 10 * Math.sin(this.direction);
     this.prevX = this.x1;
@@ -12,10 +12,15 @@ Bullet = function(gun, speed, direction) {
 };
 
 Bullet.prototype.draw = function() {
-    context.beginPath();
-    context.moveTo(this.x1, this.y1);
+    var x1 = this.x1 * scale,
+        x2 = this.x2 * scale,
+        y1 = this.y1 * scale,
+        y2 = this.y2 * scale;
 
-    context.lineTo(this.x2, this.y2);
+    context.beginPath();
+    context.moveTo(x1, y1);
+
+    context.lineTo(x2, y2);
 
     context.lineWidth = 1;
     context.strokeStyle = '#000';
@@ -24,7 +29,7 @@ Bullet.prototype.draw = function() {
 };
 
 Bullet.prototype.update = function(timeElapsed) {
-    if (this.x1 < 0 || this.x1 > canvas.width || this.y1 < 0 || this.y1 > canvas.height) {
+    if (this.x1 < 0 || this.x1 > 1600 || this.y1 < 0 || this.y1 > 1000) {
         bullets.splice(bullets.indexOf(this), 1);
         return;
     }

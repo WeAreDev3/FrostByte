@@ -1,32 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Top Down Shooter</title>
+    <title>FrostByte - A top down shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,700|Roboto+Condensed:400,700|PT+Serif:400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
+    <div id="intro">
+        <h1 id="title">FrostByte</h1>
+        <!-- the span is mkeedlinger's attempt making to link look nice. check ./css/main.css:33 -->
+        <h2 id="subtitle"><span class="theGame"><a href="https://en.wikipedia.org/wiki/The_Game_(mind_game)" target="_blank">(dammit, I lost the game)</a></span></h2>
+        <div id="button-container">
+            <button id="play">Play</button>
+        </div>
+
+        <!-- The page 'footer' -->
+        <div id="follow">
+            <h3>Follow Us</h3>
+            <a href="#">+Jesse Smick</a>
+            <a href="#">+Mikey Edlinger</a>
+            <a href="#">+Tal Ben-Ari</a>
+        </div>
+        <div id="info">
+            <h3>Info</h3>
+            <a href="#" id="first">Contact Us</a>
+            <a href="http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/home" target="_blank">About this Game</a>
+            <a href="http://gitlab.mke8.me/mkeedlinger/top-down-shooter/tree/master" target="_blank">View Source</a>
+        </div>
+    </div>
     <canvas id="frame">
-        Sorry, your browser does not support the HTML5 Canvas Element.
+        Sorry, your browser does not support the HTML5 Canvas Element. Try using <a href="https://chrome.google.com">Google Chrome</a>
     </canvas>
+    <!-- Required for websocket to work -->
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-    var socket = io.connect('/');
-    socket.on('onconnected', function(data) {
-        // Note that the data is the object we sent from the server, as is. So we can assume its id exists. 
-        console.log('Connected successfully to the socket.io server. My server side ID is ' + data.id);
-    });
-    </script>
-    <script type="text/javascript" src="js/polyfill.js"></script>
-    <script type="text/javascript" src="js/class.js"></script>
-    <script type="text/javascript" src="js/crosshairs.js"></script>
-    <script type="text/javascript" src="js/character.js"></script>
-    <script type="text/javascript" src="js/gun.js"></script>
-    <script type="text/javascript" src="js/bullet.js"></script>
-    <script type="text/javascript" src="js/game.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <!-- Our polyfills -->
+    <script src="js/polyfill.js"></script>
+    <!-- John Resig's JS Inheritance Model -->
+    <script src="js/class.js"></script>
+    <!-- Game objects and entities -->
+    <script src="js/crosshairs.js"></script>
+    <script src="js/character.js"></script>
+    <script src="js/gun.js"></script>
+    <script src="js/bullet.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/resize.js"></script>
+    <!-- Connecting to the server -->
+    <script src="js/socket.js"></script>
+    <script src="js/homepage.js"></script>
 </body>
 
 </html>

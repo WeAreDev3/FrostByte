@@ -1,12 +1,14 @@
-Crosshairs = function(x, y, character) {
-    this.x = x;
-    this.y = y;
-    this.character = character;
+Crosshairs = function(player) {
+    this.player = player;
+
+    this.x = this.player.x;
+    this.y = this.player.y;
+    this.size = 13;
     this.distFromPlayer = 0;
     this.distFromMouse = 0;
-    this.angle = 0; // The angle that the crosshairs make (with the origin
+    this.angle = this.player.direction; // The angle that the crosshairs make (with the origin
     // being @ the player's location)
-    this.mouseAngle = 0; // The angle that the mouse makes (with the origin
+    this.mouseAngle = this.player.direction; // The angle that the mouse makes (with the origin
     // being @ the player's location)
     this.mouseDistFromPlayer = 0;
     this.kickCounter = 0;
@@ -14,7 +16,9 @@ Crosshairs = function(x, y, character) {
     var curs = document.createElement('img');
     curs.src = 'img/crosshairs.png';
     curs.id = 'cursor';
-    curs.ondragstart = (function(){return false});
+    curs.ondragstart = (function() {
+        return false
+    });
     curs.draggable = false;
     document.getElementsByTagName('body')[0].appendChild(curs);
 
@@ -22,26 +26,32 @@ Crosshairs = function(x, y, character) {
 };
 
 Crosshairs.prototype.draw = function() {
+    var x = this.x * scale,
+        y = this.y * scale,
+        size = this.size * scale;
     context.beginPath();
-    context.arc(this.x, this.y, 13, 0, 2 * Math.PI, false);
+    context.arc(x, y, size, 0, 2 * Math.PI, false);
     context.lineWidth = 2;
     context.strokeStyle = '#FE634D';
     context.stroke();
     context.closePath();
+
+    cursor.width = (this.size + 3) * scale * 2;
+    cursor.height = cursor.width;
 };
 
 Crosshairs.prototype.update = function(timeElapsed) {
-    var mouseXDiff = input.mouse.x - this.x,
-        mouseYDiff = input.mouse.y - this.y,
-        playerXDiff = this.character.x - this.x,
-        playerYDiff = this.character.y - this.y,
-        mousePlayerXDiff = input.mouse.x - this.character.x,
-        mousePlayerYDiff = input.mouse.y - this.character.y;
+    var mouseXDiff = input.mouse.drawnX - this.x,
+        mouseYDiff = input.mouse.drawnY - this.y,
+        playerXDiff = this.player.x - this.x,
+        playerYDiff = this.player.y - this.y,
+        mousePlayerXDiff = input.mouse.drawnX - this.player.x,
+        mousePlayerYDiff = input.mouse.drawnY - this.player.y;
 
     this.distFromPlayer = Math.sqrt((playerXDiff * playerXDiff) + (playerYDiff * playerYDiff));
     this.distFromMouse = Math.sqrt((mouseXDiff * mouseXDiff) + (mouseYDiff * mouseYDiff));
-    this.angle = this.character.direction - Math.PI;
-    this.mouseAngle = Math.atan2((input.mouse.y - this.character.y), (input.mouse.x - this.character.x));
+    this.angle = this.player.direction - Math.PI;
+    this.mouseAngle = Math.atan2((input.mouse.drawnY - this.player.y), (input.mouse.drawnX - this.player.x));
     this.mouseDistFromPlayer = Math.sqrt((mousePlayerXDiff * mousePlayerXDiff) + (mousePlayerYDiff * mousePlayerYDiff));
 
     if (this.angle > Math.PI / 2 || this.angle < Math.PI / -2) {
@@ -52,15 +62,15 @@ Crosshairs.prototype.update = function(timeElapsed) {
         }
     }
 
-    this.angle += (this.mouseAngle - this.angle) / this.character.mobility;
-    this.distFromPlayer += (this.mouseDistFromPlayer - this.distFromPlayer) / this.character.mobility;
+    this.angle += (this.mouseAngle - this.angle) / this.player.mobility;
+    this.distFromPlayer += (this.mouseDistFromPlayer - this.distFromPlayer) / this.player.mobility;
 
     for (var i = this.kickCounter - 1; i >= 0; i--) {
-        this.angle += (Math.random() * 2 * Math.PI - Math.PI) * this.character.gun.kick / 100;
+        this.angle += (Math.random() * 2 * Math.PI - Math.PI) * this.player.gun.kick / 100;
     }
 
     this.kickCounter = 0;
 
-    this.x = this.character.x + this.distFromPlayer * Math.cos(this.angle);
-    this.y = this.character.y + this.distFromPlayer * Math.sin(this.angle);
+    this.x = this.player.x + this.distFromPlayer * Math.cos(this.angle);
+    this.y = this.player.y + this.distFromPlayer * Math.sin(this.angle);
 };
