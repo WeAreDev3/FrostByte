@@ -53,6 +53,10 @@ io.on('connection', function(socket) {
         if (socket.player) {
             console.log('And left the lobby:', socket.player.lobby.id);
             socket.player.lobby.removePlayer(socket);
+
+            if (!Object.keys(socket.player.lobby.clients).length) {
+                socket.player.lobby.remove(lobbies);
+            };
         }
     });
 });
