@@ -93,20 +93,20 @@ GameClass = Class.extend({
 
         this.forEachEnemy(function(enemy, id) {
             enemy.draw(context, this.scale);
-        });
+        }.bind(this));
 
         this.forEachPlayer(function(player, id) {
             if (player !== this.currentPlayer) {
                 player.draw(context, this.scale);
             }
-        });
+        }.bind(this));
 
         // Draw the current player last so it is on top of the rest
         this.currentPlayer.draw(context, this.scale);
 
         this.forEachBullet(function(bullet, id) {
             bullet.draw(context, this.scale);
-        });
+        }.bind(this));
 
         // Draw the crosshairs last so it is always on top
         this.currentPlayer.crosshairs.update(context);
