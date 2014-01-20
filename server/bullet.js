@@ -10,21 +10,35 @@ var Bullet = Class.extend({
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
         this.y2 = this.y1 - 10 * Math.sin(this.direction);
         this.prevX = this.x1;
+
+        this.previousState = {};
     },
-    getState: function() {
-        return {
-            'playerId': this.gun.player.id,
+    getChangedState: function() {
+        var currentState = {
             'gun': {
                 'player': {
+                    'id': this.gun.player.id,
                     'x': this.x1,
                     'y': this.y1,
                     'size': this.gun.player.size
                 },
                 'damage': this.gun.damage,
-                'bulletSpeed': this.speed,
+                'bulletSpeed': this.speed
             },
             'direction': this.direction
-        };
+        },
+            changes = {};
+
+        for (var item in currentState) {
+            if (currentState.hasOwnProperty(item)) {
+                if (currentState[item] !== this.previousState[item]) {
+                    changes[item] = currentState[item];
+                }
+            }
+        }
+
+        this.previousState = currentState;
+        return changes;
     },
     update: function(timeElapsed) {
         var game = this.gun.player.lobby.game;

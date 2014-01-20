@@ -4,6 +4,8 @@ var Character = Class.extend({
     init: function(id, x, y) {
         this.id = id;
         this.setPosition(x, y);
+
+        this.previousState = {};
     },
     setSize: function(size) {
         this.size = size;
@@ -48,13 +50,27 @@ var Character = Class.extend({
         this.setSpeed(0);
         this.setMobility(0);
     },
-    getState: function() {
-        return {
+    getChangedState: function() {
+        var currentState = {
             'x': this.x,
             'y': this.y,
             'direction': this.direction,
+            'maxHitPoints': this.maxHitPoints,
+            'hitPoints': this.hitPoints,
             'color': this.color
-        };
+        },
+            changes = {};
+
+        for (var item in currentState) {
+            if (currentState.hasOwnProperty(item)) {
+                if (currentState[item] !== this.previousState[item]) {
+                    changes[item] = currentState[item];
+                }
+            }
+        }
+        
+        this.previousState = currentState;
+        return changes;
     },
     update: function(timeElapsed) {}
 });
