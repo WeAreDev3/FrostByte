@@ -99,8 +99,8 @@ input[type="radio"]:checked + label {
     -webkit-animation: labels-2 linear .5s;
 }
 
-/*The 'Follow Us' section in the bottom left*/
-#follow {
+/*The 'creators Us' section in the bottom left*/
+#creators {
     font-family: 'Roboto Condensed';
     position: fixed;
     bottom: 0;
@@ -112,14 +112,14 @@ input[type="radio"]:checked + label {
 }
 
 /*The header in that section*/
-#follow h3 {
+#creators h3 {
     text-transform: uppercase;
     border-bottom: 1px solid #360009;
     margin: 0;
 }
 
 /*The links in that section*/
-#follow a {
+#creators a {
     color: #360009;
     text-decoration: none;
     display: block;
@@ -129,12 +129,12 @@ input[type="radio"]:checked + label {
 }
 
 /*Make it look awesome on hover*/
-#follow a:hover {
+#creators a:hover {
     background: #360009;
     color: #FFFFFF;
 }
 
-/*See #follow above, almost same stuff*/
+/*See #creators above, almost same stuff*/
 #info {
     font-family: 'Roboto Condensed';
     position: fixed;
@@ -168,23 +168,23 @@ input[type="radio"]:checked + label {
 }
 
 /*Delay each link in the 'footer' by a bit*/
-#follow a:first-of-type, #info a:first-of-type {
+#creators a:first-of-type, #info a:first-of-type {
     animation: footer-1-start 3s;
     -webkit-animation: footer-1-start 3s;
 }
 
-#follow a:nth-of-type(2), #info a:nth-of-type(2) {
+#creators a:nth-of-type(2), #info a:nth-of-type(2) {
     animation: footer-2-start 3s;
     -webkit-animation: footer-2-start 3s;
 }
 
-#follow a:last-of-type, #info a:last-of-type {
+#creators a:last-of-type, #info a:last-of-type {
     animation: footer-3-start 3s;
     -webkit-animation: footer-3-start 3s;
 }
 
 /*Hide some content when 'PLAY' is pressed*/
-.stage2 button#play, .stage2 #follow, .stage2 #info {
+.stage2 button#play, .stage2 #creators, .stage2 #info {
     opacity: 0;
 }
 
