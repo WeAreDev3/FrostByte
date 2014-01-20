@@ -1,7 +1,10 @@
-var Class = require('./class');
+var Class = require('./class'),
+    UUID = require('node-uuid');
 
 var Bullet = Class.extend({
     init: function(gun, direction) {
+        this.id = UUID();
+
         this.gun = gun;
         this.speed = this.gun.bulletSpeed;
         this.direction = direction ? direction : this.gun.player.direction;
