@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # FrostByte
 This is a simple game (top-down-shooter) written in javascript served by node.js.
 
@@ -6,6 +5,8 @@ This project is hosted [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter
 
 ### Version
 Can be found at [./package.json:3](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/blob/master/package.json#L3)
+
+We do our best to comply with the [Semver](http://semver.org/) versioning system.
 
 ### Resources
 Dev3 FrostByte wiki:  [Home](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/home)  |  [Installing/Using](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/How-to-install)
