@@ -43,8 +43,8 @@ socket.on('update', function(update) {
     // Check if any players left
     Game.forEachPlayer(function(player, id) {
         if (!(id in update.players)) {
-            delete Game.players[id];
             console.log('Player left:', id);
+            delete Game.players[id];
         }
     });
 
@@ -62,8 +62,8 @@ socket.on('update', function(update) {
     // Check if any enemies died
     Game.forEachEnemy(function(enemy, id) {
         if (!(id in update.enemies)) {
+            // console.log('Enemy died:', id);
             delete Game.enemies[id];
-            console.log('Enemy died:', id);
         }
     });
 
@@ -71,7 +71,7 @@ socket.on('update', function(update) {
     for (bulletID in update.bullets) {
         // Check if it is new
         if (!Game.bullets[bulletID]) {
-            Game.addBullet(new Bullet(bulletID, update.bullets[bulletID]));
+            Game.addBullet(new Bullet(update.bullets[bulletID].gun, bulletID));
         }
 
         // Apply the change
@@ -81,8 +81,8 @@ socket.on('update', function(update) {
     // Check if any bullets dissapeared
     Game.forEachBullet(function(bullet, id) {
         if (!(id in update.bullets)) {
+            // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet dissapeared' + (id !== 'undefined' ? ': ' + id : ''));
             delete Game.bullets[id];
-            console.log('Bullet dissapeared:', id);
         }
     });
 });
