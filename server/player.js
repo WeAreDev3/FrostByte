@@ -20,7 +20,7 @@ var Player = Character.extend({
             'm': false // Mouse
         };
 
-        this.setHitPoints(100);
+        this.resetHitPoints(100);
         this.setSize(12);
         this.setSpeed(100);
         this.setMobility(10);
