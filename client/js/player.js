@@ -11,7 +11,6 @@ Player = Character.extend({
         this.setDirection(0);
         this.setColor(77, 144, 254);
         this.setGun('full-auto');
-        console.log(this.gun);
     },
     setGun: function(gun) {
         // Can pass in an actual Gun object or the type of gun
