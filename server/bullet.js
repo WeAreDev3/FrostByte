@@ -1,7 +1,10 @@
-var Class = require('./class');
+var Class = require('./class'),
+    UUID = require('node-uuid');
 
 var Bullet = Class.extend({
     init: function(gun, direction) {
+        this.id = UUID();
+
         this.gun = gun;
         this.speed = this.gun.bulletSpeed;
         this.direction = direction ? direction : this.gun.player.direction;
@@ -10,21 +13,35 @@ var Bullet = Class.extend({
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
         this.y2 = this.y1 - 10 * Math.sin(this.direction);
         this.prevX = this.x1;
+
+        this.previousState = {};
     },
-    getState: function() {
-        return {
-            'playerId': this.gun.player.id,
+    getChangedState: function() {
+        var currentState = {
             'gun': {
                 'player': {
+                    'id': this.gun.player.id,
                     'x': this.x1,
                     'y': this.y1,
+                    'direction': this.direction,
                     'size': this.gun.player.size
                 },
                 'damage': this.gun.damage,
-                'bulletSpeed': this.speed,
-            },
-            'direction': this.direction
-        };
+                'bulletSpeed': this.speed
+            }
+        },
+            changes = {};
+
+        for (var item in currentState) {
+            if (currentState.hasOwnProperty(item)) {
+                if (currentState[item] !== this.previousState[item]) {
+                    changes[item] = currentState[item];
+                }
+            }
+        }
+
+        this.previousState = currentState;
+        return changes;
     },
     update: function(timeElapsed) {
         var game = this.gun.player.lobby.game;

@@ -10,7 +10,7 @@
         }) ? /\b_super\b/ : /.*/;
 
     // The base Class implementation (does nothing)
-    this.Class = function() {};
+    Class = function() {};
 
     // Create a new Class that inherits from this class
     Class.extend = function(prop) {

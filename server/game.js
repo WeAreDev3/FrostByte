@@ -2,8 +2,7 @@
 var Class = require('./class'),
     Bullet = require('./bullet'),
     Enemy = require('./enemy'),
-    Utils = require('./utils'),
-    UUID = require('node-uuid');
+    Utils = require('./utils');
 
 var Game = Class.extend({
     init: function() {
@@ -11,8 +10,8 @@ var Game = Class.extend({
         this.height = 1000; // = 10 * 100
 
         this.players = {};
-        this.enemies = [];
-        this.bullets = [];
+        this.enemies = {};
+        this.bullets = {};
 
         this.level = 0;
         this.nextLevel();
@@ -20,28 +19,24 @@ var Game = Class.extend({
         this.start();
     },
     addBullet: function(bullet) {
-        this.bullets.push(bullet);
+        this.bullets[bullet.id] = bullet;
     },
     removeBullet: function(bullet) {
-        this.bullets.splice(this.bullets.indexOf(bullet), 1);
+        delete this.bullets[bullet.id];
     },
     addEnemy: function(enemy) {
-        this.enemies.push(enemy);
-    },
-    nextLevel: function() {
-        this.spawnEnemies(16 * ((this.level + 1) / 2), this.level);
-        this.level++;
+        this.enemies[enemy.id] = enemy;
     },
     removeEnemy: function(enemy) {
-        this.enemies.splice(this.enemies.indexOf(enemy), 1);
+        delete this.enemies[enemy.id];
     },
-    spawnEnemies: function(number, level) {
+    spawnEnemies: function(number) {
         var location = {
             'x': 0,
             'y': 0
         };
 
-        for (var i = number - 1; i >= 0; i--) {
+        for (var i = 0; i < number; i++) {
             switch (Utils.randomInt(4)) {
                 case 0: // Start at top
                     location.x = Utils.randomInt(this.width);
@@ -64,32 +59,39 @@ var Game = Class.extend({
                     break;
             }
 
-            this.addEnemy(new Enemy(UUID(), location.x, location.y, level, this));
+            this.addEnemy(new Enemy(location.x, location.y, this.level, this));
         }
     },
+    nextLevel: function() {
+        this.spawnEnemies(16 * ((this.level + 1) / 2));
+        this.level++;
+    },
     forEachPlayer: function(callback) {
-        for (var player in this.players) {
-            if (this.players.hasOwnProperty(player)) {
-                callback(this.players[player], player);
+        for (var playerID in this.players) {
+            if (this.players.hasOwnProperty(playerID)) {
+                callback(this.players[playerID], playerID);
             }
         }
     },
     forEachEnemy: function(callback) {
-        for (var i = 0; i < this.enemies.length; i++) {
-            callback(this.enemies[i], i);
+        for (var enemyID in this.enemies) {
+            if (this.enemies.hasOwnProperty(enemyID)) {
+                callback(this.enemies[enemyID], enemyID);
+            }
         }
     },
     forEachBullet: function(callback) {
-
-        // Can't cache the length of bullets b/c it could change midway through the loop
-        for (var i = 0; i < this.bullets.length; i++) {
-            callback(this.bullets[i], i);
+        for (var bulletID in this.bullets) {
+            if (this.bullets.hasOwnProperty(bulletID)) {
+                callback(this.bullets[bulletID], bulletID);
+            }
         }
+
     },
     start: function() {
         var lastFrame = Date.now(), // Initialize the game loop
             count = 0, // Initialize the interval counter
-            self = this; // Capture the lobby object for usage below
+            self = this; // Capture the game object for usage below
 
         // Update the physics of the game
 
@@ -102,11 +104,11 @@ var Game = Class.extend({
                 enemy.update(timeElapsed);
             });
 
-            self.forEachBullet(function(bullet, index) {
+            self.forEachBullet(function(bullet, id) {
                 bullet.update(timeElapsed);
             });
 
-            if (!self.enemies.length) {
+            if (!Object.keys(self.enemies).length) {
                 self.nextLevel();
             }
         }
@@ -117,27 +119,23 @@ var Game = Class.extend({
             // The object containing the information the clients use to update
             var update = {
                 'players': {},
-                'enemies': [],
-                'bullets': []
+                'enemies': {},
+                'bullets': {}
             };
 
-            // Add the players state to the update: (x, y, direction)
+            // Add the players state to the update: (x, y, direction, hitPoints, color)
             self.forEachPlayer(function(player, id) {
-                update.players[id] = player.getState();
+                update.players[id] = player.getChangedState();
             });
 
-            // Add all the enemy states to the update: (x, y, direction)
-            self.forEachEnemy(function(enemy, index) {
-                update.enemies.push(enemy.getState());
+            // Add all the enemy states to the update: (x, y, direction, hitPoints, color)
+            self.forEachEnemy(function(enemy, id) {
+                update.enemies[id] = enemy.getChangedState();
             })
 
-            // Add all the bullet states to the update: (gun, )
-            self.forEachBullet(function(bullet, index) {
-                // if (!bullet.sent) {
-                update.bullets.push(bullet.getState());
-
-                // bullet.sent = true;
-                // }
+            // Add all the bullet states to the update: (gun{player{id, x, y, size}, damage, bulletSpeed}, direction)
+            self.forEachBullet(function(bullet, id) {
+                update.bullets[id] = bullet.getChangedState();
             });
 
             // Send the data to each client
