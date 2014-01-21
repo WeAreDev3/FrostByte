@@ -39,7 +39,7 @@
 }
 
 [placeholder]:focus::-webkit-input-placeholder {
-  transition: text-indent 0.7s 0s ease; 
+  transition: text-indent 0.5s 0s ease; 
   text-indent: 100%;
   opacity: 1;
 }
