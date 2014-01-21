@@ -1,89 +1,115 @@
-Character = Class.extend({
-    init: function(id, x, y) {
-        this.id = id;
-        this.setPosition(x, y);
+Character = function(specs) {
+    this.type = specs.type;
+    this.name = specs.name;
+    this.hp = specs.hp;
+    this.health = 100; // Percent
+    this.size = specs.size;
+    this.speed = specs.speed;
+    this.mobility = specs.mobility;
+    this.x = specs.x;
+    this.y = specs.y;
+    this.direction = specs.direction;
+    this.gun = specs.gun;
+    this.gun.character = this;
+    this.color = specs.color;
+    this.transparency = 1;
+};
 
-        this.previousState = {};
-    },
-    setSize: function(size) {
-        this.size = size;
-    },
-    setSpeed: function(speed) {
-        this.speed = speed;
-    },
-    setMobility: function(mobility) {
-        this.mobility = mobility;
-    },
-    setDirection: function(direction) {
-        this.direction = direction;
-    },
-    setPosition: function(x, y) {
-        this.x = x;
-        this.y = y;
-    },
-    setColor: function(r, g, b, a) {
-        // Assuming giving Red and Green and Blue seperatly and optionaly Alpha
-        a = a !== undefined ? a : '1';
-        this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-    },
-    setState: function(state) {
-        for (var item in state) {
-            this[item] = state[item];
+Character.prototype.draw = function() {
+    var namePositionX = this.x - (context.measureText(this.name).width / 2),
+        namePositionY = this.y + (this.size * 2);
+
+    // Draws Body
+    context.fillStyle = this.color;
+
+    if (this.type == 'player') {
+        // Square
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.direction);
+        context.fillRect(-1 * this.size, -1 * this.size, this.size * 2, this.size * 2);
+        context.restore();
+
+        context.fillStyle = '#000';
+        // draws health
+        // context.fillText(this.health + '%', this.x - (context.measureText(this.health + '%').width / 2), this.y + 3);
+        // draws name
+        context.fillText(this.name, namePositionX, namePositionY);
+    } else {
+        // Circle
+        context.beginPath();
+        context.arc(this.x, this.y, this.size, 0, 2 * Math.PI, false);
+        context.fill();
+        context.closePath();
+    }
+};
+
+Character.prototype.update = function(timeElapsed) {
+    var damageDone = 100 - this.health;
+
+    if (this.type === 'player') {
+        if (input.w) { // Up (Press W)
+            this.y -= this.speed * timeElapsed;
         }
-    },
-    resetHitPoints: function(maxHitPoints) {
-        if (maxHitPoints !== undefined) {
-            this.maxHitPoints = maxHitPoints;
+        if (input.s) { // Down (Press S)
+            this.y += this.speed * timeElapsed;
+        }
+        if (input.a) { // Left (Press A)
+            this.x -= this.speed * timeElapsed;
+        }
+        if (input.d) { // Right (Press D)
+            this.x += this.speed * timeElapsed;
         }
 
-        this.hitPoints = this.maxHitPoints;
-    },
-    setHitPoints: function(hitPoints) {
-        if (hitPoints > this.maxHitPoints) {
-            this.hitPoints = this.maxHitPoints;
-        } else if (hitPoints < 0) {
-            this.hitPoints = 0;
-        } else {
-            this.hitPoints = hitPoints;
-        }
-    },
-    health: function() {
-        return this.hitPoints / this.maxHitPoints;
-    },
-    hit: function(damage) {
-        this.hitPoints -= damage;
+        this.direction = Math.atan2((crosshairs.y - this.y), (crosshairs.x - this.x)) + Math.PI;
 
-        if (this.health() <= 0) {
-            this.kill();
+        if (input.mouseDown) {
+            this.gun.fire();
         }
-    },
-    kill: function() {
-        this.setHitPoints(0);
-        this.setSpeed(0);
-        this.setMobility(0);
-    },
-    getChangedState: function() {
-        var currentState = {
-            'x': this.x,
-            'y': this.y,
-            'direction': this.direction,
-            'maxHitPoints': this.maxHitPoints,
-            'hitPoints': this.hitPoints,
-            'color': this.color
-        },
-            changes = {};
 
-        for (var item in currentState) {
-            if (currentState.hasOwnProperty(item)) {
-                if (currentState[item] !== this.previousState[item]) {
-                    changes[item] = currentState[item];
-                }
-            }
+        this.gun.timeSinceLastFire += timeElapsed;
+
+        if (!input.mouseDown && this.gun.timeSinceLastFire >= this.gun.rate) {
+            this.gun.timeSinceLastFire = this.gun.rate;
         }
-        
-        this.previousState = currentState;
-        return changes;
-    },
-    draw: function(context, scale) {},
-    update: function(timeElapsed) {}
-});
+
+        if (!input.mouseDown) {
+            this.gun.wasFired = false;
+        }
+
+    } else {
+        this.x += this.speed * Math.cos(this.direction) * timeElapsed;
+        this.y += this.speed * Math.sin(this.direction) * timeElapsed;
+
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+            this.direction += Math.PI;
+        }
+
+        if (this.mobility < 0) {
+            this.direction += Math.PI / this.mobility * timeElapsed;
+        }
+
+        this.color = 'rgba(' + parseInt(255 - (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + parseInt(0 + (damageDone * 1.28)) + ',' + this.transparency + ')';
+
+        if (this.health <= 0) {
+            this.transparency -= timeElapsed * 2;
+        }
+        if (this.transparency <= 0) {
+            enemies.splice(enemies.indexOf(this), 1);
+        }
+    }
+};
+
+Character.prototype.hit = function(damage) {
+    this.health -= damage;
+
+    if (this.health <= 0) {
+        this.kill();
+    }
+};
+
+Character.prototype.kill = function() {
+    this.health = 0;
+    this.speed = 0;
+    this.mobility = 0;
+};

@@ -40,55 +40,8 @@
 	100% {opacity: 1;}
 }
 
-@-webkit-keyframes title-start {
-	from {opacity: 0;}
-	to {opacity: 1;}
-}
-
-@-webkit-keyframes subtitle-start {
-	0% {opacity: 0;}
-	60% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes play-button-start {
-	0% {opacity: 0;}
-	50% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes footer-start {
-	0% {opacity: 0;}
-	70% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes footer-1-start {
-	0% {opacity: 0;}
-	75% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes footer-2-start {
-	0% {opacity: 0;}
-	80% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes footer-3-start {
-	0% {opacity: 0;}
-	85% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
 /*All of the keyframes for stage 2*/
 @keyframes labels-2 {
-	0% {opacity: 0;}
-	50% {opacity: 0;}
-	100% {opacity: 1;}
-}
-
-@-webkit-keyframes labels-2 {
 	0% {opacity: 0;}
 	50% {opacity: 0;}
 	100% {opacity: 1;}

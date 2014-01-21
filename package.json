@@ -1,6 +1,6 @@
 {
     "name": "top-down-shooter",
-    "version": "0.0.2",
+    "version": "0.0.0",
     "author": "talbenari1",
     "description": "A top down shooter",
     "contributors": [{
@@ -9,8 +9,7 @@
         "name": "janka102"
     }],
     "scripts": {
-        "start": "nodemon app.js",
-        "dev": "nodemon --ignore client/ app.js"
+        "start": "node server.js"
     },
     "repository": {
         "type": "git",
@@ -18,10 +17,6 @@
     },
     "dependencies": {
         "express": "~3.2.4",
-        "socket.io": "~0.9.14",
-        "node-uuid": "*"
-    },
-    "devDependencies": {
-        "nodemon": "*"
+        "socket.io": "~0.9.14"
     }
 }

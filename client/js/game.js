@@ -1,290 +1,243 @@
-GameClass = Class.extend({
-    init: function(width, height, level) {
-        this.width = width;
-        this.height = height;
-        this.scale = 1;
+function startGame() {
+    canvas = document.getElementById('frame');
+    context = canvas.getContext('2d');
 
-        this.level = level;
+    initCanvas(); //Sets up the canvas so that it looks right on the screen
 
-        this.currentPlayer = {};
-        this.players = {};
-        this.enemies = {};
-        this.bullets = {};
+    //Event handlers, pretty straightforward stuff
+    window.onkeydown = handleKeyDown;
+    window.onkeyup = handleKeyUp;
+    window.onmousemove = handleMouseMove;
+    window.onmousedown = handleMouseDown;
+    window.onmouseup = handleMouseUp;
+    window.onresize = initCanvas; //Re-set-up the canvas every time the browser is resized
+    // Disable right-click
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    }, false);
+
+    //Some environment input variables, updated by the event handlers from above
+    input = {
+        'w': false,
+        'a': false,
+        's': false,
+        'd': false,
+        'mouse': {
+            'x': canvas.width / 2,
+            'y': canvas.height / 2
+        },
+        'mouseDown': false
+    };
+
+    var playerSpecs = {
+        'type': 'player',
+        'name': 'ME :)',
+        'hp': 100,
+        'size': 12,
+        'speed': 100,
+        'mobility': 10,
+        'x': canvas.width / 2,
+        'y': canvas.height / 2,
+        'direction': Math.PI / 2,
+        'gun': create(Gun, 'full-auto'),
+        'color': '#4D90FE'
     },
-    addPlayer: function(player) {
-        this.players[player.id] = player;
-    },
-    removePlayer: function(player) {
-        delete this.players[player.id];
-    },
-    addBullet: function(bullet) {
-        this.bullets[bullet.id] = bullet;
-    },
-    removeBullet: function(bullet) {
-        delete this.bullets[bullet.id];
-    },
-    addEnemy: function(enemy) {
-        this.enemies[enemy.id] = enemy;
-    },
-    removeEnemy: function(enemy) {
-        delete this.enemies[enemy.id];
-    },
-    spawnEnemies: function(number) {
-        var location = {
-            'x': 0,
-            'y': 0
+        enemySpecs = {
+            'type': 'enemy',
+            'name': null,
+            'hp': 50,
+            'size': 10,
+            'speed': 55,
+            'mobility': 10,
+            'x': null,
+            'y': null,
+            'direction': 0,
+            'gun': null,
+            'color': 'rbg(255,0,0)'
         };
 
-        for (var i = 0; i < number; i++) {
-            switch (Utils.randomInt(4)) {
-                case 0: // Start at top
-                    location.x = Utils.randomInt(this.width);
-                    location.y = 0;
-                    break;
+    //Create the player!
+    player = new Character(playerSpecs);
 
-                case 1: // Start from the right
-                    location.x = this.width;
-                    location.y = Utils.randomInt(this.height);
-                    break;
+    //Create the crosshairs!
+    crosshairs = new Crosshairs(canvas.width / 2, canvas.height / 2, player);
 
-                case 2: // Start at the bottom
-                    location.x = Utils.randomInt(this.width);
-                    location.y = this.height;
-                    break;
+    //defines the function that creates enemies
 
-                case 3: // Start from the left
-                    location.x = 0;
-                    location.y = Utils.randomInt(this.height);
-                    break;
-            }
+    function createEnemies(howMany) {
+        for (var i = 0; i < howMany; i++) {
+            enemySpecs.name = i;
+            enemySpecs.x = Math.random() * canvas.width;
+            enemySpecs.y = Math.random() * canvas.height;
+            enemySpecs.direction = Math.PI / (Math.random() * 2 - 1);
+            enemySpecs.gun = create(Gun, 'full-auto');
 
-            this.addEnemy(new Enemy(UUID(), location.x, location.y, this.level, this));
+            enemies.push(new Character(enemySpecs));
         }
-    },
-    nextLevel: function() {
-        this.spawnEnemies(16 * ((this.level + 1) / 2));
-        this.level++;
-    },
-    forEachPlayer: function(callback) {
-        for (var playerID in this.players) {
-            if (this.players.hasOwnProperty(playerID)) {
-                callback(this.players[playerID], playerID);
-            }
-        }
-    },
-    forEachEnemy: function(callback) {
-        for (var enemyID in this.enemies) {
-            if (this.enemies.hasOwnProperty(enemyID)) {
-                callback(this.enemies[enemyID], enemyID);
-            }
-        }
-    },
-    forEachBullet: function(callback) {
-        for (var bulletID in this.bullets) {
-            if (this.bullets.hasOwnProperty(bulletID)) {
-                callback(this.bullets[bulletID], bulletID);
-            }
-        }
-
-    },
-    draw: function(context) {
-        // Clear the screen first
-        context.clearRect(0, 0, this.width * this.scale, this.height * this.scale);
-
-        this.forEachEnemy(function(enemy, id) {
-            enemy.draw(context, this.scale);
-        }.bind(this));
-
-        this.forEachPlayer(function(player, id) {
-            if (player !== this.currentPlayer) {
-                player.draw(context, this.scale);
-            }
-        }.bind(this));
-
-        // Draw the current player last so it is on top of the rest
-        this.currentPlayer.draw(context, this.scale);
-
-        this.forEachBullet(function(bullet, id) {
-            bullet.draw(context, this.scale);
-        }.bind(this));
-
-        // Draw the crosshairs last so it is always on top
-        this.currentPlayer.crosshairs.update(context, this.scale);
-    },
-    update: function(timeElapsed) {
-        this.forEachPlayer(function(player, id) {
-            player.update(timeElapsed);
-        });
-
-        this.forEachEnemy(function(enemy, id) {
-            enemy.update(timeElapsed);
-        });
-
-        this.forEachBullet(function(bullet, id) {
-            bullet.update(timeElapsed);
-        });
-
-        this.currentPlayer.crosshairs.update(timeElapsed);
-    },
-    start: function() {
-        var lastFrame = Date.now(), // Initialize the game loop
-            count = 0, // Initialize the interval counter
-            self = this, // Capture the game object for usage below
-            context = document.getElementById('frame').getContext('2d'); // The canvas context
-
-        // Make sure the canvas size is all good
-        this.resizeBrowser();
-
-        // Some environment input variables, updated by the event handlers from above
-        this.input = {
-            'u': false,
-            'd': false,
-            'l': false,
-            'r': false,
-            'mouse': {
-                'x': 800,
-                'y': 500,
-                'drawnX': 800 * this.scale,
-                'drawnY': 500 * this.scale,
-                'down': false
-            }
-        };
-
-        // Event handlers. Key up/down. Mouse up/down/move.
-        window.onkeydown = this.keyDown.bind(this);
-        window.onkeyup = this.keyUp.bind(this);
-        window.onmousemove = this.mouseMove.bind(this);
-        window.onmousedown = this.mouseDown.bind(this);
-        window.onmouseup = this.mouseUp.bind(this);
-
-        //Resize the canvas every time the browser is resized
-        window.onresize = this.resizeBrowser.bind(this);
-
-        // Disable right-click
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-        }, false);
-
-        //We use a loop to keep the entire program synchronous
-        (function startLoop() {
-            var frameId = 0,
-                lastFrame = Date.now(),
-                count = 0;
-
-            (function loop() {
-                var thisFrame = Date.now(),
-                    timeElapsed = (thisFrame - lastFrame) / 1000;
-
-                frameId = window.requestAnimationFrame(loop);
-
-                // if (count % 1 === 0) {
-                // count = 0;
-                self.update(timeElapsed);
-                self.draw(context);
-                // }
-
-                lastFrame = thisFrame;
-                // count++;
-            })();
-        })();
-    },
-    resizeBrowser: function() {
-        // Resize the game to be as big as possible while maintaining the proper aspect ratio
-        var width = window.innerWidth,
-            height = window.innerHeight,
-            canvas = document.getElementById('frame');
-
-        if (width / height >= 1.6) {
-            canvas.height = height;
-            width = height * 1.6;
-            canvas.width = width;
-        } else {
-            canvas.width = width;
-            height = width / 1.6;
-            canvas.height = height;
-        }
-
-        leftOff = canvas.offsetLeft;
-        topOff = canvas.offsetTop;
-
-        this.scale = height / 1000;
-    },
-    keyDown: function(event) {
-        switch (event.keyCode) {
-            case 87: // w
-            case 38: // up arrow
-                if (!this.input.u) { // Only update if we have to
-                    this.input.u = true;
-                    socket.send('iut'); // Up True
-                }
-                break;
-            case 83: // s
-            case 40: // down arrow
-                if (!this.input.d) { // Only update if we have to
-                    this.input.d = true;
-                    socket.send('idt'); // Down True
-                }
-                break;
-            case 65: // a
-            case 37: // left arrow
-                if (!this.input.l) { // Only update if we have to
-                    this.input.l = true;
-                    socket.send('ilt'); // Left True
-                }
-                break;
-            case 68: // d
-            case 39: // right arrow
-                if (!this.input.r) { // Only update if we have to
-                    this.input.r = true;
-                    socket.send('irt'); // Right True
-                }
-                break;
-        }
-    },
-    keyUp: function(event) {
-        switch (event.keyCode) {
-            case 87: // w
-            case 38: // up arrow
-                this.input.u = false;
-                socket.send('iuf'); // Up False
-                break;
-            case 83: // s
-            case 40: // down arrow
-                this.input.d = false;
-                socket.send('idf'); // Down False
-                break;
-            case 65: // a
-            case 37: // left arrow
-                this.input.l = false;
-                socket.send('ilf'); // Left False
-                break;
-            case 68: // d
-            case 39: // right arrow
-                this.input.r = false;
-                socket.send('irf'); // Right False
-                break;
-        }
-    },
-    mouseMove: function(event) {
-        this.input.mouse.x = event.pageX - leftOff;
-        this.input.mouse.y = event.pageY - topOff;
-
-        this.currentPlayer.crosshairs.cursor.style.left = (event.pageX - this.currentPlayer.crosshairs.cursor.width / 2).toString(10) + 'px';
-        this.currentPlayer.crosshairs.cursor.style.top = (event.pageY - this.currentPlayer.crosshairs.cursor.height / 2).toString(10) + 'px';
-
-        this.input.mouse.drawnX = this.input.mouse.x / this.scale;
-        this.input.mouse.drawnY = this.input.mouse.y / this.scale;
-    },
-    mouseDown: function() {
-        this.input.mouse.down = true;
-
-        // Send the server Input that the Mouse is True
-        socket.send('imt');
-    },
-    mouseUp: function() {
-        this.input.mouse.down = false;
-
-        // Send the server Input that the Mouse is false
-        socket.send('imf');
     }
-});
+
+    // actually creates enemies
+    createEnemies(100);
+
+    console.log(player);
+    console.log(crosshairs);
+    console.log('Enemies:', enemies);
+
+    //We use a loop to keep the entire program synchronous
+
+    function startLoop() {
+        var frameId = 0,
+            lastFrame = Date.now(),
+            count = 0;
+
+        function loop() {
+            var thisFrame = Date.now(),
+                timeElapsed = (thisFrame - lastFrame) / 1000;
+
+            frameId = window.requestAnimationFrame(loop);
+
+            if (count % 1 === 0) {
+                count = 0;
+                update(timeElapsed);
+                draw(context);
+            }
+
+            lastFrame = thisFrame;
+            count++;
+        }
+
+        loop();
+    }
+
+    startLoop();
+};
+
+//Expands the canvas to the full width and height of the browser window
+
+function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function create(constructor, args) {
+    function F() {
+        return constructor.call(this, args);
+    }
+    F.prototype = constructor.prototype;
+    return new F();
+}
+
+//Initalize the arrays of bullets and enemies
+bullets = [];
+enemies = [];
+
+/*Every frame, update will run commands and call functions to update
+  the necessary game variables so that the draw function can draw them
+  out properly.*/
+
+function update(timeElapsed) {
+    var i;
+
+
+    // Can't cache the length of the arrays b/c they can change mid-loop.
+    for (i = 0; i < enemies.length; i++) {
+        enemies[i].update(timeElapsed);
+    }
+
+    for (i = 0; i < bullets.length; i++) {
+        bullets[i].update(timeElapsed);
+    }
+
+    player.update(timeElapsed);
+    crosshairs.update(timeElapsed);
+}
+
+
+/*Every frame, draw will clear the frame and redraw all
+  of the onscreen elements with the updated variables.*/
+
+function draw(context) {
+    var i,
+        len;
+
+    //Step 1: Clear the screen
+    clearScreen();
+
+    //Step 2: Draw all items on the screen
+    for (i = 0, len = enemies.length; i < len; i++) {
+        enemies[i].draw();
+    }
+
+    player.draw();
+
+    for (i = 0, len = bullets.length; i < len; i++) {
+        bullets[i].draw();
+    }
+
+    //Crosshairs should be drawn last so it is always on top
+    crosshairs.draw();
+}
+
+//Record the needed keys in the input object
+
+function handleKeyDown(event) {
+    switch (event.keyCode) {
+        case 87: // w
+            input.w = true;
+            break;
+        case 65: // a
+            input.a = true;
+            break;
+        case 83: // s
+            input.s = true;
+            break;
+        case 68: // d
+            input.d = true;
+            break;
+    }
+}
+
+//Remove the keys recorded from the input object
+
+function handleKeyUp(event) {
+    switch (event.keyCode) {
+        case 87: // w
+            input.w = false;
+            break;
+        case 65: // a
+            input.a = false;
+            break;
+        case 83: // s
+            input.s = false;
+            break;
+        case 68: // d
+            input.d = false;
+            break;
+    }
+}
+
+//Record the location of the cursor in the input object
+
+function handleMouseMove(event) {
+    input.mouse.x = event.pageX;
+    input.mouse.y = event.pageY;
+
+    cursor.style.left = (event.pageX - cursor.width / 2).toString(10) + 'px';
+    cursor.style.top = (event.pageY - cursor.height / 2).toString(10) + 'px';
+}
+
+//Record a mouse button press in the input object
+
+function handleMouseDown() {
+    input.mouseDown = true;
+}
+
+//Record the    
+
+function handleMouseUp() {
+    input.mouseDown = false;
+}
+
+function clearScreen() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}

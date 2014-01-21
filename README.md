@@ -1,24 +1,34 @@
-# FrostByte
-This is a simple game (top-down-shooter) written in javascript served by node.js.
+#Top Down Shooter
 
-This project is hosted [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter)
+##Goals
 
-### Version
-Can be found at [./package.json:3](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/blob/master/package.json#L3)
+###Game Logic
+- Multiplayer!
+- Change the gun kick to accuracy and then actually implement kick, where the player moves back a bit
+- Lobbies
 
-We do our best to comply with the [Semver](http://semver.org/) versioning system.
+###Game Efficiency
+- Lines 14-20 of the crosshairs (curs & cursor var stuff) can be improved.
+- Some of the crosshair logic can be moved into the mouse input object.
 
-### Resources
-Dev3 FrostByte wiki:  [Home](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/home)  |  [Installing/Using](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/How-to-install)
+###Game Aesthetics
+- Create sprites
 
-Play on our servers: _Coming soon_
+### Proposed class system by janka102:
+ - Entity
+    - Character
+        - Player
+        - Other Players in Lobby
+        - Enemy/Mob
+	    - Item
+	        - Gun
+	        - Inventory
+	        - Currency
+    - Bullet
+    - Wall/Barrier
 
-Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
-
-### Future/Goals
-This project is very new, we have far to go. Our goals can be found [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues?assignee_id=&label_name=feature&milestone_id=&scope=&sort=&state=)
-
-### Bugs
-Found a bug? Submit it [on GitHub](https://github.com/WeAreDev3/FrostByte/issues). We'll probably check it someday. 
-
-We keep all our other bugs [here](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/issues) though.
+##Bugs
+- Homescreen animations fail in Chrome.
+- Game struggles to render in Firefox (due to cursor logic).
+- Enemies disappear off-screen when game is offscreen.
+- WASD sometimes sticks. No pattern found yet.
