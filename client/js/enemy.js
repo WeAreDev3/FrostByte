@@ -14,9 +14,7 @@ Enemy = Character.extend({
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.hitPoints <= 0) {
-            this.kill();
-        } else {
+        if (this.hitPoints > 0) {
             var inflicted = 1 - this.health();
             this.setColor(parseInt(255 - (inflicted * 189)), parseInt(0 + (inflicted * 195)), parseInt(0 + (inflicted * 255)));
         }
