@@ -109,7 +109,7 @@ GameClass = Class.extend({
         }.bind(this));
 
         // Draw the crosshairs last so it is always on top
-        this.currentPlayer.crosshairs.update(context);
+        this.currentPlayer.crosshairs.update(context, this.scale);
     },
     update: function(timeElapsed) {
         this.forEachPlayer(function(player, id) {
@@ -269,8 +269,8 @@ GameClass = Class.extend({
         this.input.mouse.x = event.pageX - leftOff;
         this.input.mouse.y = event.pageY - topOff;
 
-        cursor.style.left = (event.pageX - cursor.width / 2).toString(10) + 'px';
-        cursor.style.top = (event.pageY - cursor.height / 2).toString(10) + 'px';
+        this.currentPlayer.crosshairs.cursor.style.left = (event.pageX - this.currentPlayer.crosshairs.cursor.width / 2).toString(10) + 'px';
+        this.currentPlayer.crosshairs.cursor.style.top = (event.pageY - this.currentPlayer.crosshairs.cursor.height / 2).toString(10) + 'px';
 
         this.input.mouse.drawnX = this.input.mouse.x / this.scale;
         this.input.mouse.drawnY = this.input.mouse.y / this.scale;
