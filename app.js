@@ -32,12 +32,13 @@ io.on('connection', function(socket) {
     // Log the new socket's ID to the server's console
     console.log('Socket connected:', socket.id);
 
-    socket.on('play', function() {
+    // When the player is ready to play, add them to an open lobby
+    socket.on('play', function(data) {
+        socket.name = data.name;
         router.findOpenLobby(lobbies).addPlayer(socket);
     });
 
     // Process data received from the socket
-    // So far just input and join
     socket.on('message', function(message) {
         if (!socket.player) {
             router.findOpenLobby(lobbies).addPlayer(socket);

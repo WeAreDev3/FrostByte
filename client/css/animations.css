@@ -10,6 +10,12 @@
 	100% {opacity: 1;}
 }
 
+@keyframes username-start {
+	0% {opacity: 0;}
+	30% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
 @keyframes play-button-start {
 	0% {opacity: 0;}
 	50% {opacity: 0;}
@@ -48,6 +54,12 @@
 @-webkit-keyframes subtitle-start {
 	0% {opacity: 0;}
 	60% {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+@-webkit-keyframes username-start {
+	0% {opacity: 0;}
+	30% {opacity: 0;}
 	100% {opacity: 1;}
 }
 
