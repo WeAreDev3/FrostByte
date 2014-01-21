@@ -56,7 +56,7 @@ Bullet = Class.extend({
         context.lineTo(x2, y2);
 
         context.lineWidth = 1;
-        context.strokeStyle = '#000';
+        context.strokeStyle = '#003b4e';
         context.stroke();
 
         context.closePath();
