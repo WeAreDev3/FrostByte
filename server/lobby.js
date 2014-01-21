@@ -29,6 +29,10 @@ var Lobby = Class.extend({
     removePlayer: function(socket) {
         delete this.clients[socket.id];
         delete this.game.players[socket.id];
+    },
+    remove: function(lobbies) {
+        console.log('Lobby', this.id, 'deleted.');
+        delete lobbies[this.id];
     }
 });
 

@@ -9,8 +9,8 @@
         "name": "janka102"
     }],
     "scripts": {
-        "start": "node app.js",
-        "test": "nodemon --ignore client/ app.js"
+        "start": "nodemon app.js",
+        "dev": "nodemon --ignore client/ app.js"
     },
     "repository": {
         "type": "git",
