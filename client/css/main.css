@@ -1,18 +1,222 @@
-html {
-    cursor: none;
-}
+/*Set the default font to Roboto*/
 body {
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     overflow: hidden;
+    background: #F0F0F0;
+}
+
+/*The title at the top of the page*/
+#title {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    /*text-transform: uppercase;*/
+    font-size: 80px;
+    margin: 10px auto 0;
+    text-align: center;
+    color: #19004A;
+    animation: title-start 2s;
+    -webkit-animation: title-start 2s;
+}
+
+/*The text below the title*/
+#subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+    color: #AAAAAA;
+    margin: 0;
+    animation: subtitle-start 2.5s;
+    -webkit-animation: subtitle-start 2.5s;
+}
+
+/*mkeedlinger attempts keeping the link looking nice*/
+.theGame a {
+    color: #AAAAAA;
+    text-decoration: none;
+}
+
+/*The wrapper that contains the setup buttons*/
+#button-container {
+    text-align: center;
+    margin: 40px auto 0;
+}
+
+/*The 'PLAY' button*/
+button#play {
+    font-family: 'Roboto', sans-serif;
+    background: #FFFFFF;
+    border: 1px solid #19004A;
+    color: #19004A;
+    font-size: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background .5s, color .5s;
+    animation: play-button-start 2s;
+    -webkit-animation: play-button-start 2s;
+    outline: none;
+}
+
+/*Make it look awesome on hover*/
+button#play:hover {
+    background: #19004A;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"] + label {
+    color: #000936;
+    padding: 10px;
+    cursor: pointer;
+    background: #FFFFFF;
+    text-transform: uppercase;
+    border: 1px solid #FFFFFF;
+    transition: .25s;
+    font-size: 20px;
+    display: none;
+    opacity: 0;
+}
+
+input[type="radio"] + label:hover {
+    border-color: #000936;
+}
+
+input[type="radio"]:checked + label {
+    color: #FFFFFF;
+    background: #000936;
+    border-color: #000936;
+}
+
+.stage2 input[type="radio"] + label {
+    display: inline;
+    opacity: 1;
+    animation: labels-2 linear .5s;
+    -webkit-animation: labels-2 linear .5s;
+}
+
+/*The 'creators Us' section in the bottom left*/
+#creators {
+    font-family: 'Roboto Condensed';
+    position: fixed;
+    bottom: 0;
+    padding: 20px;
+    color: #360009;
+    left: 0;
+    animation: footer-start 3s;
+    -webkit-animation: footer-start 3s;
+}
+
+/*The header in that section*/
+#creators h3 {
+    text-transform: uppercase;
+    border-bottom: 1px solid #360009;
+    margin: 0;
+}
+
+/*The links in that section*/
+#creators a {
+    color: #360009;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    border-bottom: 1px solid #FFFFFF;
+    transition: .5s;
+}
+
+/*Make it look awesome on hover*/
+#creators a:hover {
+    background: #360009;
+    color: #FFFFFF;
+}
+
+/*See #creators above, almost same stuff*/
+#info {
+    font-family: 'Roboto Condensed';
+    position: fixed;
+    bottom: 0;
+    padding: 20px;
+    color: #00362D;
+    right: 0;
+    text-align: right;
+    animation: footer-start 3s;
+    -webkit-animation: footer-start 3s;
+}
+
+#info h3 {
+    text-transform: uppercase;
+    border-bottom: 1px solid #00362D;
+    margin: 0;
+}
+
+#info a {
+    color: #00362D;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    border-bottom: 1px solid #FFFFFF;
+    transition: .5s;
+}
+
+#info a:hover {
+    background: #00362D;
+    color: #FFFFFF;
+}
+
+/*Delay each link in the 'footer' by a bit*/
+#creators a:first-of-type, #info a:first-of-type {
+    animation: footer-1-start 3s;
+    -webkit-animation: footer-1-start 3s;
+}
+
+#creators a:nth-of-type(2), #info a:nth-of-type(2) {
+    animation: footer-2-start 3s;
+    -webkit-animation: footer-2-start 3s;
+}
+
+#creators a:last-of-type, #info a:last-of-type {
+    animation: footer-3-start 3s;
+    -webkit-animation: footer-3-start 3s;
+}
+
+/*Hide some content when 'PLAY' is pressed*/
+.stage2 button#play, .stage2 #creators, .stage2 #info {
+    opacity: 0;
+}
+
+/*Add this to some items after animating to avoid bugs*/
+.opacity-transition {
+    transition: opacity .25s !important;
+}
+
+/*This too*/
+.remove-display {
+    display: none;
 }
 canvas {
-    display: block;
+    display: none;
     margin: 0 auto;
     box-sizing: border-box;
-    background: #DDDDDD;
-    /*Because why not, that's why*/
+    background: #F0F0F0;
+    border: 1px solid #111111;
 }
 #cursor {
     position: absolute;
     -moz-user-select: none;
+}
+
+#intro.playing {
+    display: none;
+}
+
+#frame.playing {
+    display: block;
+}
+
+html.playing {
+    cursor: none;
 }

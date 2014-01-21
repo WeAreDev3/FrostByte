@@ -8,21 +8,21 @@
 var types = {
     'semi-auto': {
         'accuracy': 5,
-        'damage': 40, 
+        'damage': 40,
         'kick': 5,
         'bulletSpeed': 15,
         'rate': 140
     },
     'full-auto': {
         'accuracy': 8,
-        'damage': 30, 
+        'damage': 30,
         'kick': 2,
         'bulletSpeed': 15,
         'rate': 100
     },
     'shotgun': {
         'accuracy': 13,
-        'damage': 20, 
+        'damage': 20,
         'kick': 7,
         'bulletSpeed': 17,
         'rate': 220
@@ -38,7 +38,7 @@ Gun = function(type) {
     this.wasFired = false;
     this.rate = types[type].rate / 1000;
     this.timeSinceLastFire = 0;
-    this.character = null;
+    this.player = null;
 };
 
 Gun.prototype.fire = function() {
@@ -49,19 +49,20 @@ Gun.prototype.fire = function() {
             case 'semi-auto':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    new Bullet(this, this.bulletSpeed, this.character.direction);
+                    new Bullet(this);
                     crosshairs.kickCounter++;
                 }
                 break;
             case 'full-auto':
-                new Bullet(this, this.bulletSpeed, this.character.direction);
+                new Bullet(this);
                 crosshairs.kickCounter++;
                 break;
             case 'shotgun':
                 if (!this.wasFired) {
                     this.wasFired = true;
-                    for (var i = 0; i < 15; i++) {
-                        new Bullet(this, this.bulletSpeed, this.character.direction + (Math.random() * 2 - 1) * this.character.gun.accuracy / 100);
+
+                    for (var i = 0, n = 3, halfN = (n - 1) / 2; i < n; i++) {
+                        new Bullet(this, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100);
                     }
                     crosshairs.kickCounter++;
                 }
