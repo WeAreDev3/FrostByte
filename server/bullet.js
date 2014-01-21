@@ -1,7 +1,10 @@
-var Class = require('./class');
+var Class = require('./class'),
+    UUID = require('node-uuid');
 
 var Bullet = Class.extend({
     init: function(gun, direction) {
+        this.id = UUID();
+
         this.gun = gun;
         this.speed = this.gun.bulletSpeed;
         this.direction = direction ? direction : this.gun.player.direction;
@@ -10,24 +13,39 @@ var Bullet = Class.extend({
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
         this.y2 = this.y1 - 10 * Math.sin(this.direction);
         this.prevX = this.x1;
+
+        this.previousState = {};
     },
-    getState: function() {
-        return {
-            'playerId': this.gun.player.id,
+    getChangedState: function() {
+        var currentState = {
             'gun': {
                 'player': {
+                    'id': this.gun.player.id,
                     'x': this.x1,
                     'y': this.y1,
+                    'direction': this.direction,
                     'size': this.gun.player.size
                 },
                 'damage': this.gun.damage,
-                'bulletSpeed': this.speed,
-            },
-            'direction': this.direction
-        };
+                'bulletSpeed': this.speed
+            }
+        },
+            changes = {};
+
+        for (var item in currentState) {
+            if (currentState.hasOwnProperty(item)) {
+                if (currentState[item] !== this.previousState[item]) {
+                    changes[item] = currentState[item];
+                }
+            }
+        }
+
+        this.previousState = currentState;
+        return changes;
     },
     update: function(timeElapsed) {
-        var game = this.gun.player.lobby.game;
+        var game = this.gun.player.lobby.game,
+            self = this;
 
         if (this.x1 < 0 || this.x1 > game.width || this.y1 < 0 || this.y1 > game.height) {
             game.removeBullet(this);
@@ -39,20 +57,20 @@ var Bullet = Class.extend({
             m2 = -1 / m,
             intersection = [];
 
-        for (var i = 0, len = game.enemies.length; i < len; i++) {
+        game.forEachEnemy(function(enemy, id) {
             // The x and y intersect of the line and enemy
-            intersection[0] = ((game.enemies[i].x * -m2) + (this.x1 * m) + game.enemies[i].y - this.y1) / (m - m2);
-            intersection[1] = m * intersection[0] - (m * this.x1) + this.y1;
+            intersection[0] = ((enemy.x * -m2) + (self.x1 * m) + enemy.y - self.y1) / (m - m2);
+            intersection[1] = m * intersection[0] - (m * self.x1) + self.y1;
 
-            var distanceFromBulletLine = Math.sqrt(Math.pow((game.enemies[i].x - intersection[0]), 2) + Math.pow((game.enemies[i].y - intersection[1]), 2)),
-                isIntersectionOnBullet = this.x2 > this.prevX ? intersection[0] > this.prevX && intersection[0] < this.x2 : intersection[0] < this.prevX && intersection[0] > this.x2;
+            var distanceFromBulletLine = Math.sqrt(Math.pow((enemy.x - intersection[0]), 2) + Math.pow((enemy.y - intersection[1]), 2)),
+                isIntersectionOnBullet = self.x2 > self.prevX ? intersection[0] > self.prevX && intersection[0] < self.x2 : intersection[0] < self.prevX && intersection[0] > self.x2;
 
-            if (isIntersectionOnBullet && distanceFromBulletLine <= game.enemies[i].size && game.enemies[i].health() > 0) {
-                game.enemies[i].hit(this.gun.damage);
-                game.removeBullet(this);
+            if (isIntersectionOnBullet && distanceFromBulletLine <= enemy.size && enemy.health() > 0) {
+                enemy.hit(self.gun.damage);
+                game.removeBullet(self);
                 return;
             }
-        }
+        });
 
         this.prevX = this.x1;
         this.x1 -= this.speed * Math.cos(this.direction) * timeElapsed * 100;

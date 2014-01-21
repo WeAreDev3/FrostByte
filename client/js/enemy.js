@@ -1,15 +1,10 @@
-var Character = require('./character'),
-    UUID = require('node-uuid');
+Enemy = Character.extend({
+    init: function(id, state) {
+        this._super(id, state.x, state.y);
 
-var Enemy = Character.extend({
-    init: function(x, y, level, game) {
-        this._super(UUID(), x, y);
-
-        this.game = game;
-
-        this.resetHitPoints(70 + (level * Math.random() * 20));
+        this.resetHitPoints(state.maxHitPoints);
         this.setSize(10);
-        this.setSpeed(50 + (level * Math.random() * 10));
+        this.setSpeed(50);
         this.setMobility(10);
         this.setDirection(0);
         this.setColor(255, 0, 0);
@@ -19,12 +14,22 @@ var Enemy = Character.extend({
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.hitPoints <= 0) {
-            this.kill();
-        } else {
+        if (this.hitPoints > 0) {
             var inflicted = 1 - this.health();
             this.setColor(parseInt(255 - (inflicted * 189)), parseInt(0 + (inflicted * 195)), parseInt(0 + (inflicted * 255)));
         }
+    },
+    draw: function(context, scale) {
+        var x = this.x * scale,
+            y = this.y * scale,
+            size = this.size * scale;
+
+        // Draws Body
+        context.fillStyle = this.color;
+        context.beginPath();
+        context.arc(x, y, size, 0, 2 * Math.PI, false);
+        context.fill();
+        context.closePath();
     },
     update: function(timeElapsed) {
         // If alive...
@@ -36,7 +41,7 @@ var Enemy = Character.extend({
                 players = [];
 
             // Create an array of all the players to loop through them with Array.reduce()
-            this.game.forEachPlayer(function(player, id) {
+            Game.forEachPlayer(function(player, id) {
                 players.push(player);
             });
 
@@ -65,16 +70,16 @@ var Enemy = Character.extend({
                 this.setPosition(0, this.y);
                 offScreen = true;
             }
-            if (this.x > this.game.width) {
-                this.setPosition(this.game.width, this.y);
+            if (this.x > Game.width) {
+                this.setPosition(Game.width, this.y);
                 offScreen = true;
             }
             if (this.y < 0) {
                 this.setPosition(this.x, 0);
                 offScreen = true;
             }
-            if (this.y > this.game.height) {
-                this.setPosition(this.x, this.game.height);
+            if (this.y > Game.height) {
+                this.setPosition(this.x, Game.height);
                 offScreen = true;
             }
 
@@ -90,10 +95,8 @@ var Enemy = Character.extend({
             this.alpha -= timeElapsed * 2;
 
             if (this.alpha <= 0) {
-                this.game.removeEnemy(this);
+                Game.removeEnemy(this);
             }
         }
     }
 });
-
-module.exports = Enemy;
