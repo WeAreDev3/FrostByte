@@ -12,25 +12,24 @@ var Enemy = Character.extend({
         this.setMobility(10);
         this.setDirection(0);
         this.setColor(255, 0, 0);
+        this.damage = 5;
 
         this.alpha = 1;
     },
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.hitPoints <= 0) {
-            this.kill();
-        } else {
+        if (this.hitPoints > 0) {
             var inflicted = 1 - this.health();
             this.setColor(parseInt(255 - (inflicted * 189)), parseInt(0 + (inflicted * 195)), parseInt(0 + (inflicted * 255)));
         }
     },
     update: function(timeElapsed) {
+        var nearestPlayer,
+            prevDistance;
         // If alive...
         if (this.health() > 0) {
             var self = this,
-                nearestPlayer,
-                prevDistance,
                 offScreen = false,
                 players = [];
 
@@ -42,6 +41,7 @@ var Enemy = Character.extend({
             // Go through all the players and check who is the closest
             if (players.length) {
                 nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
+
                     var currDistance = Math.sqrt(Math.pow(currPlayer.x - self.x, 2) + Math.pow(currPlayer.y - self.y, 2));
                     if (prevDistance === undefined) {
                         prevDistance = Math.sqrt(Math.pow(prevPlayer.x - self.x, 2) + Math.pow(prevPlayer.y - self.y, 2));
@@ -80,6 +80,17 @@ var Enemy = Character.extend({
             if (offScreen) {
                 this.setDirection(this.direction + Math.PI);
             }
+
+
+
+            if (!(prevDistance >= 0)) {
+                prevDistance = Math.sqrt(Math.pow(nearestPlayer.x - this.x, 2) + Math.pow(nearestPlayer.y - this.y, 2));
+            };
+
+            if (prevDistance <= (this.size + nearestPlayer.size)) {
+                nearestPlayer.hit(this.damage);
+                this.hit(this.hitPoints);
+            };
         } else {
             // If dead, fade out
             var rgb = this.color.match(/^rgba\((\d+),(\d+),(\d+)/i);
