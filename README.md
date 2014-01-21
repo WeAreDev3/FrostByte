@@ -11,7 +11,7 @@ We do our best to comply with the [Semver](http://semver.org/) versioning system
 ### Resources
 Dev3 FrostByte wiki:  [Home](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/home)  |  [Installing/Using](http://gitlab.mke8.me/mkeedlinger/top-down-shooter/wikis/How-to-install)
 
-Play on our servers: _Coming soon_
+Play on our servers: [Play](http://frostbyte.mke8.me/)
 
 Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 
