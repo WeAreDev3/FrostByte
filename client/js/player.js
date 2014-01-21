@@ -43,6 +43,8 @@ Player = Character.extend({
         context.fillText(this.name, namePositionX, namePositionY);
     },
     update: function(timeElapsed) {
+        var currentDirection = this.direction;
+
         // Move the player if needed
         if (Game.input.u) { // Up
             this.y -= this.speed * timeElapsed;
@@ -69,6 +71,14 @@ Player = Character.extend({
         }
         if (this.y > Game.height) {
             this.setPosition(this.x, Game.height);
+        }
+
+        // Number.toFixed() returns a string, so make sure to turn it back into a number
+        this.direction = (Math.atan2((this.crosshairs.y - this.y), (this.crosshairs.x - this.x)) + Math.PI); //.toFixed(3);
+
+        // If the player direction changes, send the new direction to the server
+        if (currentDirection !== this.direction) {
+            socket.send('d' + this.direction);
         }
 
         // Handle the gun firing
