@@ -8,7 +8,7 @@ var Player = Character.extend({
 
         this._super(this.socket.id, this.lobby.game.width / 2, this.lobby.game.height / 2);
 
-        this.name = this.socket.id;
+        this.name = this.socket.name;
 
         // Input from client
         this.input = {
