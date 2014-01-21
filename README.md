@@ -3,6 +3,8 @@ This is a simple game (top down shooter) written in javascript served by node.js
 
 This project is hosted [here](http://gitlab.mke8.me/dev3/frostbyte)
 
+Mirror: [GitHub](https://github.com/WeAreDev3/FrostByte)
+
 ### Version
 Can be found at [./package.json:3](http://gitlab.mke8.me/dev3/frostbyte/blob/master/package.json#L3)
 
