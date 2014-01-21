@@ -7,16 +7,16 @@ Enemy = Character.extend({
         this.setSpeed(50);
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(255, 0, 0);
+        this.setColor(255, 45, 0);
 
         this.alpha = 1;
     },
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.hitPoints > 0) {
+        if (this.health() > 0) {
             var inflicted = 1 - this.health();
-            this.setColor(parseInt(255 - (inflicted * 189)), parseInt(0 + (inflicted * 195)), parseInt(0 + (inflicted * 255)));
+            this.setColor(parseInt(255 - (inflicted * 189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
         }
     },
     draw: function(context, scale) {
