@@ -6,6 +6,7 @@ var Character = Class.extend({
         this.setPosition(x, y);
 
         this.previousState = {};
+        this.forceUpdate = false;
     },
     setSize: function(size) {
         this.size = size;
@@ -66,16 +67,22 @@ var Character = Class.extend({
             'direction': this.direction,
             'maxHitPoints': this.maxHitPoints,
             'hitPoints': this.hitPoints,
-            'color': this.color
+            'color': this.color,
+            'name': this.name
         },
             changes = {};
 
-        for (var item in currentState) {
-            if (currentState.hasOwnProperty(item)) {
-                if (currentState[item] !== this.previousState[item]) {
-                    changes[item] = currentState[item];
+        if (!this.forceUpdate) {
+            for (var item in currentState) {
+                if (currentState.hasOwnProperty(item)) {
+                    if (currentState[item] !== this.previousState[item]) {
+                        changes[item] = currentState[item];
+                    }
                 }
             }
+        } else {
+            changes = currentState;
+            this.forceUpdate = false;
         }
         
         this.previousState = currentState;

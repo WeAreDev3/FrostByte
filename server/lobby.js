@@ -25,6 +25,14 @@ var Lobby = Class.extend({
         this.clients[socket.id] = socket;
         this.game.players[socket.id] = new Player(socket, this);
 
+        this.game.forEachPlayer(function(player, id) {
+            player.forceUpdate = true;
+        });
+
+        this.game.forEachEnemy(function(enemy, id) {
+            enemy.forceUpdate = true;
+        });
+
         if (Object.keys(this.clients).length >= this.size) {
             this.full = true;
         }
