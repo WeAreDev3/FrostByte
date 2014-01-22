@@ -37,6 +37,13 @@
     text-align: center;
     margin: 40px auto 0;
 }
+
+[placeholder]:focus::-webkit-input-placeholder {
+  transition: text-indent 0.3s 0s ease; 
+  text-indent: 100%;
+  opacity: 1;
+}
+
 /*The 'PLAY' button*/
  button#play {
     font-family:'Roboto', sans-serif;
