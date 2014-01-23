@@ -12,7 +12,8 @@ var Enemy = Character.extend({
         this.setSpeed(50 + (level * Math.random() * 10));
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(255, 45, 0);
+        this.setColor(255, 0, 0);
+        this.damage = 5;
 
         this.alpha = 1;
     },
@@ -29,7 +30,7 @@ var Enemy = Character.extend({
         if (this.health() > 0) {
             var self = this,
                 nearestPlayer,
-                prevDistance,
+                closestDistance,
                 offScreen = false,
                 players = [];
 
@@ -38,16 +39,16 @@ var Enemy = Character.extend({
                 players.push(player);
             });
 
-            // Go through all the players and check who is the closest
+            // Go through all the players and check who is the closest so this enemy can follow them
             if (players.length) {
                 nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
                     var currDistance = Math.sqrt(Math.pow(currPlayer.x - self.x, 2) + Math.pow(currPlayer.y - self.y, 2));
-                    if (prevDistance === undefined) {
-                        prevDistance = Math.sqrt(Math.pow(prevPlayer.x - self.x, 2) + Math.pow(prevPlayer.y - self.y, 2));
+                    if (closestDistance === undefined) {
+                        closestDistance = Math.sqrt(Math.pow(prevPlayer.x - self.x, 2) + Math.pow(prevPlayer.y - self.y, 2));
                     }
-                    // console.log(prevDistance, currDistance);
-                    if (prevDistance > currDistance) {
-                        prevDistance = currDistance;
+                    // console.log(closestDistance, currDistance);
+                    if (closestDistance > currDistance) {
+                        closestDistance = currDistance;
                         return currPlayer;
                     }
 
@@ -59,6 +60,19 @@ var Enemy = Character.extend({
 
             this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
 
+            // If there is only one player closestDistance wouldn't be defined yet
+            if (closestDistance === undefined) {
+                closestDistance = Math.sqrt(Math.pow(nearestPlayer.x - this.x, 2) + Math.pow(nearestPlayer.y - this.y, 2));
+            }
+
+
+            // If enemy is touching the nearest player, hit the player and kill this enemy
+            if (closestDistance <= (this.size + nearestPlayer.size)) {
+                nearestPlayer.hit(this.damage);
+                this.hit(this.hitPoints);
+            }
+
+            // Make sure the enemy can't off the screen
             if (this.x < 0) {
                 this.setPosition(0, this.y);
                 offScreen = true;
