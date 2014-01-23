@@ -1,12 +1,14 @@
 {
-    "name": "top-down-shooter",
+    "name": "FrostByte",
     "version": "0.1.5",
-    "author": "talbenari1",
+    "author": "Dev3",
     "description": "A top down shooter",
     "contributors": [{
         "name": "mkeedlinger"
     }, {
         "name": "janka102"
+    }, {
+        "name": "talbenari1"
     }],
     "scripts": {
         "start": "nodemon app.js",
@@ -14,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/talbenari1/Top-Down-Shooter.git"
+        "url": "https://github.com/dev3/frostbyte.git"
     },
     "dependencies": {
         "express": "~3.2.4",
