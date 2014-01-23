@@ -40,10 +40,15 @@
     text-align: center;
     margin: 40px auto 0;
 }
-[placeholder]:focus::-webkit-input-placeholder {
-    transition: text-indent 0.3s 0s ease;
-    text-indent: 100%;
+[placeholder]::-webkit-input-placeholder {
+    transition: padding 0.4s 0s ease, opacity 0.3s 0 ease-in;
+    padding-top: 0;
     opacity: 1;
+}
+[placeholder]:focus::-webkit-input-placeholder {
+    transition: padding 0.2s 0.3s ease-out, opacity 0.3s 0.3s ease-out;
+    padding-top: 1em;
+    opacity: 0;
 }
 /*The 'PLAY' button*/
  button#play {
