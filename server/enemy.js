@@ -22,7 +22,7 @@ var Enemy = Character.extend({
 
         if (this.health() > 0) {
             var inflicted = 1 - this.health();
-            this.setColor(parseInt(255 - (inflicted * 189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
+            this.setColor(parseInt(255 + (inflicted * -189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
         }
     },
     update: function(timeElapsed) {
@@ -67,6 +67,7 @@ var Enemy = Character.extend({
                 // If enemy is touching the nearest player, hit the player and kill this enemy
                 if (closestDistance <= (this.size + nearestPlayer.size)) {
                     nearestPlayer.hit(this.damage);
+
                     this.hit(this.hitPoints);
                 }
             }
