@@ -27,6 +27,10 @@ var Player = Character.extend({
         this.setColor(77, 144, 254);
         this.setGun('full-auto');
 
+        this.stats = {
+            'damage': 0
+        };
+
         // Add the player onto the socket to be used elsewhere
         this.socket.player = this;
     },
@@ -78,6 +82,7 @@ var Player = Character.extend({
         console.log('you just got hit, yo!', this.hitPoints);
 
         if (this.hitPoints <= 0) {
+            this.setHitPoints(0);
             this.kill();
         }
     },
