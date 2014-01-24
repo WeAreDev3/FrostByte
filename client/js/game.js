@@ -149,7 +149,7 @@ GameClass = Class.extend({
             }
         };
 
-        this.tmpInput = {
+        this.tmpInput = { // Used to see if input actaully needs to be sent to the server
             'u': false,
             'd': false,
             'l': false,
@@ -164,7 +164,7 @@ GameClass = Class.extend({
         window.onmousedown = this.mouseDown.bind(this);
         window.onmouseup = this.mouseUp.bind(this);
 
-        window.onblur = this.onBlur;
+        window.onblur = this.onBlur.bind(this);
 
         //Resize the canvas every time the browser is resized
         window.onresize = this.resizeBrowser.bind(this);
@@ -283,6 +283,10 @@ GameClass = Class.extend({
         this.tmpInput.m = false;
     },
     onBlur: function() {
-
+        for (var input in this.tmpInput) {
+            if (this.tmpInput.hasOwnProperty(input)) {
+                this.tmpInput[input] = false;
+            }
+        }
     }
 });
