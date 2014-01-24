@@ -43,7 +43,16 @@ Player = Character.extend({
         context.fillText(this.name, namePositionX, namePositionY);
     },
     update: function(timeElapsed) {
-        if (Game.currentPlayer.id === this.id) {
+        if (this.hitPoints > 0) {
+            for (var input in Game.tmpInput) {
+                if (Game.tmpInput.hasOwnProperty(input) && Game.tmpInput[input] !== Game.input[input]) {
+                    Game.input[input] = Game.tmpInput[input];
+                    // console.log('i' + input + (Game.input[input] + '')[0]);
+                    socket.send('i' + input + (Game.input[input] + '')[0]);
+                }
+            }
+
+
             var currentDirection = this.direction;
 
             // Move the player if needed
