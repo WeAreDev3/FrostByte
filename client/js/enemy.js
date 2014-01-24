@@ -32,12 +32,12 @@ Enemy = Character.extend({
         context.closePath();
         if (this.health() <= 0) {
             console.log(this.killAnimation);
-            context.fillStyle = "rgb(93,61,228)";
+            context.fillStyle = "rgba(43,149,238," + (this.alpha>.7?1:this.alpha+.3) + ")";
             context.beginPath();
             context.arc(x, y, this.killAnimation * scale, 0, 2 * Math.PI, false);
             context.fill();
             context.closePath();
-            this.killAnimation += .27 * scale;
+            this.killAnimation += .3 * scale;
         };
     },
     update: function(timeElapsed) {
