@@ -28,6 +28,9 @@ var Game = Class.extend({
         this.enemies[enemy.id] = enemy;
     },
     nextLevel: function() {
+        this.forEachPlayer(function(player, id) {
+            player.resetHitPoints();
+        });
         this.spawnEnemies(16 * ((this.level + 1) / 2), this.level);
         this.level++;
     },
