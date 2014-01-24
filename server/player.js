@@ -75,13 +75,15 @@ var Player = Character.extend({
     },
     hit: function(damage) {
         this.hitPoints -= damage;
-        console.log('you just got hit, yo!')
+        console.log('you just got hit, yo!', this.hitPoints);
+
         if (this.hitPoints <= 0) {
             this.kill();
         }
     },
     kill: function() {
-        this.lobby.removePlayer(this);
+        // this.lobby.removePlayer(this);
+        console.log('Booted!!!');
     },
     update: function(timeElapsed) {
         // Move the player if needed
