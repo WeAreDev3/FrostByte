@@ -10,6 +10,7 @@ Enemy = Character.extend({
         this.setColor(255, 45, 0);
 
         this.alpha = 1;
+        this.killAnimation = 3;
     },
     hit: function(damage) {
         this.hitPoints -= damage;
@@ -23,13 +24,21 @@ Enemy = Character.extend({
         var x = this.x * scale,
             y = this.y * scale,
             size = this.size * scale;
-
         // Draws Body
         context.fillStyle = this.color;
         context.beginPath();
         context.arc(x, y, size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
+        if (this.health() <= 0) {
+            console.log(this.killAnimation);
+            context.fillStyle = "rgb(93,61,228)";
+            context.beginPath();
+            context.arc(x, y, this.killAnimation * scale, 0, 2 * Math.PI, false);
+            context.fill();
+            context.closePath();
+            this.killAnimation += .27 * scale;
+        };
     },
     update: function(timeElapsed) {
         // If alive...
@@ -88,7 +97,8 @@ Enemy = Character.extend({
             }
         } else {
             // If dead, fade out
-            var rgb = this.color.match(/^rgba\((\d+),(\d+),(\d+)/i);
+            var rgb = this.color.match(/^rgba\((\d+),(\d+),(\d+)/i),
+                dead = true;
 
             this.setColor(rgb[1], rgb[2], rgb[3], this.alpha);
 
