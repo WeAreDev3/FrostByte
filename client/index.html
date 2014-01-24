@@ -36,7 +36,7 @@
             </span>
         </h2>
         <div id="username-container">
-            <input id="username" maxlength="12" placeholder="Username" tabindex="1">
+            <input id="username" maxlength="12" placeholder="Username" tabindex="1" onkeydown="if (event.keyCode == 13) document.getElementById('play').click()">
         </div>
         <div id="button-container">
             <button id="play" tabindex="-1">Play</button>

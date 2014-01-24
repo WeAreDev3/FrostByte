@@ -11,8 +11,8 @@
         "name": "talbenari1"
     }],
     "scripts": {
-        "start": "nodemon app.js",
-        "dev": "nodemon --ignore client/ app.js"
+        "start": "node app.js",
+        "dev": "google-chrome http://localhost:3000; nodemon --ignore client/ app.js"
     },
     "repository": {
         "type": "git",
