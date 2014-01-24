@@ -86,47 +86,49 @@ var Player = Character.extend({
         console.log('Booted!!!');
     },
     update: function(timeElapsed) {
-        // Move the player if needed
-        if (this.input.u) { // Up
-            this.y -= this.speed * timeElapsed;
-        }
-        if (this.input.d) { // Down
-            this.y += this.speed * timeElapsed;
-        }
-        if (this.input.l) { // Left
-            this.x -= this.speed * timeElapsed;
-        }
-        if (this.input.r) { // Right
-            this.x += this.speed * timeElapsed;
-        }
+        if (this.hitPoints > 0) {
+            // Move the player if needed
+            if (this.input.u) { // Up
+                this.y -= this.speed * timeElapsed;
+            }
+            if (this.input.d) { // Down
+                this.y += this.speed * timeElapsed;
+            }
+            if (this.input.l) { // Left
+                this.x -= this.speed * timeElapsed;
+            }
+            if (this.input.r) { // Right
+                this.x += this.speed * timeElapsed;
+            }
 
-        // Make sure the player doesn't go off the screen
-        if (this.x < 0) {
-            this.setPosition(0, this.y);
-        }
-        if (this.x > this.lobby.game.width) {
-            this.setPosition(this.lobby.game.width, this.y);
-        }
-        if (this.y < 0) {
-            this.setPosition(this.x, 0);
-        }
-        if (this.y > this.lobby.game.height) {
-            this.setPosition(this.x, this.lobby.game.height);
-        }
+            // Make sure the player doesn't go off the screen
+            if (this.x < 0) {
+                this.setPosition(0, this.y);
+            }
+            if (this.x > this.lobby.game.width) {
+                this.setPosition(this.lobby.game.width, this.y);
+            }
+            if (this.y < 0) {
+                this.setPosition(this.x, 0);
+            }
+            if (this.y > this.lobby.game.height) {
+                this.setPosition(this.x, this.lobby.game.height);
+            }
 
-        // Handle the gun firing
-        if (this.input.m) {
-            this.gun.fire();
-        }
+            // Handle the gun firing
+            if (this.input.m) {
+                this.gun.fire();
+            }
 
-        this.gun.timeSinceLastFire += timeElapsed;
+            this.gun.timeSinceLastFire += timeElapsed;
 
-        if (!this.input.m && this.gun.timeSinceLastFire > this.gun.rate) {
-            this.gun.timeSinceLastFire = this.gun.rate;
-        }
+            if (!this.input.m && this.gun.timeSinceLastFire > this.gun.rate) {
+                this.gun.timeSinceLastFire = this.gun.rate;
+            }
 
-        if (!this.input.m && this.gun.wasFired) {
-            this.gun.wasFired = false;
+            if (!this.input.m && this.gun.wasFired) {
+                this.gun.wasFired = false;
+            }
         }
     }
 });
