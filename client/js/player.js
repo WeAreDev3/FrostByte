@@ -54,7 +54,6 @@ Player = Character.extend({
                 }
             }
 
-
             var currentDirection = this.direction;
 
             // Move the player if needed
