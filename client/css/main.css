@@ -22,7 +22,7 @@
 }
 /*The text below the title*/
  #subtitle {
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 300;
     text-align: center;
     color: #AAAAAA;
@@ -30,8 +30,12 @@
     animation: subtitle-start 2.5s;
     -webkit-animation: subtitle-start 2.5s;
 }
+
+.survival {
+    font-weight: bold;
+}
 /*mkeedlinger attempts keeping the link looking nice*/
- .theGame a {
+ .aGame a {
     color: #AAAAAA;
     text-decoration: none;
 }
