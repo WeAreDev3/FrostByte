@@ -12,7 +12,8 @@
     }],
     "scripts": {
         "start": "node app.js",
-        "dev": "google-chrome http://localhost:3000; nodemon --ignore client/ app.js"
+        "dev": "nodemon --ignore client/ app.js",
+        "mdev": "google-chrome ./resources/redirect.html; nodemon --ignore client/ app.js"
     },
     "repository": {
         "type": "git",
