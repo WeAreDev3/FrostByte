@@ -33,70 +33,70 @@ Enemy = Character.extend({
     },
     update: function(timeElapsed) {
         // If alive...
-        if (this.health() > 0) {
-            var self = this,
-                nearestPlayer,
-                prevDistance,
-                offScreen = false,
-                players = [];
+    //     if (this.health() > 0) {
+    //         var self = this,
+    //             nearestPlayer,
+    //             prevDistance,
+    //             offScreen = false,
+    //             players = [];
 
-            // Create an array of all the players to loop through them with Array.reduce()
-            Game.forEachPlayer(function(player, id) {
-                players.push(player);
-            });
+    //         // Create an array of all the players to loop through them with Array.reduce()
+    //         Game.forEachPlayer(function(player, id) {
+    //             players.push(player);
+    //         });
 
-            // Go through all the players and check who is the closest
-            if (players.length) {
-                nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
-                    var currDistance = Math.sqrt(Math.pow(currPlayer.x - self.x, 2) + Math.pow(currPlayer.y - self.y, 2));
-                    if (prevDistance === undefined) {
-                        prevDistance = Math.sqrt(Math.pow(prevPlayer.x - self.x, 2) + Math.pow(prevPlayer.y - self.y, 2));
-                    }
-                    // console.log(prevDistance, currDistance);
-                    if (prevDistance > currDistance) {
-                        prevDistance = currDistance;
-                        return currPlayer;
-                    }
+    //         // Go through all the players and check who is the closest
+    //         if (players.length) {
+    //             nearestPlayer = players.reduce(function(prevPlayer, currPlayer) {
+    //                 var currDistance = Math.sqrt(Math.pow(currPlayer.x - self.x, 2) + Math.pow(currPlayer.y - self.y, 2));
+    //                 if (prevDistance === undefined) {
+    //                     prevDistance = Math.sqrt(Math.pow(prevPlayer.x - self.x, 2) + Math.pow(prevPlayer.y - self.y, 2));
+    //                 }
+    //                 // console.log(prevDistance, currDistance);
+    //                 if (prevDistance > currDistance) {
+    //                     prevDistance = currDistance;
+    //                     return currPlayer;
+    //                 }
 
-                    return prevPlayer;
-                });
+    //                 return prevPlayer;
+    //             });
 
-                this.setDirection(+Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
-            }
+    //             this.setDirection(+Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
+    //         }
 
-            this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
+    //         this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
 
-            if (this.x < 0) {
-                this.setPosition(0, this.y);
-                offScreen = true;
-            }
-            if (this.x > Game.width) {
-                this.setPosition(Game.width, this.y);
-                offScreen = true;
-            }
-            if (this.y < 0) {
-                this.setPosition(this.x, 0);
-                offScreen = true;
-            }
-            if (this.y > Game.height) {
-                this.setPosition(this.x, Game.height);
-                offScreen = true;
-            }
+    //         if (this.x < 0) {
+    //             this.setPosition(0, this.y);
+    //             offScreen = true;
+    //         }
+    //         if (this.x > Game.width) {
+    //             this.setPosition(Game.width, this.y);
+    //             offScreen = true;
+    //         }
+    //         if (this.y < 0) {
+    //             this.setPosition(this.x, 0);
+    //             offScreen = true;
+    //         }
+    //         if (this.y > Game.height) {
+    //             this.setPosition(this.x, Game.height);
+    //             offScreen = true;
+    //         }
 
-            if (offScreen) {
-                this.setDirection(this.direction + Math.PI);
-            }
-        } else {
-            // If dead, fade out
-            var rgb = this.color.match(/^rgba\((\d+),(\d+),(\d+)/i);
+    //         if (offScreen) {
+    //             this.setDirection(this.direction + Math.PI);
+    //         }
+    //     } else {
+    //         // If dead, fade out
+    //         var rgb = this.color.match(/^rgba\((\d+),(\d+),(\d+)/i);
 
-            this.setColor(rgb[1], rgb[2], rgb[3], this.alpha);
+    //         this.setColor(rgb[1], rgb[2], rgb[3], this.alpha);
 
-            this.alpha -= timeElapsed * 2;
+    //         this.alpha -= timeElapsed * 2;
 
-            if (this.alpha <= 0) {
-                Game.removeEnemy(this);
-            }
-        }
+    //         if (this.alpha <= 0) {
+    //             Game.removeEnemy(this);
+    //         }
+    //     }
     }
 });
