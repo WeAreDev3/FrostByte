@@ -96,7 +96,7 @@ GameClass = Class.extend({
         }.bind(this));
 
         this.forEachPlayer(function(player, id) {
-            if (player !== this.currentPlayer) {
+            if (player !== this.currentPlayer && player.hitPoints > 0) {
                 player.draw(context, this.scale);
             }
         }.bind(this));
@@ -108,17 +108,16 @@ GameClass = Class.extend({
             bullet.draw(context, this.scale);
         }.bind(this));
 
+
         // Draw the crosshairs last so it is always on top
         this.currentPlayer.crosshairs.draw(context, this.scale);
     },
     update: function(timeElapsed) {
-        this.forEachPlayer(function(player, id) {
-            player.update(timeElapsed);
-        });
+        this.currentPlayer.update(timeElapsed);
 
-        this.forEachEnemy(function(enemy, id) {
-            enemy.update(timeElapsed);
-        });
+        // this.forEachEnemy(function(enemy, id) {
+        //     enemy.update(timeElapsed);
+        // });
 
         this.forEachBullet(function(bullet, id) {
             bullet.update(timeElapsed);
@@ -165,6 +164,8 @@ GameClass = Class.extend({
         window.onmousedown = this.mouseDown.bind(this);
         window.onmouseup = this.mouseUp.bind(this);
 
+        window.onblur = this.onBlur;
+
         //Resize the canvas every time the browser is resized
         window.onresize = this.resizeBrowser.bind(this);
 
@@ -173,7 +174,7 @@ GameClass = Class.extend({
             event.preventDefault();
         }, false);
 
-        //We use a loop to keep the entire program synchronous
+        // We use a loop to keep the entire program synchronous
         (function startLoop() {
             var frameId = 0,
                 lastFrame = Date.now(),
@@ -280,6 +281,8 @@ GameClass = Class.extend({
     },
     mouseUp: function() {
         this.tmpInput.m = false;
+    },
+    onBlur: function() {
 
     }
 });
