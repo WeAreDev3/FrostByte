@@ -32,7 +32,7 @@ var Gun = Class.extend({
         },
         'full-auto': {
             'accuracy': 8,
-            'damage': 30,
+            'damage': 30, 
             'kick': 2,
             'bulletSpeed': 15,
             'rate': 100

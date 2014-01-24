@@ -57,7 +57,7 @@ io.on('connection', function(socket) {
 
             if (!Object.keys(socket.player.lobby.clients).length) {
                 socket.player.lobby.remove(lobbies);
-            };
+            }
         }
     });
 });
