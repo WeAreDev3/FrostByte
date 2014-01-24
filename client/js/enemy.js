@@ -9,6 +9,9 @@ Enemy = Character.extend({
         this.setDirection(0);
         this.setColor(255, 45, 0);
 
+        this.lines = [];
+        this.lineCounter = 0;
+
         this.alpha = 1;
     },
     hit: function(damage) {
@@ -30,6 +33,24 @@ Enemy = Character.extend({
         context.arc(x, y, size, 0, 2 * Math.PI, false);
         context.fill();
         context.closePath();
+
+        if (this.lines.length) {
+            for (var i = this.lines.length - 1; i >= 0; i--) {
+                line = this.lines[i];
+                line.a = this.alpha;
+                context.beginPath();
+                context.moveTo(x + line.x * this.lineCounter * line.vel, y + line.y * this.lineCounter * line.vel);
+                context.lineTo(x + line.x * this.lineCounter * line.vel * -1, y + line.y * this.lineCounter * line.vel * -1);
+                context.lineWidth = line.width;
+                context.strokeStyle = 'rgba(' + parseInt(line.r) + ', ' + parseInt(line.g) + ', ' + parseInt(line.b) + ', ' + parseFloat(line.a) + ')';
+                context.stroke();
+            };
+        };
+
+        if (this.lineCounter < 20) {
+            this.lineCounter += 2;
+        };
+
     },
     update: function(timeElapsed) {
         // If alive...
@@ -61,7 +82,7 @@ Enemy = Character.extend({
                     return prevPlayer;
                 });
 
-                this.setDirection(+Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
+                this.setDirection(Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
             }
 
             this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
@@ -93,6 +114,22 @@ Enemy = Character.extend({
             this.setColor(rgb[1], rgb[2], rgb[3], this.alpha);
 
             this.alpha -= timeElapsed * 2;
+            if (!this.lines.length) {
+                for (var i = Math.random() * 5 + 15; i >= 0; i--) {
+                    this.lineCounter = 0;
+                    this.lines.push({
+                        'x': Math.random() * 2 - 1,
+                        'y': Math.random() * 2 - 1,
+                        'vel': Math.random() / 1.5,
+                        'width': Math.random() * 2 + 2,
+                        'r': Math.random() * 50 + 55,
+                        'g': Math.random() * 50 + 150,
+                        'b': Math.random() * 50 + 205,
+                        'a': 1
+                    });
+                };
+            };
+            
 
             if (this.alpha <= 0) {
                 Game.removeEnemy(this);
