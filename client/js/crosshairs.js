@@ -28,52 +28,56 @@ Crosshairs = Class.extend({
         this.cursor = cursor;
     },
     draw: function(context, scale) {
-        var x = this.x * scale,
-            y = this.y * scale,
-            size = this.size * scale;
+        if (this.player.hitPoints > 0) {
+            var x = this.x * scale,
+                y = this.y * scale,
+                size = this.size * scale;
 
-        context.beginPath();
-        context.arc(x, y, size, 0, 2 * Math.PI, false);
-        context.lineWidth = 2 * this.scale;
-        context.strokeStyle = '#FE634D';
-        context.stroke();
-        context.closePath();
+            context.beginPath();
+            context.arc(x, y, size, 0, 2 * Math.PI, false);
+            context.lineWidth = 2 * this.scale;
+            context.strokeStyle = '#FE634D';
+            context.stroke();
+            context.closePath();
 
-        this.cursor.width = (this.size + 3) * scale * 2;
-        this.cursor.height = this.cursor.width;
+            this.cursor.width = (this.size + 3) * scale * 2;
+            this.cursor.height = this.cursor.width;
+        }
     },
     update: function(timeElapsed) {
-        var mouseXDiff = Game.input.mouse.drawnX - this.x,
-            mouseYDiff = Game.input.mouse.drawnY - this.y,
-            playerXDiff = this.player.x - this.x,
-            playerYDiff = this.player.y - this.y,
-            mousePlayerXDiff = Game.input.mouse.drawnX - this.player.x,
-            mousePlayerYDiff = Game.input.mouse.drawnY - this.player.y;
+        if (this.player.hitPoints > 0) {
+            var mouseXDiff = Game.input.mouse.drawnX - this.x,
+                mouseYDiff = Game.input.mouse.drawnY - this.y,
+                playerXDiff = this.player.x - this.x,
+                playerYDiff = this.player.y - this.y,
+                mousePlayerXDiff = Game.input.mouse.drawnX - this.player.x,
+                mousePlayerYDiff = Game.input.mouse.drawnY - this.player.y;
 
-        this.distFromPlayer = Math.sqrt((playerXDiff * playerXDiff) + (playerYDiff * playerYDiff));
-        this.distFromMouse = Math.sqrt((mouseXDiff * mouseXDiff) + (mouseYDiff * mouseYDiff));
-        this.angleWithPlayer = this.player.direction - Math.PI;
-        this.mouseAngleWithPlayer = Math.atan2((Game.input.mouse.drawnY - this.player.y), (Game.input.mouse.drawnX - this.player.x));
-        this.mouseDistFromPlayer = Math.sqrt((mousePlayerXDiff * mousePlayerXDiff) + (mousePlayerYDiff * mousePlayerYDiff));
+            this.distFromPlayer = Math.sqrt((playerXDiff * playerXDiff) + (playerYDiff * playerYDiff));
+            this.distFromMouse = Math.sqrt((mouseXDiff * mouseXDiff) + (mouseYDiff * mouseYDiff));
+            this.angleWithPlayer = this.player.direction - Math.PI;
+            this.mouseAngleWithPlayer = Math.atan2((Game.input.mouse.drawnY - this.player.y), (Game.input.mouse.drawnX - this.player.x));
+            this.mouseDistFromPlayer = Math.sqrt((mousePlayerXDiff * mousePlayerXDiff) + (mousePlayerYDiff * mousePlayerYDiff));
 
-        if (this.angleWithPlayer > Math.PI / 2 || this.angleWithPlayer < Math.PI / -2) {
-            if (this.angleWithPlayer / this.mouseAngleWithPlayer < 0 && this.angleWithPlayer > 0) {
-                this.angleWithPlayer -= Math.PI * 2;
-            } else if (this.angleWithPlayer / this.mouseAngleWithPlayer < 0 && this.angleWithPlayer < 0) {
-                this.angleWithPlayer += Math.PI * 2;
+            if (this.angleWithPlayer > Math.PI / 2 || this.angleWithPlayer < Math.PI / -2) {
+                if (this.angleWithPlayer / this.mouseAngleWithPlayer < 0 && this.angleWithPlayer > 0) {
+                    this.angleWithPlayer -= Math.PI * 2;
+                } else if (this.angleWithPlayer / this.mouseAngleWithPlayer < 0 && this.angleWithPlayer < 0) {
+                    this.angleWithPlayer += Math.PI * 2;
+                }
             }
+
+            this.angleWithPlayer += (this.mouseAngleWithPlayer - this.angleWithPlayer) / this.player.mobility;
+            this.distFromPlayer += (this.mouseDistFromPlayer - this.distFromPlayer) / this.player.mobility;
+
+            for (var i = this.kickCounter - 1; i >= 0; i--) {
+                this.angleWithPlayer += (Math.random() * 2 * Math.PI - Math.PI) * this.player.gun.kick / 100;
+            }
+
+            this.kickCounter = 0;
+
+            this.x = this.player.x + this.distFromPlayer * Math.cos(this.angleWithPlayer);
+            this.y = this.player.y + this.distFromPlayer * Math.sin(this.angleWithPlayer);
         }
-
-        this.angleWithPlayer += (this.mouseAngleWithPlayer - this.angleWithPlayer) / this.player.mobility;
-        this.distFromPlayer += (this.mouseDistFromPlayer - this.distFromPlayer) / this.player.mobility;
-
-        for (var i = this.kickCounter - 1; i >= 0; i--) {
-            this.angleWithPlayer += (Math.random() * 2 * Math.PI - Math.PI) * this.player.gun.kick / 100;
-        }
-
-        this.kickCounter = 0;
-
-        this.x = this.player.x + this.distFromPlayer * Math.cos(this.angleWithPlayer);
-        this.y = this.player.y + this.distFromPlayer * Math.sin(this.angleWithPlayer);
     }
 });

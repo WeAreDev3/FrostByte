@@ -96,7 +96,7 @@ GameClass = Class.extend({
         }.bind(this));
 
         this.forEachPlayer(function(player, id) {
-            if (player !== this.currentPlayer) {
+            if (player !== this.currentPlayer && player.hitPoints > 0) {
                 player.draw(context, this.scale);
             }
         }.bind(this));
@@ -108,17 +108,16 @@ GameClass = Class.extend({
             bullet.draw(context, this.scale);
         }.bind(this));
 
+
         // Draw the crosshairs last so it is always on top
         this.currentPlayer.crosshairs.draw(context, this.scale);
     },
     update: function(timeElapsed) {
-        this.forEachPlayer(function(player, id) {
-            player.update(timeElapsed);
-        });
+        this.currentPlayer.update(timeElapsed);
 
-        this.forEachEnemy(function(enemy, id) {
-            enemy.update(timeElapsed);
-        });
+        // this.forEachEnemy(function(enemy, id) {
+        //     enemy.update(timeElapsed);
+        // });
 
         this.forEachBullet(function(bullet, id) {
             bullet.update(timeElapsed);
@@ -137,17 +136,25 @@ GameClass = Class.extend({
 
         // Some environment input variables, updated by the event handlers from above
         this.input = {
+            'u': false, // Up
+            'd': false, // Down
+            'l': false, // Left
+            'r': false, // Right
+            'm': false, // Mouse down?
+            'mouse': { // Mouse locations
+                'x': 800,
+                'y': 500,
+                'drawnX': 800 * this.scale,
+                'drawnY': 500 * this.scale
+            }
+        };
+
+        this.tmpInput = { // Used to see if input actaully needs to be sent to the server
             'u': false,
             'd': false,
             'l': false,
             'r': false,
-            'mouse': {
-                'x': 800,
-                'y': 500,
-                'drawnX': 800 * this.scale,
-                'drawnY': 500 * this.scale,
-                'down': false
-            }
+            'm': false
         };
 
         // Event handlers. Key up/down. Mouse up/down/move.
@@ -157,6 +164,8 @@ GameClass = Class.extend({
         window.onmousedown = this.mouseDown.bind(this);
         window.onmouseup = this.mouseUp.bind(this);
 
+        window.onblur = this.onBlur.bind(this);
+
         //Resize the canvas every time the browser is resized
         window.onresize = this.resizeBrowser.bind(this);
 
@@ -165,7 +174,7 @@ GameClass = Class.extend({
             event.preventDefault();
         }, false);
 
-        //We use a loop to keep the entire program synchronous
+        // We use a loop to keep the entire program synchronous
         (function startLoop() {
             var frameId = 0,
                 lastFrame = Date.now(),
@@ -213,30 +222,26 @@ GameClass = Class.extend({
         switch (event.keyCode) {
             case 87: // w
             case 38: // up arrow
-                if (!this.input.u) { // Only update if we have to
-                    this.input.u = true;
-                    socket.send('iut'); // Up True
+                if (!this.tmpInput.u) { // Only update if we have to
+                    this.tmpInput.u = true;
                 }
                 break;
             case 83: // s
             case 40: // down arrow
-                if (!this.input.d) { // Only update if we have to
-                    this.input.d = true;
-                    socket.send('idt'); // Down True
+                if (!this.tmpInput.d) { // Only update if we have to
+                    this.tmpInput.d = true;
                 }
                 break;
             case 65: // a
             case 37: // left arrow
-                if (!this.input.l) { // Only update if we have to
-                    this.input.l = true;
-                    socket.send('ilt'); // Left True
+                if (!this.tmpInput.l) { // Only update if we have to
+                    this.tmpInput.l = true;
                 }
                 break;
             case 68: // d
             case 39: // right arrow
-                if (!this.input.r) { // Only update if we have to
-                    this.input.r = true;
-                    socket.send('irt'); // Right True
+                if (!this.tmpInput.r) { // Only update if we have to
+                    this.tmpInput.r = true;
                 }
                 break;
         }
@@ -245,23 +250,19 @@ GameClass = Class.extend({
         switch (event.keyCode) {
             case 87: // w
             case 38: // up arrow
-                this.input.u = false;
-                socket.send('iuf'); // Up False
+                this.tmpInput.u = false;
                 break;
             case 83: // s
             case 40: // down arrow
-                this.input.d = false;
-                socket.send('idf'); // Down False
+                this.tmpInput.d = false;
                 break;
             case 65: // a
             case 37: // left arrow
-                this.input.l = false;
-                socket.send('ilf'); // Left False
+                this.tmpInput.l = false;
                 break;
             case 68: // d
             case 39: // right arrow
-                this.input.r = false;
-                socket.send('irf'); // Right False
+                this.tmpInput.r = false;
                 break;
         }
     },
@@ -276,15 +277,16 @@ GameClass = Class.extend({
         this.input.mouse.drawnY = this.input.mouse.y / this.scale;
     },
     mouseDown: function() {
-        this.input.mouse.down = true;
-
-        // Send the server Input that the Mouse is True
-        socket.send('imt');
+        this.tmpInput.m = true;
     },
     mouseUp: function() {
-        this.input.mouse.down = false;
-
-        // Send the server Input that the Mouse is false
-        socket.send('imf');
+        this.tmpInput.m = false;
+    },
+    onBlur: function() {
+        for (var input in this.tmpInput) {
+            if (this.tmpInput.hasOwnProperty(input)) {
+                this.tmpInput[input] = false;
+            }
+        }
     }
 });
