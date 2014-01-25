@@ -28,7 +28,8 @@ var Player = Character.extend({
         this.setGun('full-auto');
 
         this.stats = {
-            'damage': 0
+            'damage': 0,
+            'kills': 0
         };
 
         // Add the player onto the socket to be used elsewhere

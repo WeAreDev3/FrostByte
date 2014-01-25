@@ -67,7 +67,13 @@ var Bullet = Class.extend({
 
             if (isIntersectionOnBullet && distanceFromBulletLine <= enemy.size && enemy.health() > 0) {
                 enemy.hit(self.gun.damage);
+
+                // Update stats
                 self.gun.player.stats.damage += self.gun.damage;
+                if (enemy.hitPoints <= 0) {
+                    self.gun.player.stats.kills++;
+                }
+
                 game.removeBullet(self);
                 return;
             }
