@@ -115,9 +115,9 @@ GameClass = Class.extend({
     update: function(timeElapsed) {
         this.currentPlayer.update(timeElapsed);
 
-        // this.forEachEnemy(function(enemy, id) {
-        //     enemy.update(timeElapsed);
-        // });
+        this.forEachEnemy(function(enemy, id) {
+            enemy.update(timeElapsed);
+        });
 
         this.forEachBullet(function(bullet, id) {
             bullet.update(timeElapsed);
