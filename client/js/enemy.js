@@ -32,7 +32,7 @@ Enemy = Character.extend({
         context.closePath();
         if (this.health() <= 0) {
             console.log(this.killAnimation);
-            context.fillStyle = "rgba(43,149,238," + (this.alpha>.7?1:this.alpha+.3) + ")";
+            context.fillStyle = "rgba(" + (this.alpha > .6 ? 95 : 43) + ",149,238," + (this.alpha > .3 ? 1 : this.alpha + .3) + ")";
             context.beginPath();
             context.arc(x, y, this.killAnimation * scale, 0, 2 * Math.PI, false);
             context.fill();
