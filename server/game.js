@@ -154,17 +154,18 @@ var Game = Class.extend({
             // Define the time elapsed since the last frame
             var thisFrame = Date.now(),
                 timeElapsed = (thisFrame - lastFrame) / 1000;
+            if (count % 5 == 0) {
 
-            // Update the physics of the game
-            physUpdate(timeElapsed);
+                // Update the physics of the game
+                physUpdate(timeElapsed);
 
-            // Every 3 intervals (45ms),
-            if (count % 3 == 0) {
-                count = 0;
-                // Serve the update to the clients
-                serveUpdate();
-            };
-
+                // Every 3 intervals (45ms),
+                if (count % 3 == 0) {
+                    count = 0;
+                    // Serve the update to the clients
+                    serveUpdate();
+                };
+            }
             lastFrame = thisFrame;
             count++;
         }, 15);
