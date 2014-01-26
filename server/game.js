@@ -154,7 +154,7 @@ var Game = Class.extend({
             // Define the time elapsed since the last frame
             var thisFrame = Date.now(),
                 timeElapsed = (thisFrame - lastFrame) / 1000;
-            if (count % 5 == 0) {
+            if (count % 1 == 0) {
 
                 // Update the physics of the game
                 physUpdate(timeElapsed);

@@ -186,7 +186,7 @@ GameClass = Class.extend({
 
                 frameId = window.requestAnimationFrame(loop);
 
-                if (count % 5 === 0) {
+                if (count % 1 === 0) {
                     count = 0;
                     self.update(timeElapsed);
                     self.draw(context);
