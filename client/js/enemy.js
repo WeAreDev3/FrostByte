@@ -65,7 +65,11 @@ Enemy = Character.extend({
     update: function(timeElapsed) {
         // If dead, add lines to show on death
         if (this.hitPoints <= 0) {
-            this.alpha -= timeElapsed * 2;
+            if (this.alpha - timeElapsed * 2 >= 0) {
+                this.alpha -= timeElapsed * 2;
+            } else {
+                this.alpha = 0;
+            }
 
             if (!this.lines.length) {
                 this.lineCounter = 0;
@@ -78,8 +82,7 @@ Enemy = Character.extend({
                         'width': Math.random() * 2 + 2,
                         'r': Math.random() * 50 + 55,
                         'g': Math.random() * 50 + 150,
-                        'b': Math.random() * 50 + 205,
-                        'a': 1
+                        'b': Math.random() * 50 + 205
                     });
                 }
             }
