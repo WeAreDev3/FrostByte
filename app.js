@@ -12,7 +12,11 @@ var http = require('http'),
     lobbies = {};
 
 // Set the main directory for client files to the client directory
+app.set("view options", {layout: false});
 app.use(express.static(path.resolve(__dirname, 'client')));
+app.get('/changelog', function (req, res) {
+    res.sendfile(__dirname + '/client/changelog.html');
+});
 
 // Configure the socket
 io.configure(function() {
