@@ -21,29 +21,39 @@ Player = Character.extend({
         }
     },
     draw: function(context, scale) {
-        var x = this.x * scale,
-            y = this.y * scale,
-            size = this.size * scale;
+        if (this.hitPoints > 0) {
+            var x = this.x * scale,
+                y = this.y * scale,
+                size = this.size * scale;
 
-        // Draws the body
-        context.fillStyle = this.color;
-        context.save();
-        context.translate(x, y);
-        context.rotate(this.direction);
-        context.fillRect(-1 * size, -1 * size, size * 2, size * 2);
-        context.restore();
+            // Draws the body
+            context.fillStyle = this.color;
+            context.save();
+            context.translate(x, y);
+            context.rotate(this.direction);
+            context.fillRect(-1 * size, -1 * size, size * 2, size * 2);
+            context.restore();
 
-        // Draws the name
-        context.fillStyle = '#000000';
-        context.font = 'normal ' + size + 'pt Roboto'
+            // Draws the name
+            context.fillStyle = '#000000';
+            context.font = 'normal ' + size + 'pt Roboto';
 
-        var namePositionX = x - (context.measureText(this.name).width / 2),
-            namePositionY = y + (size * 2);
+            var namePositionX = x - (context.measureText(this.name).width / 2),
+                namePositionY = y + (size * 2);
 
-        context.fillText(this.name, namePositionX, namePositionY);
+            context.fillText(this.name, namePositionX, namePositionY);
+        }
     },
     update: function(timeElapsed) {
-        if (Game.currentPlayer.id === this.id) {
+        if (this.hitPoints > 0) {
+            for (var input in Game.tmpInput) {
+                if (Game.tmpInput.hasOwnProperty(input) && Game.tmpInput[input] !== Game.input[input]) {
+                    Game.input[input] = Game.tmpInput[input];
+                    // console.log('i' + input + (Game.input[input] + '')[0]);
+                    socket.send('i' + input + (Game.input[input] + '')[0]);
+                }
+            }
+
             var currentDirection = this.direction;
 
             // Move the player if needed

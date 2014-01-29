@@ -13,7 +13,8 @@ var Game = Class.extend({
         this.enemies = {};
         this.bullets = {};
 
-        this.level = 0;
+        this.level = 1;
+        this.spawningEnemies = 0;
         this.nextLevel();
 
         this.start();
@@ -28,44 +29,53 @@ var Game = Class.extend({
         this.enemies[enemy.id] = enemy;
     },
     nextLevel: function() {
-        this.spawnEnemies(16 * ((this.level + 1) / 2), this.level);
+        console.log('\nLevel:', this.level);
+
+        this.forEachPlayer(function(player, id) {
+            player.resetHitPoints();
+            console.log(player.name, 'has done', Utils.formatNumber(player.stats.damage), 'damage.');
+            console.log(player.name, 'has killed', Utils.formatNumber(player.stats.kills), player.stats.kills !== 1 ? 'enemies.' : 'enemy.');
+        });
+
+        this.spawningEnemies = 8 * this.level;
+        this.spawnTime = new Date().getTime();
         this.level++;
     },
     removeEnemy: function(enemy) {
         delete this.enemies[enemy.id];
     },
-    spawnEnemies: function(number) {
-        // console.log('spawing', number);
+    spawnEnemy: function() {
         var location = {
             'x': 0,
             'y': 0
         };
 
-        for (var i = 0; i < number; i++) {
-            switch (Utils.randomInt(4)) {
-                case 0: // Start at top
-                    location.x = Utils.randomInt(this.width);
-                    location.y = 0;
-                    break;
+        switch (Utils.randomInt(4)) {
+            case 0: // Start at top
+                location.x = Utils.randomInt(this.width);
+                location.y = 0;
+                break;
 
-                case 1: // Start from the right
-                    location.x = this.width;
-                    location.y = Utils.randomInt(this.height);
-                    break;
+            case 1: // Start from the right
+                location.x = this.width;
+                location.y = Utils.randomInt(this.height);
+                break;
 
-                case 2: // Start at the bottom
-                    location.x = Utils.randomInt(this.width);
-                    location.y = this.height;
-                    break;
+            case 2: // Start at the bottom
+                location.x = Utils.randomInt(this.width);
+                location.y = this.height;
+                break;
 
-                case 3: // Start from the left
-                    location.x = 0;
-                    location.y = Utils.randomInt(this.height);
-                    break;
-            }
-
-            this.addEnemy(new Enemy(location.x, location.y, this.level, this));
+            case 3: // Start from the left
+                location.x = 0;
+                location.y = Utils.randomInt(this.height);
+                break;
         }
+
+        this.addEnemy(new Enemy(location.x, location.y, this.level, this));
+        this.spawningEnemies--;
+
+        this.spawnTime = new Date().getTime();
     },
     forEachPlayer: function(callback) {
         for (var playerID in this.players) {
@@ -108,8 +118,14 @@ var Game = Class.extend({
                 bullet.update(timeElapsed);
             });
 
-            if (!Object.keys(self.enemies).length) {
-                self.nextLevel();
+            if (self.spawningEnemies > 0) {
+                if (new Date().getTime() - self.spawnTime > 500) {
+                    self.spawnEnemy();
+                }
+            } else {
+                if (!Object.keys(self.enemies).length) {
+                    self.nextLevel();
+                }
             }
         }
 
@@ -149,17 +165,18 @@ var Game = Class.extend({
             // Define the time elapsed since the last frame
             var thisFrame = Date.now(),
                 timeElapsed = (thisFrame - lastFrame) / 1000;
+            if (count % 1 == 0) {
 
-            // Update the physics of the game
-            physUpdate(timeElapsed);
+                // Update the physics of the game
+                physUpdate(timeElapsed);
 
-            // Every 3 intervals (45ms),
-            if (count % 3 == 0) {
-                count = 0;
-                // Serve the update to the clients
-                serveUpdate();
-            };
-
+                // Every 3 intervals (45ms),
+                if (count % 3 == 0) {
+                    count = 0;
+                    // Serve the update to the clients
+                    serveUpdate();
+                };
+            }
             lastFrame = thisFrame;
             count++;
         }, 15);

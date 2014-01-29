@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/main.css">
     <script>
-    // google analytics
+    // Google Analytics
     (function(i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function() {
@@ -29,35 +29,38 @@
 
 <body>
     <div id="intro">
-        <h1 id="title"><img src="img/frostbyte.png" alt="FrostByte"></h1>
+        <h1 id="title">
+            <img src="img/frostbyte.png" alt="FrostByte">
+        </h1>
         <!-- the span is mkeedlinger's attempt making to link look nice. check ./css/main.css:33 -->
         <h2 id="subtitle">
-            <span class="theGame"><a href="https://en.wikipedia.org/wiki/The_Game_(mind_game)" target="_blank">(dammit, I lost the game)</a>
+            <span class="aGame">A game about
+                <span class="survival">survival</span>
             </span>
         </h2>
         <div id="username-container">
-            <input id="username" maxlength="12" placeholder="Username">
+            <input id="username" maxlength="12" placeholder="Username" tabindex="1" onkeydown="if (event.keyCode == 13) document.getElementById('play').click()">
         </div>
         <div id="button-container">
-            <button id="play">Play</button>
+            <button id="play" tabindex="-1">Play</button>
         </div>
 
         <!-- The page 'footer' -->
         <div id="creators">
             <h3>The Creators</h3>
-            <a href="https://github.com/janka102">Jesse Smick</a>
-            <a href="https://github.com/mkeedlinger">Michael Edlinger</a>
-            <a href="https://github.com/talbenari1">Tal Ben-Ari</a>
+            <a href="https://github.com/janka102" tabindex="-1">Jesse Smick</a>
+            <a href="https://github.com/mkeedlinger" tabindex="-1">Michael Edlinger</a>
+            <a href="https://github.com/talbenari1" tabindex="-1">Tal Ben-Ari</a>
         </div>
         <div id="info">
             <h3>Info</h3>
-            <a href="https://github.com/WeAreDev3" id="first">Our Team</a>
-            <a href="http://gitlab.mke8.me/dev3/frostbyte/wikis/home" target="_blank">About the Game</a>
-            <a href="http://gitlab.mke8.me/dev3/frostbyte/tree/master" target="_blank">View Source</a>
+            <a href="https://github.com/WeAreDev3" id="first" tabindex="-1">Our Team</a>
+            <a href="http://gitlab.mke8.me/dev3/frostbyte/wikis/home" target="_blank" tabindex="-1">About the Game</a>md
+            <a href="/changelog" target="_blank" tabindex="-1">View Changelog</a>
         </div>
     </div>
     <canvas id="frame">
-        Sorry, your browser does not support the HTML5 Canvas Element. Try using <a href="https://chrome.google.com">Google Chrome</a>
+        Sorry, your browser does not support the HTML5 Canvas Element. Try using <a href="https://chrome.google.com" tabindex="-1">Google Chrome</a>
     </canvas>
     <!-- Required for websocket to work -->
     <script src="/socket.io/socket.io.js"></script>
