@@ -20,10 +20,12 @@ var Enemy = Character.extend({
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.health() > 0) {
-            var inflicted = 1 - this.health();
-            this.setColor(parseInt(255 + (inflicted * -189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
+        if (this.hitPoints < 0) {
+            this.hitPoints = 0;
         }
+
+        var inflicted = 1 - this.health();
+        this.setColor(parseInt(255 + (inflicted * -189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
     },
     update: function(timeElapsed) {
         // If alive...
