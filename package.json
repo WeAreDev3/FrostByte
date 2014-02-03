@@ -13,7 +13,7 @@
     "scripts": {
         "start": "node app.js",
         "dev": "nodemon --ignore client/ app.js",
-        "mdev": "hash google-chrome && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
+        "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
     },
     "repository": {
         "type": "git",
