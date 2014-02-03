@@ -11,9 +11,13 @@ var Router = {
             }
         }
 
-        lobby = new Lobby(5);
+        lobby = this.createLobby(lobbies);
         lobbies[lobby.id] = lobby;
+
         return lobbies[lobby.id];
+    },
+    createLobby: function(lobbies) {
+        return new Lobby(5);
     }
 };
 

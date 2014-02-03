@@ -3,6 +3,44 @@ socket.on('connect', function() {
     console.log('Connected successfully as', socket.socket.sessionid);
 });
 
+socket.on('lobbyList', function(lobbies) {
+    var lobbyTable = document.getElementById('lobbies').querySelector('table'),
+        tr,
+        td;
+
+    console.log(lobbies);
+
+    for (lobby in lobbies) {
+        if (lobbies.hasOwnProperty(lobby)) {
+            tr = document.createElement('tr');
+
+            td = document.createElement('td');
+            td.innerText = lobby;
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.innerText = lobbies[lobby].playerCount;
+
+            tr.onclick = function(event) {
+                var self = event.target,
+                    siblings = self.parentNode.childNodes;
+
+                for (var i = siblings.length - 1; i >= 0; i--) {
+                    siblings[i].classList.remove('selected');
+                }
+
+                self.classList.add('selected');
+            };
+
+            tr.appendChild(td);
+
+            lobbyTable.querySelector('tbody').appendChild(tr);
+        }
+    }
+
+    lobbyTable.parentElement.classList.remove('remove-display');
+});
+
 socket.on('joinedLobby', function(data) {
     console.log('Joined the lobby:', data.id);
 

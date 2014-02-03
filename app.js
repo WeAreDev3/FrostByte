@@ -36,9 +36,31 @@ io.on('connection', function(socket) {
     // Log the new socket's ID to the server's console
     console.log('Socket connected:', socket.id);
 
+    // When signing in, send them all the lobbies
+    socket.on('signIn', function(data) {
+        socket.name = data.name;
+        
+        var lobbyList = {};
+
+        for (var lobby in lobbies) {
+            if (lobbies.hasOwnProperty(lobby)) {
+                lobbyList[lobby] = {
+                    'playerCount': Object.keys(lobbies[lobby].clients).length
+                }
+            }
+        }
+        socket.emit('lobbyList', lobbyList);
+    });
+
+    socket.on('newLobby', function() {
+        var lobby = router.createLobby(lobbies);
+        lobbies[lobby.id] = lobby;
+
+        lobbies[lobby.id].addPlayer(socket);
+    });
+
     // When the player is ready to play, add them to an open lobby
     socket.on('play', function(data) {
-        socket.name = data.name;
         router.findOpenLobby(lobbies).addPlayer(socket);
     });
 
