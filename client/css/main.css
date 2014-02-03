@@ -30,7 +30,6 @@
     animation: subtitle-start 2.5s;
     -webkit-animation: subtitle-start 2.5s;
 }
-
 .survival {
     font-weight: bold;
 }
@@ -216,6 +215,8 @@ canvas {
 }
 #frame.playing {
     display: block;
+    background-image: url(../img/snow.png);
+    background-size: 5%;
 }
 html.playing {
     cursor: none;
