@@ -5,6 +5,14 @@ window.onload = function() {
     document.getElementById('createLobby').onclick = function() {
         socket.emit('newLobby');
         document.getElementById('lobbies').classList.add('remove-display');
+
+        startGame();
+    };
+
+    document.getElementById('joinLobby').onclick = function() {
+        // Tell the  server we are ready to play the game (damn it, I lost the game)
+        socket.emit('play');
+
         startGame();
     };
 };
@@ -30,9 +38,4 @@ function startGame() {
     document.getElementById('intro').classList.add('playing');
     document.getElementById('frame').classList.add('playing');
     document.getElementsByTagName('html')[0].classList.add('playing');
-
-    // Tell the  server we are ready to play the game (damn it, I lost the game)
-    socket.emit('play', {
-        name: username
-    });
 }
