@@ -55,7 +55,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('newLobby', function() {
-        var lobby = router.createLobby(lobbies);
+        var lobby = router.createLobby(5);
+
         lobbies[lobby.id] = lobby;
 
         lobbies[lobby.id].addPlayer(socket);

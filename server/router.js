@@ -2,8 +2,10 @@ var Lobby = require('./lobby');
 
 var Router = {
     findOpenLobby: function(lobbies) {
+        var lobby;
+
         // Search through all of the lobbies
-        for (var lobby in lobbies) {
+        for (lobby in lobbies) {
             // If a lobby is not full
             if (!lobbies[lobby].full) {
                 // console.log('Found lobby:', lobbies[lobby]);
@@ -11,13 +13,13 @@ var Router = {
             }
         }
 
-        lobby = this.createLobby(lobbies);
+        lobby = this.createLobby(5);
         lobbies[lobby.id] = lobby;
 
         return lobbies[lobby.id];
     },
-    createLobby: function(lobbies) {
-        return new Lobby(5);
+    createLobby: function(size) {
+        return new Lobby(size);
     }
 };
 
