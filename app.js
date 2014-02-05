@@ -33,6 +33,20 @@ io.configure(function() {
 
 });
 
+function createLobbyList() {
+    var lobbyList = {};
+
+    for (var lobby in lobbies) {
+        if (lobbies.hasOwnProperty(lobby)) {
+            lobbyList[lobby] = {
+                'playerCount': Object.keys(lobbies[lobby].clients).length
+            }
+        }
+    }
+
+    return lobbyList;
+}
+
 // Define what happens when a user connects to the server
 io.on('connection', function(socket) {
     // Log the new socket's ID to the server's console
@@ -42,16 +56,7 @@ io.on('connection', function(socket) {
     socket.on('signIn', function(data) {
         socket.name = data.name;
 
-        var lobbyList = {};
-
-        for (var lobby in lobbies) {
-            if (lobbies.hasOwnProperty(lobby)) {
-                lobbyList[lobby] = {
-                    'playerCount': Object.keys(lobbies[lobby].clients).length
-                }
-            }
-        }
-        socket.emit('lobbyList', lobbyList);
+        socket.emit('lobbyList', createLobbyList());
     });
 
     socket.on('newLobby', function() {
@@ -59,7 +64,7 @@ io.on('connection', function(socket) {
 
         lobbies[lobby.id] = lobby;
 
-        lobbies[lobby.id].addPlayer(socket);
+        socket.emit('lobbyList', createLobbyList());
     });
 
     // When the player is ready to play, add them to an open lobby

@@ -5,36 +5,43 @@ socket.on('connect', function() {
 
 socket.on('lobbyList', function(lobbies) {
     var lobbyTable = document.getElementById('lobbies').querySelector('table'),
+        count = 0,
         tr,
         td;
 
-    console.log(lobbies);
-
     for (lobby in lobbies) {
         if (lobbies.hasOwnProperty(lobby)) {
-            tr = document.createElement('tr');
+            if (lobbyTable.innerText.indexOf(lobby) === -1) {
+                // Add a new lobby to the table
+                tr = document.createElement('tr');
 
-            td = document.createElement('td');
-            td.innerText = lobby;
-            tr.appendChild(td);
+                td = document.createElement('td');
+                td.innerText = lobby;
+                tr.appendChild(td);
 
-            td = document.createElement('td');
-            td.innerText = lobbies[lobby].playerCount;
+                td = document.createElement('td');
+                td.innerText = lobbies[lobby].playerCount;
 
-            tr.onclick = function(event) {
-                var self = event.target,
-                    siblings = self.parentNode.childNodes;
+                tr.onclick = function(event) {
+                    var self = event.target,
+                        siblings = self.parentNode.childNodes;
 
-                for (var i = siblings.length - 1; i >= 0; i--) {
-                    siblings[i].classList.remove('selected');
-                }
+                    for (var i = siblings.length - 1; i >= 0; i--) {
+                        siblings[i].classList.remove('selected');
+                    }
 
-                self.classList.add('selected');
-            };
+                    self.classList.add('selected');
+                };
 
-            tr.appendChild(td);
+                tr.appendChild(td);
 
-            lobbyTable.querySelector('tbody').appendChild(tr);
+                lobbyTable.querySelector('tbody').appendChild(tr);
+            } else {
+                // Update the lobby size
+                lobbyTable.querySelectorAll('tbody tr')[count].querySelector('td:last-of-type').innerText = lobbies[lobby].playerCount;
+            }
+
+            count++;
         }
     }
 

@@ -4,12 +4,11 @@ window.onload = function() {
 
     document.getElementById('createLobby').onclick = function() {
         socket.emit('newLobby');
-        document.getElementById('lobbies').classList.add('remove-display');
-
-        startGame();
     };
 
     document.getElementById('joinLobby').onclick = function() {
+        document.getElementById('lobbies').classList.add('remove-display');
+        
         // Tell the  server we are ready to play the game (damn it, I lost the game)
         socket.emit('play');
 
