@@ -12,9 +12,11 @@ var http = require('http'),
     lobbies = {};
 
 // Set the main directory for client files to the client directory
-app.set("view options", {layout: false});
+app.set("view options", {
+    layout: false
+});
 app.use(express.static(path.resolve(__dirname, 'client')));
-app.get('/changelog', function (req, res) {
+app.get('/changelog', function(req, res) {
     res.sendfile(__dirname + '/client/changelog.html');
 });
 
@@ -39,7 +41,7 @@ io.on('connection', function(socket) {
     // When signing in, send them all the lobbies
     socket.on('signIn', function(data) {
         socket.name = data.name;
-        
+
         var lobbyList = {};
 
         for (var lobby in lobbies) {
@@ -60,7 +62,7 @@ io.on('connection', function(socket) {
     });
 
     // When the player is ready to play, add them to an open lobby
-    socket.on('play', function(data) {
+    socket.on('play', function() {
         router.findOpenLobby(lobbies).addPlayer(socket);
     });
 
