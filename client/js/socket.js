@@ -17,23 +17,26 @@ socket.on('lobbyList', function(lobbies) {
 
                 td = document.createElement('td');
                 td.innerText = lobby;
+
                 tr.appendChild(td);
 
                 td = document.createElement('td');
                 td.innerText = lobbies[lobby].playerCount;
 
+                tr.appendChild(td);
+
                 tr.onclick = function(event) {
-                    var self = event.target,
+                    var self = event.target.tagName === "TR" ? event.target : event.target.parentNode,
                         siblings = self.parentNode.childNodes;
 
                     for (var i = siblings.length - 1; i >= 0; i--) {
-                        siblings[i].classList.remove('selected');
+                        if (siblings[i].tagName) {
+                            siblings[i].classList.remove('selected');
+                        }
                     }
 
                     self.classList.add('selected');
                 };
-
-                tr.appendChild(td);
 
                 lobbyTable.querySelector('tbody').appendChild(tr);
             } else {
