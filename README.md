@@ -11,6 +11,11 @@ Did you...
 - Add the changes to changelog.html?
 - Document any bugs created or fixed as a result of your changes in our Issues?
 
+### About to merge dev to the master branch?
+Did you...
+- Add a tag labeling the version?
+- Update the changelog?
+
 ### Version
 Can be found at [./package.json:3](http://gitlab.mke8.me/dev3/frostbyte/blob/master/package.json#L3) and in [our changelog](http://frostbyte.mke8.me/changelog)
 
