@@ -68,8 +68,8 @@ io.on('connection', function(socket) {
     });
 
     // When the player is ready to play, add them to an open lobby
-    socket.on('play', function() {
-        router.findOpenLobby(lobbies).addPlayer(socket);
+    socket.on('play', function(data) {
+        router.findLobby(lobbies, data.lobbyId).addPlayer(socket);
     });
 
     // Process data received from the socket

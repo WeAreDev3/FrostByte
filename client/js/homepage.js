@@ -8,9 +8,11 @@ window.onload = function() {
 
     document.getElementById('joinLobby').onclick = function() {
         document.getElementById('lobbies').classList.add('remove-display');
-        
+
         // Tell the  server we are ready to play the game (damn it, I lost the game)
-        socket.emit('play');
+        socket.emit('play', {
+            lobbyId: document.getElementById('lobbies').querySelector('tr.selected td').innerText
+        });
 
         startGame();
     };
