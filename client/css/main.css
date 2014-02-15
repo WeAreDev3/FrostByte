@@ -249,7 +249,7 @@ canvas {
 #frame.playing {
     display: block;
     background-image: url(../img/snow.png);
-    background-size: 5%;
+    background-size: 50%;
 }
 html.playing {
     cursor: none;

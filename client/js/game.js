@@ -217,8 +217,6 @@ GameClass = Class.extend({
         topOff = canvas.offsetTop;
 
         this.scale = height / 1000;
-
-        canvas.style.backgroundSize = this.scale * 50 + "%";
     },
     keyDown: function(event) {
         switch (event.keyCode) {
