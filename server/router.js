@@ -20,6 +20,11 @@ var Router = {
     },
     createLobby: function(size) {
         return new Lobby(size);
+    },
+    findLobby: function(lobbies, lobbyId) {
+        if (lobbyId in lobbies && !lobbies[lobbyId].full) {
+            return lobbies[lobbyId];
+        }
     }
 };
 
