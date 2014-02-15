@@ -240,6 +240,8 @@ canvas {
 #cursor {
     position: absolute;
     -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 #intro.playing {
     display: none;
