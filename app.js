@@ -47,6 +47,14 @@ function createLobbyList() {
     return lobbyList;
 }
 
+function forEachSocket(callback) {
+    var clients = io.sockets.clients();
+
+    for (var i = clients.length - 1; i >= 0; i--) {
+        callback(clients[i]);
+    }
+}
+
 // Define what happens when a user connects to the server
 io.on('connection', function(socket) {
     // Log the new socket's ID to the server's console
@@ -55,21 +63,36 @@ io.on('connection', function(socket) {
     // When signing in, send them all the lobbies
     socket.on('signIn', function(data) {
         socket.name = data.name;
-
+        socket.isInLobby = true;
         socket.emit('lobbyList', createLobbyList());
     });
 
     socket.on('newLobby', function() {
-        var lobby = router.createLobby(5);
+        var lobby = router.createLobby(5),
+            listOfLobbies;
 
         lobbies[lobby.id] = lobby;
 
-        socket.emit('lobbyList', createLobbyList());
+        listOfLobbies = createLobbyList();
+        forEachSocket(function(socket) {
+            if (socket.isInLobby) {
+                socket.emit('lobbyList', listOfLobbies);
+            }
+        });
+        
     });
 
     // When the player is ready to play, add them to an open lobby
     socket.on('play', function(data) {
         router.findLobby(lobbies, data.lobbyId).addPlayer(socket);
+        socket.isInLobby = false;
+
+        var listOfLobbies = createLobbyList();
+        forEachSocket(function(socket) {
+            if (socket.isInLobby) {
+                socket.emit('lobbyList', listOfLobbies);
+            }
+        });
     });
 
     // Process data received from the socket
@@ -86,12 +109,21 @@ io.on('connection', function(socket) {
         // Log the socket's disconnection w/ ID to the console
         console.log('Socket disconnected:', socket.id);
         if (socket.player) {
+            var listOfLobbies;
+
             console.log('And left the lobby:', socket.player.lobby.id);
             socket.player.lobby.removePlayer(socket);
 
             if (!Object.keys(socket.player.lobby.clients).length) {
                 socket.player.lobby.remove(lobbies);
             }
+
+            listOfLobbies = createLobbyList();
+            forEachSocket(function(socket) {
+                if (socket.isInLobby) {
+                    socket.emit('lobbyList', listOfLobbies);
+                }
+            });
         }
     });
 });
