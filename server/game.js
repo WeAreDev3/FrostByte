@@ -38,7 +38,7 @@ var Game = Class.extend({
         });
 
         this.spawningEnemies = 8 * this.level;
-        this.spawnTime = new Date().getTime();
+        this.spawnTime = Date.now();
         this.level++;
     },
     removeEnemy: function(enemy) {
@@ -75,7 +75,7 @@ var Game = Class.extend({
         this.addEnemy(new Enemy(location.x, location.y, this.level, this));
         this.spawningEnemies--;
 
-        this.spawnTime = new Date().getTime();
+        this.spawnTime = Date.now();
     },
     forEachPlayer: function(callback) {
         for (var playerID in this.players) {
@@ -119,7 +119,7 @@ var Game = Class.extend({
             });
 
             if (self.spawningEnemies > 0) {
-                if (new Date().getTime() - self.spawnTime > 500) {
+                if (Date.now() - self.spawnTime > 500) {
                     self.spawnEnemy();
                 }
             } else {
