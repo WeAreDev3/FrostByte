@@ -64,7 +64,7 @@ var Gun = Class.extend({
                     if (!this.wasFired) {
                         this.wasFired = true;
 
-                        for (var i = 0, n = 6, halfN = (n - 1) / 2; i < n; i++) {
+                        for (var i = 0, n = 5, halfN = (n - 1) / 2; i < n; i++) {
                             this.player.lobby.game.addBullet(new Bullet(this, this.player.direction + ((i - halfN) / halfN) / 10));
                         }
                     }
