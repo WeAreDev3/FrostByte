@@ -1,0 +1,94 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: 'Roboto';
+}
+
+header {
+	background: #F9F9F9;
+	height: 60px;
+}
+
+header #your-stats div {
+	display: inline-block;
+	margin: 0 0 0 20px;
+	box-sizing: border-box;
+	vertical-align: top;
+	width: 140px;
+}
+
+header h2 {
+	font-family: 'Roboto';
+	font-weight: 700;
+	font-size: 10px;
+	color: #404040;
+	margin: 5px -4px -2px 0;
+	text-transform: uppercase;
+	width: 50%;
+	display: inline-block;
+}
+
+header h3 {
+	margin: 0;
+	width: 50%;
+	display: inline-block;
+	font-size: 30px;
+	text-align: right;
+	color: #404040;
+}
+
+header h3 span {
+	font-size: 10px;
+}
+
+header h1 {
+	font-family: 'Roboto';
+	font-weight: 300;
+	margin: 2px 0;
+	font-size: 20px;
+	text-transform: uppercase;
+	color: #404040;
+}
+
+header h1 span {
+	font-weight: 700;
+}
+
+header meter {
+	height: 2px;
+	width: 100%;
+  	-webkit-appearance: none;
+}
+
+header meter::-webkit-meter-bar {
+  	transition: .2s;
+	background: #CCCCCC;
+}
+
+header meter:-moz-meter-optimum::-moz-meter-bar {
+  	transition: .2s;
+	background: #4D90FE;
+}
+
+header meter:-moz-meter-optimum, header meter:-moz-meter-sub-optimum {
+	background: #404040;
+  	transition: .2s;
+}
+
+header meter::-webkit-meter-optimum-value {
+	background: #4D90FE;
+  	transition: .2s;
+}
+
+header meter::-webkit-meter-suboptimum-value {
+	background: #FE634D;
+  	transition: .2s;
+}
+
+header meter:-moz-meter-sub-optimum::-moz-meter-bar {
+  	transition: .2s;
+	background: #FE634D;
+}
