@@ -93,7 +93,7 @@ Player = Character.extend({
             }
 
             // Handle the gun firing
-            if (Game.input.mouse.down) {
+            if (Game.input.m) {
                 this.gun.fire();
             }
 
