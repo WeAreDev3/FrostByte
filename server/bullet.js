@@ -72,7 +72,7 @@ var Bullet = Class.extend({
                 enemy.hit(self.gun.damage);
 
                 // Update stats
-                self.gun.player.stats.damage += self.gun.damage;
+                self.gun.player.stats.damage += (enemy.speed / 50) * self.gun.damage;
                 if (enemy.hitPoints <= 0) {
                     self.gun.player.stats.kills++;
                 }
