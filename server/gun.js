@@ -23,22 +23,22 @@ var Gun = Class.extend({
           bulletSpeed: Higher is BETTER
           rate: Higher is WORSE
         */
-        'semi-auto': {
-            'accuracy': 5,
-            'damage': 40,
+        'sniper': {
+            'accuracy': 50,
+            'damage': 150,
             'kick': 5,
             'bulletSpeed': 15,
-            'rate': 140
+            'rate': 500
         },
         'full-auto': {
-            'accuracy': 8,
+            'accuracy': 60,
             'damage': 30,
             'kick': 2,
             'bulletSpeed': 15,
             'rate': 100
         },
         'shotgun': {
-            'accuracy': 13,
+            'accuracy': 70,
             'damage': 20,
             'kick': 7,
             'bulletSpeed': 17,
@@ -50,7 +50,7 @@ var Gun = Class.extend({
             this.timeSinceLastFire -= this.rate;
 
             switch (this.type) {
-                case 'semi-auto':
+                case 'sniper':
                     if (!this.wasFired) {
                         this.wasFired = true;
 
@@ -64,8 +64,8 @@ var Gun = Class.extend({
                     if (!this.wasFired) {
                         this.wasFired = true;
 
-                        for (var i = 0, n = 3, halfN = (n - 1) / 2; i < n; i++) {
-                            this.player.lobby.game.addBullet(new Bullet(this, this.player.direction + (((i - halfN) / halfN) * this.player.gun.accuracy) / 100));
+                        for (var i = 0, n = 5, halfN = (n - 1) / 2; i < n; i++) {
+                            this.player.lobby.game.addBullet(new Bullet(this, this.player.direction + ((i - halfN) / halfN) / 10));
                         }
                     }
                     break;

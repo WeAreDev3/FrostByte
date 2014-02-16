@@ -296,10 +296,8 @@ GameClass = Class.extend({
         }
 
         this.blurred = true;
-        console.log('blurred');
     },
     onFocus: function() {
         this.blurred = false;
-        console.log('focused');
     }
 });

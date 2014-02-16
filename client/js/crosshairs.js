@@ -33,12 +33,12 @@ Crosshairs = Class.extend({
                 y = this.y * scale,
                 size = this.size * scale;
 
-            context.beginPath();
-            context.arc(x, y, size, 0, 2 * Math.PI, false);
-            context.lineWidth = 2 * this.scale;
-            context.strokeStyle = '#FE634D';
-            context.stroke();
-            context.closePath();
+            // context.beginPath();
+            // context.arc(x, y, size, 0, 2 * Math.PI, false);
+            // context.lineWidth = 2 * this.scale;
+            // context.strokeStyle = '#FE634D';
+            // context.stroke();
+            // context.closePath();
 
             this.cursor.width = (this.size + 3) * scale * 2;
             this.cursor.height = this.cursor.width;

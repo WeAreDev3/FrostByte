@@ -8,6 +8,9 @@ var Bullet = Class.extend({
         this.gun = gun;
         this.speed = this.gun.bulletSpeed;
         this.direction = direction ? direction : this.gun.player.direction;
+
+        this.direction += gun.accuracy * 0.001 * (2 * Math.random() - 1);
+
         this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction);
         this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
@@ -69,7 +72,7 @@ var Bullet = Class.extend({
                 enemy.hit(self.gun.damage);
 
                 // Update stats
-                self.gun.player.stats.damage += self.gun.damage;
+                self.gun.player.stats.damage += (enemy.speed / 50) * self.gun.damage;
                 if (enemy.hitPoints <= 0) {
                     self.gun.player.stats.kills++;
                 }
