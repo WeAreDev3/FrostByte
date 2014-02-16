@@ -43,7 +43,6 @@ Gun = Class.extend({
         }
     },
     fire: function() {
-        console.log('fired');
         if (this.timeSinceLastFire >= this.rate) {
             this.timeSinceLastFire -= this.rate;
 
