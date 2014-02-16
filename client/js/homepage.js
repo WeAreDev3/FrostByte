@@ -7,14 +7,18 @@ window.onload = function() {
     };
 
     document.getElementById('joinLobby').onclick = function() {
-        document.getElementById('lobbies').classList.add('remove-display');
+        var lobbyId = document.getElementById('lobbies').querySelector('tr.selected td').innerText;
 
-        // Tell the  server we are ready to play the game (damn it, I lost the game)
-        socket.emit('play', {
-            lobbyId: document.getElementById('lobbies').querySelector('tr.selected td').innerText
-        });
+        if (lobbyId) {
+            document.getElementById('lobbies').classList.add('remove-display');
 
-        startGame();
+            // Tell the  server we are ready to play the game (damn it, I lost the game)
+            socket.emit('play', {
+                lobbyId: lobbyId
+            });
+
+            startGame();
+        }
     };
 };
 
