@@ -24,14 +24,14 @@ var Gun = Class.extend({
           rate: Higher is WORSE
         */
         'sniper': {
-            'accuracy': 50,
+            'accuracy': 35,
             'damage': 150,
             'kick': 5,
             'bulletSpeed': 15,
             'rate': 500
         },
         'full-auto': {
-            'accuracy': 60,
+            'accuracy': 55,
             'damage': 30,
             'kick': 2,
             'bulletSpeed': 15,
