@@ -47,7 +47,7 @@ var Enemy = Character.extend({
     },
     update: function(timeElapsed) {
         // If alive...
-        if (this.health() > 0) {
+        if (this.hitPoints > 0) {
             var self = this,
                 nearestPlayer,
                 closestDistance,

@@ -50,7 +50,7 @@ Enemy = Character.extend({
             }
         }
 
-        if (this.health() <= 0) {
+        if (this.hitPoints <= 0) {
             context.fillStyle = "rgba(" + (this.alpha > .6 ? 95 : 43) + ",149,238," + (this.alpha > .3 ? 1 : this.alpha + .3) + ")";
             context.beginPath();
             context.arc(x, y, size * (this.alpha > .7 ? .3 : (1 - this.alpha)), 0, 2 * Math.PI, false);
