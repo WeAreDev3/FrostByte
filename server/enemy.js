@@ -8,24 +8,42 @@ var Enemy = Character.extend({
         this.game = game;
 
         this.resetHitPoints(70 + (level * Math.random() * 20));
+        this.damageLeft = this.hitPoints; // Used for scoring purposes
+
+        this.baseColor = {
+            'start': {
+                'red': 255,
+                'green': 60,
+                'blue': 0
+            },
+            'delta': {
+                'red': -189,
+                'green': 145,
+                'blue': 255
+            }
+        };
+
         this.setSize(10);
         this.setSpeed(50 + (level * Math.random() * 10));
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(255, 0, 0);
+        this.updateColor();
         this.damage = 5;
 
         this.alpha = 1;
     },
     hit: function(damage) {
         this.hitPoints -= damage;
+        this.damageLeft -= damage;
 
         if (this.hitPoints < 0) {
             this.hitPoints = 0;
         }
 
-        var inflicted = 1 - this.health();
-        this.setColor(parseInt(255 + (inflicted * -189)), parseInt(60 + (inflicted * 145)), parseInt(0 + (inflicted * 255)));
+            this.damageLeft = -1;
+        }
+
+        this.updateColor();
     },
     update: function(timeElapsed) {
         // If alive...

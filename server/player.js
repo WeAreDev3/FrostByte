@@ -19,12 +19,25 @@ var Player = Character.extend({
             'm': false // Mouse
         };
 
+        this.baseColor = {
+            'start': {
+                'red': 77,
+                'green': 144,
+                'blue': 254
+            },
+            'delta': {
+                'red': 77,
+                'green': 144,
+                'blue': 254
+            }
+        }
+
         this.resetHitPoints(100);
         this.setSize(12);
         this.setSpeed(100);
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(77, 144, 254);
+        this.updateColor();
         this.setGun('full-auto');
 
         this.stats = {

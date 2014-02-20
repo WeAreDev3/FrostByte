@@ -7,7 +7,7 @@ Enemy = Character.extend({
         this.setSpeed(50);
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(255, 45, 0);
+        this.setColor(255, 60, 0);
 
         this.lines = [];
         this.lineCounter = 0;
@@ -17,8 +17,8 @@ Enemy = Character.extend({
     hit: function(damage) {
         this.hitPoints -= damage;
 
-        if (this.health() > 0) {
-            var healthRemaining = 1 - this.health();
+        if (this.hitPoints > 0) {
+            var healthRemaining = this.healthGone();
             this.setColor(parseInt(255 - (healthRemaining * 189)), parseInt(60 + (healthRemaining * 145)), parseInt(0 + (healthRemaining * 255)));
         }
     },
