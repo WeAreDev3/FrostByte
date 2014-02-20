@@ -40,6 +40,7 @@ var Enemy = Character.extend({
             this.hitPoints = 0;
         }
 
+        if (this.damageLeft < 0) {
             this.damageLeft = -1;
         }
 

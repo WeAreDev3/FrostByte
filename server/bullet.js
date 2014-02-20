@@ -68,11 +68,14 @@ var Bullet = Class.extend({
             var distanceFromBulletLine = Math.sqrt(Math.pow((enemy.x - intersection[0]), 2) + Math.pow((enemy.y - intersection[1]), 2)),
                 isIntersectionOnBullet = self.x2 > self.prevX ? intersection[0] > self.prevX && intersection[0] < self.x2 : intersection[0] < self.prevX && intersection[0] > self.x2;
 
-            if (isIntersectionOnBullet && distanceFromBulletLine <= enemy.size && enemy.health() > 0) {
+            if (isIntersectionOnBullet && distanceFromBulletLine <= enemy.size && enemy.healthGone() < 1) {
                 enemy.hit(self.gun.damage);
 
                 // Update stats
-                self.gun.player.stats.damage += (enemy.speed / 70) * self.gun.damage;
+                if (enemy.damageLeft >= 0) {
+                    self.gun.player.stats.damage += Math.round((enemy.speed / 70) * self.gun.damage);
+                }
+
                 if (enemy.hitPoints <= 0) {
                     self.gun.player.stats.kills++;
                 }
