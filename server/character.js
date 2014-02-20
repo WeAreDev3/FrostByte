@@ -42,6 +42,10 @@ var Character = Class.extend({
             this.maxHitPoints = maxHitPoints;
         }
 
+        if (this.isDead !== undefined) {
+            this.isDead = false;
+        }
+
         this.hitPoints = this.maxHitPoints;
     },
     setHitPoints: function(hitPoints) {

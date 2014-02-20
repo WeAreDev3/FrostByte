@@ -30,7 +30,9 @@ var Player = Character.extend({
                 'green': 144,
                 'blue': 254
             }
-        }
+        };
+
+        this.isDead = false;
 
         this.resetHitPoints(100);
         this.setSize(12);
@@ -42,7 +44,8 @@ var Player = Character.extend({
 
         this.stats = {
             'damage': 0,
-            'kills': 0
+            'kills': 0,
+            'deaths': 0
         };
 
         // Add the player onto the socket to be used elsewhere
@@ -96,7 +99,6 @@ var Player = Character.extend({
         console.log(this.name, 'got hit:', this.hitPoints);
 
         if (this.hitPoints <= 0) {
-            this.setHitPoints(0);
             this.kill();
         }
     },
@@ -148,6 +150,9 @@ var Player = Character.extend({
             if (!this.input.m && this.gun.wasFired) {
                 this.gun.wasFired = false;
             }
+        } else if (!this.isDead) {
+            this.stats.deaths++;
+            this.isDead = true;
         }
     }
 });

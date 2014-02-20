@@ -35,6 +35,7 @@ var Game = Class.extend({
             player.resetHitPoints();
             console.log(player.name, 'has done', Utils.formatNumber(player.stats.damage), 'damage.');
             console.log(player.name, 'has killed', Utils.formatNumber(player.stats.kills), player.stats.kills !== 1 ? 'enemies.' : 'enemy.');
+            console.log(player.name, 'has died', Utils.formatNumber(player.stats.deaths), player.stats.deaths !== 1 ? 'times.' : 'time.');
         });
 
         this.spawningEnemies = 8 * this.level;
