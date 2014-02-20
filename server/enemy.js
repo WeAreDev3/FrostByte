@@ -7,7 +7,7 @@ var Enemy = Character.extend({
 
         this.game = game;
 
-        this.resetHitPoints(70 + (level * Math.random() * 20));
+        this.resetHitPoints(Math.round(70 + (level * Math.random() * 20)));
         this.damageLeft = this.hitPoints; // Used for scoring purposes
 
         this.baseColor = {
@@ -24,7 +24,7 @@ var Enemy = Character.extend({
         };
 
         this.setSize(10);
-        this.setSpeed(50 + (level * Math.random() * 10));
+        this.setSpeed(Math.round(50 + (level * Math.random() * 10)));
         this.setMobility(10);
         this.setDirection(0);
         this.updateColor();
