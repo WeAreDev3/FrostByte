@@ -81,7 +81,7 @@ var Bullet = Class.extend({
                 }
 
                 game.removeBullet(self);
-                return;
+                return true;
             }
         });
 
