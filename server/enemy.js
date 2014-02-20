@@ -55,6 +55,9 @@ var Enemy = Character.extend({
                 offScreen = false,
                 players = [];
 
+            // Regen health
+            this.setHitPoints(this.hitPoints + (timeElapsed * 20));
+
             // Create an array of all the players to loop through them with Array.reduce()
             this.game.forEachPlayer(function(player, id) {
                 if (player.hitPoints > 0) {
