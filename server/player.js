@@ -19,17 +19,33 @@ var Player = Character.extend({
             'm': false // Mouse
         };
 
+        this.baseColor = {
+            'start': {
+                'red': 77,
+                'green': 144,
+                'blue': 254
+            },
+            'delta': {
+                'red': 77,
+                'green': 144,
+                'blue': 254
+            }
+        };
+
+        this.isDead = false;
+
         this.resetHitPoints(100);
         this.setSize(12);
         this.setSpeed(100);
         this.setMobility(10);
         this.setDirection(0);
-        this.setColor(77, 144, 254);
+        this.updateColor();
         this.setGun('full-auto');
 
         this.stats = {
             'damage': 0,
-            'kills': 0
+            'kills': 0,
+            'deaths': 0
         };
 
         // Add the player onto the socket to be used elsewhere
@@ -83,7 +99,6 @@ var Player = Character.extend({
         console.log(this.name, 'got hit:', this.hitPoints);
 
         if (this.hitPoints <= 0) {
-            this.setHitPoints(0);
             this.kill();
         }
     },
@@ -135,6 +150,9 @@ var Player = Character.extend({
             if (!this.input.m && this.gun.wasFired) {
                 this.gun.wasFired = false;
             }
+        } else if (!this.isDead) {
+            this.stats.deaths++;
+            this.isDead = true;
         }
     }
 });

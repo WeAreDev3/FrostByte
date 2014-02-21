@@ -35,6 +35,7 @@ var Game = Class.extend({
             player.resetHitPoints();
             console.log(player.name, 'has done', Utils.formatNumber(player.stats.damage), 'damage.');
             console.log(player.name, 'has killed', Utils.formatNumber(player.stats.kills), player.stats.kills !== 1 ? 'enemies.' : 'enemy.');
+            console.log(player.name, 'has died', Utils.formatNumber(player.stats.deaths), player.stats.deaths !== 1 ? 'times.' : 'time.');
         });
 
         this.spawningEnemies = 8 * this.level;
@@ -80,21 +81,27 @@ var Game = Class.extend({
     forEachPlayer: function(callback) {
         for (var playerID in this.players) {
             if (this.players.hasOwnProperty(playerID)) {
-                callback(this.players[playerID], playerID);
+                if (callback(this.players[playerID], playerID) === true) {
+                    break;
+                }
             }
         }
     },
     forEachEnemy: function(callback) {
         for (var enemyID in this.enemies) {
             if (this.enemies.hasOwnProperty(enemyID)) {
-                callback(this.enemies[enemyID], enemyID);
+                if (callback(this.enemies[enemyID], enemyID) === true) {
+                    break;
+                }
             }
         }
     },
     forEachBullet: function(callback) {
         for (var bulletID in this.bullets) {
             if (this.bullets.hasOwnProperty(bulletID)) {
-                callback(this.bullets[bulletID], bulletID);
+                if (callback(this.bullets[bulletID], bulletID) === true) {
+                    break;
+                }
             }
         }
     },
