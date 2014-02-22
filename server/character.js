@@ -31,11 +31,15 @@ var Character = Class.extend({
     },
     updateColor: function() {
         var healthGone = this.healthGone();
-        
+
         // Transition the color based on health
         this.setColor(parseInt(this.baseColor.start.red + (healthGone * this.baseColor.delta.red)),
-                      parseInt(this.baseColor.start.green + (healthGone * this.baseColor.delta.green)),
-                      parseInt(this.baseColor.start.blue + (healthGone * this.baseColor.delta.blue)));
+            parseInt(this.baseColor.start.green + (healthGone * this.baseColor.delta.green)),
+            parseInt(this.baseColor.start.blue + (healthGone * this.baseColor.delta.blue)));
+    },
+    resetRoundScore: function() {
+        this.lifeScore = 0;
+        console.log('round score reset');
     },
     resetHitPoints: function(maxHitPoints) {
         if (maxHitPoints !== undefined) {

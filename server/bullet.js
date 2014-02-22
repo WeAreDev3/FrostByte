@@ -73,11 +73,14 @@ var Bullet = Class.extend({
 
                 // Update stats
                 if (enemy.damageLeft >= 0) {
-                    self.gun.player.stats.damage += Math.round((enemy.speed / 70) * self.gun.damage);
+                    self.gun.player.stats.score += Math.round((enemy.speed / 70) * self.gun.damage);
+                    self.gun.player.lifeScore += Math.round((enemy.speed / 70) * self.gun.damage);
+                    self.gun.player.stats.damage += self.gun.damage;
                 }
 
                 if (enemy.hitPoints <= 0) {
                     self.gun.player.stats.kills++;
+                    console.log(self.gun.player.name, "killed an enemy. Score: ", self.gun.player.stats.score);
                 }
 
                 game.removeBullet(self);

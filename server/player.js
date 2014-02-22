@@ -42,7 +42,10 @@ var Player = Character.extend({
         this.updateColor();
         this.setGun('full-auto');
 
+        this.lifeScore = 0;
+
         this.stats = {
+            'score': 0,
             'damage': 0,
             'kills': 0,
             'deaths': 0
@@ -153,8 +156,15 @@ var Player = Character.extend({
         } else if (!this.isDead) {
             this.stats.deaths++;
             this.isDead = true;
+            this.stats.score -= deathPenalty(this.lifeScore);
+            this.lifeScore;
+            console.log(this.name + " died! Score: " + this.stats.score);
         }
     }
 });
+
+function deathPenalty (score) {
+    return score / 2;
+}
 
 module.exports = Player;
