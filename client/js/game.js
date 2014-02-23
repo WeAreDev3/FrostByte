@@ -3,6 +3,7 @@ GameClass = Class.extend({
         this.width = width;
         this.height = height;
         this.scale = 1;
+        this.blurred = false;
 
         this.level = level;
 
@@ -165,6 +166,7 @@ GameClass = Class.extend({
         window.onmouseup = this.mouseUp.bind(this);
 
         window.onblur = this.onBlur.bind(this);
+        window.onfocus = this.onFocus.bind(this);
 
         //Resize the canvas every time the browser is resized
         window.onresize = this.resizeBrowser.bind(this);
@@ -219,51 +221,55 @@ GameClass = Class.extend({
         this.scale = height / 1000;
     },
     keyDown: function(event) {
-        switch (event.keyCode) {
-            case 87: // w
-            case 38: // up arrow
-                if (!this.tmpInput.u) { // Only update if we have to
-                    this.tmpInput.u = true;
-                }
-                break;
-            case 83: // s
-            case 40: // down arrow
-                if (!this.tmpInput.d) { // Only update if we have to
-                    this.tmpInput.d = true;
-                }
-                break;
-            case 65: // a
-            case 37: // left arrow
-                if (!this.tmpInput.l) { // Only update if we have to
-                    this.tmpInput.l = true;
-                }
-                break;
-            case 68: // d
-            case 39: // right arrow
-                if (!this.tmpInput.r) { // Only update if we have to
-                    this.tmpInput.r = true;
-                }
-                break;
+        if (!this.blurred) {
+            switch (event.keyCode) {
+                case 87: // w
+                case 38: // up arrow
+                    if (!this.tmpInput.u) { // Only update if we have to
+                        this.tmpInput.u = true;
+                    }
+                    break;
+                case 83: // s
+                case 40: // down arrow
+                    if (!this.tmpInput.d) { // Only update if we have to
+                        this.tmpInput.d = true;
+                    }
+                    break;
+                case 65: // a
+                case 37: // left arrow
+                    if (!this.tmpInput.l) { // Only update if we have to
+                        this.tmpInput.l = true;
+                    }
+                    break;
+                case 68: // d
+                case 39: // right arrow
+                    if (!this.tmpInput.r) { // Only update if we have to
+                        this.tmpInput.r = true;
+                    }
+                    break;
+            }
         }
     },
     keyUp: function(event) {
-        switch (event.keyCode) {
-            case 87: // w
-            case 38: // up arrow
-                this.tmpInput.u = false;
-                break;
-            case 83: // s
-            case 40: // down arrow
-                this.tmpInput.d = false;
-                break;
-            case 65: // a
-            case 37: // left arrow
-                this.tmpInput.l = false;
-                break;
-            case 68: // d
-            case 39: // right arrow
-                this.tmpInput.r = false;
-                break;
+        if (!this.blurred) {
+            switch (event.keyCode) {
+                case 87: // w
+                case 38: // up arrow
+                    this.tmpInput.u = false;
+                    break;
+                case 83: // s
+                case 40: // down arrow
+                    this.tmpInput.d = false;
+                    break;
+                case 65: // a
+                case 37: // left arrow
+                    this.tmpInput.l = false;
+                    break;
+                case 68: // d
+                case 39: // right arrow
+                    this.tmpInput.r = false;
+                    break;
+            }
         }
     },
     mouseMove: function(event) {
@@ -288,5 +294,10 @@ GameClass = Class.extend({
                 this.tmpInput[input] = false;
             }
         }
+
+        this.blurred = true;
+    },
+    onFocus: function() {
+        this.blurred = false;
     }
 });

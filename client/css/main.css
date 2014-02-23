@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 /*Set the default font to Roboto*/
  body {
     font-family:'Roboto', sans-serif;
@@ -30,7 +33,6 @@
     animation: subtitle-start 2.5s;
     -webkit-animation: subtitle-start 2.5s;
 }
-
 .survival {
     font-weight: bold;
 }
@@ -116,6 +118,34 @@ input[type="radio"]:checked + label {
     opacity: 1;
     animation: labels-2 linear .5s;
     -webkit-animation: labels-2 linear .5s;
+}
+#lobbies table {
+    margin: 35px auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 512px;
+    border: 1px solid #19004A;
+}
+#lobbies table th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #19004A;
+    padding: 4px;
+    text-align: left;
+}
+#lobbies table td {
+    padding: 4px;
+    vertical-align: top;
+    border-top: 1px solid #DDD;
+}
+#lobbies table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+#lobbies table tbody tr.selected {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+#lobbyButtons {
+    text-align: center;
 }
 /*The 'creators Us' section in the bottom left*/
  #creators {
@@ -210,12 +240,16 @@ canvas {
 #cursor {
     position: absolute;
     -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 #intro.playing {
     display: none;
 }
 #frame.playing {
     display: block;
+    background-image: url(../img/snow.png);
+    background-size: 50%;
 }
 html.playing {
     cursor: none;

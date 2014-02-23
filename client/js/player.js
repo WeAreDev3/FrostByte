@@ -31,7 +31,7 @@ Player = Character.extend({
             context.save();
             context.translate(x, y);
             context.rotate(this.direction);
-            context.fillRect(-1 * size, -1 * size, size * 2, size * 2);
+            context.fillRect(-size, -size, size * 2, size * 2);
             context.restore();
 
             // Draws the name
@@ -93,7 +93,7 @@ Player = Character.extend({
             }
 
             // Handle the gun firing
-            if (Game.input.mouse.down) {
+            if (Game.input.m) {
                 this.gun.fire();
             }
 

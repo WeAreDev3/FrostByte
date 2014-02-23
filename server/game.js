@@ -33,12 +33,15 @@ var Game = Class.extend({
 
         this.forEachPlayer(function(player, id) {
             player.resetHitPoints();
+            player.resetRoundScore();
             console.log(player.name, 'has done', Utils.formatNumber(player.stats.damage), 'damage.');
             console.log(player.name, 'has killed', Utils.formatNumber(player.stats.kills), player.stats.kills !== 1 ? 'enemies.' : 'enemy.');
+            console.log(player.name, 'has died', Utils.formatNumber(player.stats.deaths), player.stats.deaths !== 1 ? 'times.' : 'time.');
+            console.log(player.name, 'has ', Utils.formatNumber(player.stats.score), 'points.');
         });
 
         this.spawningEnemies = 8 * this.level;
-        this.spawnTime = new Date().getTime();
+        this.spawnTime = Date.now();
         this.level++;
     },
     removeEnemy: function(enemy) {
@@ -75,26 +78,32 @@ var Game = Class.extend({
         this.addEnemy(new Enemy(location.x, location.y, this.level, this));
         this.spawningEnemies--;
 
-        this.spawnTime = new Date().getTime();
+        this.spawnTime = Date.now();
     },
     forEachPlayer: function(callback) {
         for (var playerID in this.players) {
             if (this.players.hasOwnProperty(playerID)) {
-                callback(this.players[playerID], playerID);
+                if (callback(this.players[playerID], playerID) === true) {
+                    break;
+                }
             }
         }
     },
     forEachEnemy: function(callback) {
         for (var enemyID in this.enemies) {
             if (this.enemies.hasOwnProperty(enemyID)) {
-                callback(this.enemies[enemyID], enemyID);
+                if (callback(this.enemies[enemyID], enemyID) === true) {
+                    break;
+                }
             }
         }
     },
     forEachBullet: function(callback) {
         for (var bulletID in this.bullets) {
             if (this.bullets.hasOwnProperty(bulletID)) {
-                callback(this.bullets[bulletID], bulletID);
+                if (callback(this.bullets[bulletID], bulletID) === true) {
+                    break;
+                }
             }
         }
     },
@@ -119,7 +128,7 @@ var Game = Class.extend({
             });
 
             if (self.spawningEnemies > 0) {
-                if (new Date().getTime() - self.spawnTime > 500) {
+                if (Date.now() - self.spawnTime > 500) {
                     self.spawnEnemy();
                 }
             } else {

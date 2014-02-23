@@ -3,6 +3,54 @@ socket.on('connect', function() {
     console.log('Connected successfully as', socket.socket.sessionid);
 });
 
+socket.on('lobbyList', function(lobbies) {
+    var lobbyTable = document.getElementById('lobbies').querySelector('table'),
+        count = 0,
+        tr,
+        td;
+
+    for (lobby in lobbies) {
+        if (lobbies.hasOwnProperty(lobby)) {
+            if (lobbyTable.innerText.indexOf(lobby) === -1) {
+                // Add a new lobby to the table
+                tr = document.createElement('tr');
+
+                td = document.createElement('td');
+                td.innerText = lobby;
+
+                tr.appendChild(td);
+
+                td = document.createElement('td');
+                td.innerText = lobbies[lobby].playerCount;
+
+                tr.appendChild(td);
+
+                tr.onclick = function(event) {
+                    var self = event.target.tagName === "TR" ? event.target : event.target.parentNode,
+                        siblings = self.parentNode.childNodes;
+
+                    for (var i = siblings.length - 1; i >= 0; i--) {
+                        if (siblings[i].tagName) {
+                            siblings[i].classList.remove('selected');
+                        }
+                    }
+
+                    self.classList.add('selected');
+                };
+
+                lobbyTable.querySelector('tbody').appendChild(tr);
+            } else {
+                // Update the lobby size
+                lobbyTable.querySelectorAll('tbody tr')[count].querySelector('td:last-of-type').innerText = lobbies[lobby].playerCount;
+            }
+
+            count++;
+        }
+    }
+
+    lobbyTable.parentElement.classList.remove('remove-display');
+});
+
 socket.on('joinedLobby', function(data) {
     console.log('Joined the lobby:', data.id);
 

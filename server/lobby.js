@@ -15,6 +15,8 @@ var Lobby = Class.extend({
         this.game = new Game();
     },
     addPlayer: function(socket) {
+        console.log(socket.name, 'joined', this.id);
+        
         socket.emit('joinedLobby', {
             id: this.id,
             width: this.game.width,

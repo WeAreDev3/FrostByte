@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- NOTE: This is closed source software! -->
+<!-- While we can not stop you from seeing our client-side code, we kindly ask that you refrane from looking -->
 <head>
     <title>FrostByte - A top down shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,15 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Iceberg">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript">
+    // ads :/
+    var adfly_id = 4425652;
+    var adfly_advert = 'banner';
+    var frequency_cap = 2;
+    var frequency_delay = 100;
+    var init_delay = 0;
+    </script>
+    <script src="https://cdn.adf.ly/js/entry.js"></script>
     <script>
     // Google Analytics
     (function(i, s, o, g, r, a, m) {
@@ -38,11 +48,31 @@
                 <span class="survival">survival</span>
             </span>
         </h2>
-        <div id="username-container">
-            <input id="username" maxlength="12" placeholder="Username" tabindex="1" onkeydown="if (event.keyCode == 13) document.getElementById('play').click()">
+
+        <div id="signIn">
+            <div id="username-container">
+                <input id="username" maxlength="12" placeholder="Username" tabindex="1" onkeydown="if (event.keyCode == 13) document.getElementById('play').click()">
+            </div>
+            <div id="button-container">
+                <button id="play" tabindex="-1">Play</button>
+            </div>
         </div>
-        <div id="button-container">
-            <button id="play" tabindex="-1">Play</button>
+
+        <div id="lobbies" class="remove-display">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lobby ID</th>
+                        <th>Player Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="lobbyButtons">
+                <button id="createLobby">Create New Lobby</button>
+                <button id="joinLobby">Join</button>
+            </div>
         </div>
 
         <!-- The page 'footer' -->

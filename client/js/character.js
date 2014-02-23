@@ -47,8 +47,8 @@ Character = Class.extend({
             this.hitPoints = hitPoints;
         }
     },
-    health: function() {
-        return this.hitPoints / this.maxHitPoints;
+    healthGone: function() {
+        return 1 - (this.hitPoints / this.maxHitPoints);
     },
     hit: function(damage) {
         this.hitPoints -= damage;

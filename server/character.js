@@ -29,9 +29,25 @@ var Character = Class.extend({
         a = a !== undefined ? a : '1';
         this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
     },
+    updateColor: function() {
+        var healthGone = this.healthGone();
+
+        // Transition the color based on health
+        this.setColor(parseInt(this.baseColor.start.red + (healthGone * this.baseColor.delta.red)),
+            parseInt(this.baseColor.start.green + (healthGone * this.baseColor.delta.green)),
+            parseInt(this.baseColor.start.blue + (healthGone * this.baseColor.delta.blue)));
+    },
+    resetRoundScore: function() {
+        this.lifeScore = 0;
+        console.log('round score reset');
+    },
     resetHitPoints: function(maxHitPoints) {
         if (maxHitPoints !== undefined) {
             this.maxHitPoints = maxHitPoints;
+        }
+
+        if (this.isDead !== undefined) {
+            this.isDead = false;
         }
 
         this.hitPoints = this.maxHitPoints;
@@ -44,9 +60,11 @@ var Character = Class.extend({
         } else {
             this.hitPoints = hitPoints;
         }
+
+        this.updateColor();
     },
-    health: function() {
-        return this.hitPoints / this.maxHitPoints;
+    healthGone: function() {
+        return 1 - (this.hitPoints / this.maxHitPoints);
     },
     hit: function(damage) {
         this.hitPoints -= damage;
@@ -84,7 +102,7 @@ var Character = Class.extend({
             changes = currentState;
             this.forceUpdate = false;
         }
-        
+
         this.previousState = currentState;
         return changes;
     },
