@@ -6,6 +6,8 @@ This project is hosted [here](http://gitlab.mke8.me/dev3/frostbyte)
 ### Working on the project?
 Make sure you know our workflow defined [HERE](http://gitlab.mke8.me/dev3/company-resources/wikis/WorkFlow)
 
+Just an FYI, the web-server and game-server folders each hold their own nodejs server
+
 
 ### Version
 Can be found at [./package.json:3](http://gitlab.mke8.me/dev3/frostbyte/blob/master/package.json#L3) and in [our changelog](http://frostbyte.mke8.me/changelog)
