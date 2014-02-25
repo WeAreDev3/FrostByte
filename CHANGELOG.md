@@ -1,5 +1,5 @@
 ### v0.2.0
-#### 23 Feb, 2014
+**23 Feb, 2014**
 - Started to lay the foundation of a scoring system
 
 ### v0.1.7
