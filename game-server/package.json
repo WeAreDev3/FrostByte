@@ -1,0 +1,26 @@
+{
+    "name": "FrostByte",
+    "author": "Dev3",
+    "description": "A top down shooter",
+    "contributors": [{
+        "name": "mkeedlinger"
+    }, {
+        "name": "janka102"
+    }, {
+        "name": "talbenari1"
+    }],
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon --ignore client/ app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dev3/frostbyte.git"
+    },
+    "dependencies": {
+        "node-uuid": "*"
+    },
+    "devDependencies": {
+        "nodemon": "*"
+    }
+}
