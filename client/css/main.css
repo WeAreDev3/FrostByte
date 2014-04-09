@@ -62,13 +62,13 @@ header h2 {
     color: #404040;
     margin: 5px -4px -2px 0;
     text-transform: uppercase;
-    width: 50%;
+    width: 40%;
     display: inline-block;
 }
 
 header h3 {
     margin: 0;
-    width: 50%;
+    width: 60%;
     display: inline-block;
     font-size: 30px;
     text-align: right;
