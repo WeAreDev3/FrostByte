@@ -336,6 +336,7 @@ canvas {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    cursor: none !important;
 }
 
 #intro.playing {
