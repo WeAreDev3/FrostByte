@@ -54,19 +54,19 @@ socket.on('lobbyList', function(lobbies) {
 socket.on('joinedLobby', function(data) {
     console.log('Joined the lobby:', data.id);
 
+    var hud = new Hud(document.getElementById('your-stats'));
+
     // If player reconnects, don't start another game
     if (typeof Game === 'undefined') {
         Game = new GameClass(data.width, data.height);
         console.log('New Game:', Game);
 
-        Game.currentPlayer = new Player(socket.socket.sessionid, username);
-        Game.currentPlayer.crosshairs = new Crosshairs(Game.currentPlayer);
+        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
 
         Game.start();
     } else {
-        Game.currentPlayer = new Player(socket.socket.sessionid, username);
-        Game.currentPlayer.crosshairs = new Crosshairs(Game.currentPlayer);
+        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
     }
 });
@@ -86,6 +86,11 @@ socket.on('update', function(update) {
 
         // Apply the change
         Game.players[playerID].setState(update.players[playerID]);
+
+        if (playerID === Game.currentPlayer.id && update.players[playerID].hitPoints) {
+            // console.log('Your health changed: ', update.players[playerID].hitPoints);
+            Game.currentPlayer.hud.setHealth(update.players[playerID].hitPoints);
+        }
     }
 
     // Check if any players left
@@ -104,7 +109,7 @@ socket.on('update', function(update) {
         }
 
         // Apply the change
-        Game.enemies[enemyID].setState(update.enemies[enemyID])
+        Game.enemies[enemyID].setState(update.enemies[enemyID]);
     }
 
     // Check if any enemies died
