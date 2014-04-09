@@ -201,8 +201,9 @@ GameClass = Class.extend({
     },
     resizeBrowser: function() {
         // Resize the game to be as big as possible while maintaining the proper aspect ratio
-        var width = window.innerWidth,
-            height = window.innerHeight,
+        var headerHeight = document.querySelector('header').getBoundingClientRect().height,
+            width = window.innerWidth,
+            height = window.innerHeight - headerHeight,
             canvas = document.getElementById('frame');
 
         if (width / height >= 1.6) {

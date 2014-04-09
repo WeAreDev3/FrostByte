@@ -36,11 +36,99 @@
 .survival {
     font-weight: bold;
 }
-/*mkeedlinger attempts keeping the link looking nice*/
- .aGame a {
-    color: #AAAAAA;
-    text-decoration: none;
+
+header {
+    display: none;
+    background: #F9F9F9;
+    height: 60px;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    cursor: default;
 }
+
+header #your-stats div {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    box-sizing: border-box;
+    vertical-align: top;
+    width: 140px;
+}
+
+header h2 {
+    font-family: 'Roboto';
+    font-weight: 700;
+    font-size: 10px;
+    color: #404040;
+    margin: 5px -4px -2px 0;
+    text-transform: uppercase;
+    width: 50%;
+    display: inline-block;
+}
+
+header h3 {
+    margin: 0;
+    width: 50%;
+    display: inline-block;
+    font-size: 30px;
+    text-align: right;
+    color: #404040;
+}
+
+header h3 span {
+    font-size: 10px;
+}
+
+header h1 {
+    font-family: 'Roboto';
+    font-weight: 300;
+    margin: 2px 0;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #404040;
+}
+
+header h1 span {
+    font-weight: 700;
+}
+
+header meter {
+    height: 2px;
+    width: 100%;
+    -webkit-appearance: none;
+    vertical-align: top;
+}
+
+header meter::-webkit-meter-bar {
+    transition: .2s;
+    background: #CCCCCC;
+}
+
+header meter:-moz-meter-optimum::-moz-meter-bar {
+    transition: .2s;
+    background: #4D90FE;
+}
+
+header meter:-moz-meter-optimum, header meter:-moz-meter-sub-optimum {
+    background: #404040;
+    transition: .2s;
+}
+
+header meter::-webkit-meter-optimum-value {
+    background: #4D90FE;
+    transition: .2s;
+}
+
+header meter::-webkit-meter-suboptimum-value {
+    background: #FE634D;
+    transition: .2s;
+}
+
+header meter:-moz-meter-sub-optimum::-moz-meter-bar {
+    transition: .2s;
+    background: #FE634D;
+}
+
 /*The wrapper that contains the setup buttons*/
  #button-container, #username-container {
     text-align: center;
@@ -214,22 +302,27 @@ input[type="radio"]:checked + label {
     animation: footer-2-start 3s;
     -webkit-animation: footer-2-start 3s;
 }
+
 #creators a:last-of-type, #info a:last-of-type {
     animation: footer-3-start 3s;
     -webkit-animation: footer-3-start 3s;
 }
+
 /*Hide some content when 'PLAY' is pressed*/
  .stage2 button#play, .stage2 #creators, .stage2 #info {
     opacity: 0;
 }
+
 /*Add this to some items after animating to avoid bugs*/
  .opacity-transition {
     transition: opacity .25s !important;
 }
+
 /*This too*/
  .remove-display {
     display: none;
 }
+
 canvas {
     display: none;
     margin: 0 auto;
@@ -237,20 +330,28 @@ canvas {
     background: #F0F0F0;
     border: 1px solid #111111;
 }
+
 #cursor {
     position: absolute;
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
+
 #intro.playing {
     display: none;
 }
+
 #frame.playing {
     display: block;
     background-image: url(../img/snow.png);
     background-size: 50%;
 }
+
 html.playing {
     cursor: none;
+}
+
+header.playing {
+    display: block;
 }

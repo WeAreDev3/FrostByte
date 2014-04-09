@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- NOTE: This is closed source software! -->
-<!-- While we can not stop you from seeing our client-side code, we kindly ask that you refrane from looking -->
 <head>
     <title>FrostByte - A top down shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,6 +87,28 @@
             <a href="/changelog" target="_blank" tabindex="-1">View Changelog</a>
         </div>
     </div>
+    <header>
+        <div id="your-stats">
+            <div id="health">
+                <h2>Health</h2>
+                <h3>75<span> / 100</span></h3>
+                <meter id="health-meter" value="75" min="0" max="100" low="30"></meter>
+            </div>
+            <div id="ammo">
+                <h2>Ammo</h2>
+                <h3>10<span> / 12</span></h3>
+                <meter id="ammo-meter" value="10" min="0" max="12" low="2"></meter>
+            </div>
+            <div id="score">
+                <h1>Score
+                    <span>0</span>
+                </h1>
+                <h1>Kills
+                    <span>0</span>
+                </h1>
+            </div>
+        </div>
+    </header>
     <canvas id="frame">
         Sorry, your browser does not support the HTML5 Canvas Element. Try using <a href="https://chrome.google.com" tabindex="-1">Google Chrome</a>
     </canvas>
