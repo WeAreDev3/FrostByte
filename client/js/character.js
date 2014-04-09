@@ -51,7 +51,7 @@ Character = Class.extend({
         return 1 - (this.hitPoints / this.maxHitPoints);
     },
     hit: function(damage) {
-        this.hitPoints -= damage;
+        this.setHitPoints(this.hitPoints - damage);
 
         if (this.health() <= 0) {
             this.kill();
