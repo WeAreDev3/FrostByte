@@ -93,27 +93,34 @@ var Bullet = Class.extend({
             intersection[0] = ((enemy.x * -m2) + (self.x1 * m) + enemy.y - self.y1) / (m - m2);
             intersection[1] = m * intersection[0] - (m * self.x1) + self.y1;
 
-            var distanceFromBulletLine = Math.sqrt(Math.pow((enemy.x - intersection[0]), 2) + Math.pow((enemy.y - intersection[1]), 2)),
-                isIntersectionOnBullet = self.x2 > self.prevX ? intersection[0] > self.prevX && intersection[0] < self.x2 : intersection[0] < self.prevX && intersection[0] > self.x2;
+            // Only check alive enemies, aka. not ones that are fading out
+            if (enemy.healthGone() < 1) {
 
-            if (isIntersectionOnBullet && distanceFromBulletLine <= enemy.size && enemy.healthGone() < 1) {
-                enemy.hit(self.gun.damage);
+                // If the enemy intersects with the line
+                if (self.x2 > self.prevX ? intersection[0] > self.prevX && intersection[0] < self.x2 : intersection[0] < self.prevX && intersection[0] > self.x2) {
+                    var distanceFromBulletLine = Math.sqrt(Math.pow((enemy.x - intersection[0]), 2) + Math.pow((enemy.y - intersection[1]), 2));
 
-                // Update stats
-                if (enemy.damageLeft >= 0) {
-                    self.gun.player.stats.score += Math.round((enemy.speed / 70) * self.gun.damage);
-                    self.gun.player.lifeScore += Math.round((enemy.speed / 70) * self.gun.damage);
-                    self.gun.player.stats.damage += self.gun.damage;
+                    // And is the correct distance from the line
+                    if (distanceFromBulletLine <= enemy.size) {
+                        enemy.hit(self.gun.damage);
+
+                        // Update stats
+                        if (enemy.damageLeft >= 0) {
+                            self.gun.player.stats.score += Math.round((enemy.speed / 70) * self.gun.damage);
+                            self.gun.player.lifeScore += Math.round((enemy.speed / 70) * self.gun.damage);
+                            self.gun.player.stats.damage += self.gun.damage;
+                        }
+
+                        if (enemy.hitPoints <= 0) {
+                            self.gun.player.stats.kills++;
+                            // console.log(self.gun.player.name, "killed enemy #" + self.gun.player.stats.kills + ". Score: ", self.gun.player.stats.score);
+                        }
+
+                        // Destroy the bullet
+                        game.removeBullet(self);
+                        return true;
+                    }
                 }
-
-                if (enemy.hitPoints <= 0) {
-                    self.gun.player.stats.kills++;
-                    console.log(self.gun.player.name, "killed enemy #" + self.gun.player.stats.kills + ". Score: ", self.gun.player.stats.score);
-                }
-
-                // Destroy the bullet
-                game.removeBullet(self);
-                return true;
             }
         });
 

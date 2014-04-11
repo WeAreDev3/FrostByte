@@ -77,13 +77,20 @@ Bullet = Class.extend({
             intersection[0] = ((Game.enemies[i].x * -m2) + (this.x1 * m) + Game.enemies[i].y - this.y1) / (m - m2);
             intersection[1] = m * intersection[0] - (m * this.x1) + this.y1;
 
-            var distanceFromBulletLine = Math.sqrt(Math.pow((Game.enemies[i].x - intersection[0]), 2) + Math.pow((Game.enemies[i].y - intersection[1]), 2)),
-                isIntersectionOnBullet = this.x2 > this.prevX ? intersection[0] > this.prevX && intersection[0] < this.x2 : intersection[0] < this.prevX && intersection[0] > this.x2;
+            // Only check alive enemies, aka. not ones that are fading out
+            if (Game.enemies[i].hitPoints > 0) {
 
-            if (isIntersectionOnBullet && distanceFromBulletLine <= Game.enemies[i].size && Game.enemies[i].health() > 0) {
-                Game.enemies[i].hit(this.gun.damage);
-                Game.removeBullet(this);
-                return;
+                // If the enemy is intersecting that line
+                if (this.x2 > this.prevX ? intersection[0] > this.prevX && intersection[0] < this.x2 : intersection[0] < this.prevX && intersection[0] > this.x2) {
+                    // The enemy distance to that line
+                    var distanceFromBulletLine = Math.sqrt(Math.pow((Game.enemies[i].x - intersection[0]), 2) + Math.pow((Game.enemies[i].y - intersection[1]), 2));
+
+                    if (distanceFromBulletLine <= Game.enemies[i].size) {
+                        Game.enemies[i].hit(this.gun.damage);
+                        Game.removeBullet(this);
+                        return;
+                    }                    
+                }
             }
         }
 
