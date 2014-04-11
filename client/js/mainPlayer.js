@@ -5,6 +5,16 @@ MainPlayer = Player.extend({
 
         this.crosshairs = new Crosshairs(this);
     },
+    setScore: function(score) {
+        this.stats.score = score;
+
+        this.hud.setScore(score);
+    },
+    setKills: function(kills) {
+        this.stats.kills = kills;
+
+        this.hud.setKills(kills);
+    },
     resetHitPoints: function(maxHitPoints) {
         if (maxHitPoints !== undefined) {
             this.maxHitPoints = maxHitPoints;
