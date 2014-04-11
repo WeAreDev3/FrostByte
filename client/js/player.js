@@ -28,7 +28,7 @@ Player = Character.extend({
     setScore: function(score) {
         this.stats.score = score;
     },
-    setkills: function(kills) {
+    setKills: function(kills) {
         this.stats.kills = kills;
     },
     draw: function(context, scale) {
