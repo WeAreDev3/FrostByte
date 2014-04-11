@@ -1,25 +1,45 @@
-var Class = require('./class'),
-    UUID = require('node-uuid');
+/*
+** bullet.js (server-side) defines the Bullet class,
+** giving it the ability to update its stats and check
+** for specific events that may occur, such as touching
+** an enemy, allowing it to behave accordingly.
+*/
 
+var Class = require('./class'), // John Resig's Class Inheritance
+    UUID = require('node-uuid'); // UUID functionality
+
+// Define the Bullet class
 var Bullet = Class.extend({
+
+    // init will get called whenever a new bullet is created
     init: function(gun, direction) {
+        // Give the bullet a unique ID
         this.id = UUID();
 
+        // Map a gun to the bullet
         this.gun = gun;
+
+        // Give the bullet a speed
         this.speed = this.gun.bulletSpeed;
+
+        // Set the direction in which the bullet will travel
         this.direction = direction ? direction : this.gun.player.direction;
 
+        // Give the bullet some directional inaccuracy, depending on the bullet accuracy
         this.direction += gun.accuracy * 0.001 * (2 * Math.random() - 1);
 
+        // Define the initial position of the bullet (away from the player body, so it won't hit it)
         this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction);
         this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
         this.y2 = this.y1 - 10 * Math.sin(this.direction);
         this.prevX = this.x1;
 
+        // Instantiate a previousState object (will come in handy below)
         this.previousState = {};
     },
     getChangedState: function() {
+        // Create an object denoting the current state of the bullet
         var currentState = {
             'gun': {
                 'player': {
@@ -33,8 +53,10 @@ var Bullet = Class.extend({
                 'bulletSpeed': this.speed
             }
         },
+            // Instantiate a changes object
             changes = {};
 
+        // If the current state of each item in currentState matches the previous state, remove it
         for (var item in currentState) {
             if (currentState.hasOwnProperty(item)) {
                 if (currentState[item] !== this.previousState[item]) {
@@ -42,14 +64,19 @@ var Bullet = Class.extend({
                 }
             }
         }
+        // changes should now only reflect differences between previousState and currentState
 
+        // Set the previousState to the currentState
         this.previousState = currentState;
+
+        // Return the changes to whatever asked for it
         return changes;
     },
     update: function(timeElapsed) {
         var game = this.gun.player.lobby.game,
             self = this;
 
+        // If the bullet has gone off the screen, remove it from the game
         if (this.x1 < 0 || this.x1 > game.width || this.y1 < 0 || this.y1 > game.height) {
             game.removeBullet(this);
             return;
@@ -60,6 +87,7 @@ var Bullet = Class.extend({
             m2 = -1 / m,
             intersection = [];
 
+        // Find the first enemy to be touching the bullet, and damage them
         game.forEachEnemy(function(enemy, id) {
             // The x and y intersect of the line and enemy
             intersection[0] = ((enemy.x * -m2) + (self.x1 * m) + enemy.y - self.y1) / (m - m2);
@@ -83,11 +111,13 @@ var Bullet = Class.extend({
                     console.log(self.gun.player.name, "killed enemy #" + self.gun.player.stats.kills + ". Score: ", self.gun.player.stats.score);
                 }
 
+                // Destroy the bullet
                 game.removeBullet(self);
                 return true;
             }
         });
 
+        // If the bullet hasn't already been destroyed from the above conditions, update its stats
         this.prevX = this.x1;
         this.x1 -= this.speed * Math.cos(this.direction) * timeElapsed * 100;
         this.y1 -= this.speed * Math.sin(this.direction) * timeElapsed * 100;
@@ -96,4 +126,5 @@ var Bullet = Class.extend({
     }
 });
 
+// Allow the Bullet class to be accessible by other modules
 module.exports = Bullet;
