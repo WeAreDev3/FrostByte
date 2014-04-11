@@ -19,9 +19,9 @@ Hud = Class.extend({
         this.playerHealth.nodeValue = hitPoints;
     },
     setScore: function(score) {
-        this.score.textContent = score;
+        this.score.textContent = Utils.formatNumber(score);
     },
     setKills: function(kills) {
-        this.kills.textContent = kills;
+        this.kills.textContent = Utils.formatNumber(kills);
     }
 });
