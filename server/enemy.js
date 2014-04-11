@@ -7,9 +7,6 @@ var Enemy = Character.extend({
 
         this.game = game;
 
-        this.resetHitPoints(Math.round(70 + (level * Math.random() * 20)));
-        this.damageLeft = this.hitPoints; // Used for scoring purposes
-
         this.baseColor = {
             'start': {
                 'red': 255,
@@ -23,17 +20,19 @@ var Enemy = Character.extend({
             }
         };
 
+        this.resetHitPoints(Math.round(70 + (level * Math.random() * 20)));
+        this.damageLeft = this.hitPoints; // Used for scoring purposes
         this.setSize(10);
         this.setSpeed(Math.round(50 + (level * Math.random() * 10)));
         this.setMobility(10);
         this.setDirection(0);
         this.updateColor();
-        this.damage = 5;
+        this.damage = Math.round((this.hitPoints / 40) + (this.speed / 20));
 
         this.alpha = 1;
     },
     hit: function(damage) {
-        this.hitPoints -= damage;
+        this.setHitPoints(this.hitPoints - damage);
         this.damageLeft -= damage;
 
         if (this.hitPoints < 0) {

@@ -47,7 +47,6 @@ Character = Class.extend({
                 case 'stats':
                     for (var stat in state[item]) {
                         if (state[item].hasOwnProperty(stat)) {
-                            console.log(stat, state[item][stat]);
                             if (stat === 'score') {
                                 this.setScore(state[item][stat]);
                             } else if (stat === 'kills') {
@@ -86,7 +85,7 @@ Character = Class.extend({
     hit: function(damage) {
         this.setHitPoints(this.hitPoints - damage);
 
-        if (this.health() <= 0) {
+        if (this.hitPoints <= 0) {
             this.kill();
         }
     },

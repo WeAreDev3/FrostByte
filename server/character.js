@@ -51,6 +51,7 @@ var Character = Class.extend({
         }
 
         this.hitPoints = this.maxHitPoints;
+        this.updateColor();
     },
     setHitPoints: function(hitPoints) {
         if (hitPoints > this.maxHitPoints) {
