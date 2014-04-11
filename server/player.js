@@ -26,9 +26,9 @@ var Player = Character.extend({
                 'blue': 254
             },
             'delta': {
-                'red': 77,
-                'green': 144,
-                'blue': 254
+                'red': 178,
+                'green': -89,
+                'blue': -254
             }
         };
 
@@ -98,7 +98,7 @@ var Player = Character.extend({
 
     },
     hit: function(damage) {
-        this.hitPoints -= damage;
+        this.setHitPoints(this.hitPoints - damage);
         console.log(this.name, 'got hit:', this.hitPoints);
 
         if (this.hitPoints <= 0) {
