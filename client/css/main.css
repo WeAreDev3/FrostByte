@@ -60,7 +60,6 @@ header #your-stats div {
 }
 
 header h2 {
-    font-family: 'Roboto';
     font-weight: 700;
     font-size: 10px;
     color: #404040;
@@ -84,7 +83,6 @@ header h3 span {
 }
 
 header h1 {
-    font-family: 'Roboto';
     font-weight: 300;
     margin: 2px 0;
     font-size: 20px;
@@ -150,7 +148,6 @@ header meter:-moz-meter-sub-optimum::-moz-meter-bar {
 }
 /*The 'PLAY' button*/
  button#play {
-    font-family:'Roboto', sans-serif;
     background: transparent;
     border: 1px solid #19004A;
     color: #19004A;
@@ -170,7 +167,6 @@ header meter:-moz-meter-sub-optimum::-moz-meter-bar {
     cursor: pointer;
 }
 #username {
-    font-family:'Roboto', sans-serif;
     height: 31px;
     width: 180;
     text-align: center;
@@ -241,7 +237,7 @@ input[type="radio"]:checked + label {
 }
 /*The 'creators Us' section in the bottom left*/
  #creators {
-    font-family:'Roboto Condensed';
+    font-family:'Roboto Condensed', sans-serif;
     position: fixed;
     bottom: 0;
     padding: 20px;
@@ -271,7 +267,7 @@ input[type="radio"]:checked + label {
 }
 /*See #creators above, almost same stuff*/
  #info {
-    font-family:'Roboto Condensed';
+    font-family:'Roboto Condensed', sans-serif;
     position: fixed;
     bottom: 0;
     padding: 20px;
