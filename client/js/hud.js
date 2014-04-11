@@ -7,6 +7,7 @@ Hud = Class.extend({
         this.healthMeter = document.getElementById('health-meter');
         this.score = document.getElementById('player-score');
         this.kills = document.getElementById('player-kills');
+        this.level = document.getElementById('game-level');
     },
     setHealth: function(hitPoints, maxHitPoints) {
         if (maxHitPoints !== undefined) {
@@ -23,5 +24,8 @@ Hud = Class.extend({
     },
     setKills: function(kills) {
         this.kills.textContent = Utils.formatNumber(kills);
+    },
+    setLevel: function(level) {
+        this.level.textContent = level;
     }
 });

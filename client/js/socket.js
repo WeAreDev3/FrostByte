@@ -58,16 +58,18 @@ socket.on('joinedLobby', function(data) {
 
     // If player reconnects, don't start another game
     if (typeof Game === 'undefined') {
-        Game = new GameClass(data.width, data.height);
+        Game = new GameClass(data.width, data.height, 1);
         console.log('New Game:', Game);
 
         Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
+        Game.currentPlayer.hud.setLevel(Game.level);
 
         Game.start();
     } else {
         Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
+        Game.currentPlayer.hud.setLevel(Game.level);
     }
 });
 
@@ -138,4 +140,9 @@ socket.on('update', function(update) {
             delete Game.bullets[id];
         }
     });
+
+    if (typeof update.game.level !== 'undefined') {
+        Game.level = update.game.level;
+        Game.currentPlayer.hud.setLevel(Game.level);
+    }
 });

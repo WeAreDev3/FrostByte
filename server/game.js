@@ -16,6 +16,7 @@ var Game = Class.extend({
 
         // Define any needed variables
         this.level = 1;
+        this.prevLevel = 1;
         this.spawningEnemies = 0;
         this.nextLevel();
 
@@ -171,7 +172,8 @@ var Game = Class.extend({
             var update = {
                 'players': {},
                 'enemies': {},
-                'bullets': {}
+                'bullets': {},
+                'game': {}
             };
 
             // Add the players state to the update: (x, y, direction, hitPoints, color)
@@ -188,6 +190,12 @@ var Game = Class.extend({
             self.forEachBullet(function(bullet, id) {
                 update.bullets[id] = bullet.getChangedState();
             });
+
+            // If the level changed, send that
+            if (self.prevLevel !== self.level) {
+                update.game.level =  self.level - 1;
+                self.prevLevel = self.level;
+            }
 
             // Send the data to each client
             self.forEachPlayer(function(player, id) {
