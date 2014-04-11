@@ -15,7 +15,7 @@ var Utils = {
     formatNumber: function(number) {
         if (number < 1000) { // 1,000
             return number;
-        } else if (number < 100000) { // 10,000
+        } else if (number < 100000) { // 100,000
             return (number / 1000).toFixed(1) + 'K';
         } else if (number < 1000000) { // 1,000,000
             return (number / 1000).toFixed(0) + 'K';
