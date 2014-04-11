@@ -33,6 +33,10 @@ var Bullet = Class.extend({
         this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
         this.x2 = this.x1 - 10 * Math.cos(this.direction);
         this.y2 = this.y1 - 10 * Math.sin(this.direction);
+
+        // prevX is used because if the bullet is going fast enough, on the next update
+        // it will be more than one length ahead, so it checks from the previous location
+        // for any hits
         this.prevX = this.x1;
 
         // Instantiate a previousState object (will come in handy below)
