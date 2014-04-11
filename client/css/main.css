@@ -10,7 +10,6 @@
 }
 /*The title at the top of the page*/
  #title {
-    font-family:'Iceberg', sans-serif;
     font-weight: 700;
     /*text-transform: uppercase;*/
     font-size: 100px;
