@@ -28,7 +28,40 @@ Character = Class.extend({
     },
     setState: function(state) {
         for (var item in state) {
-            this[item] = state[item];
+            switch (item) {
+                case 'direction':
+                    this.setDirection(state[item]);
+                    break;
+                case 'x':
+                    this.x = state[item];
+                    break;
+                case 'y':
+                    this.y = state[item];
+                    break;
+                case 'hitPoints':
+                    this.setHitPoints(state[item]);
+                    break;
+                case 'maxHitPoints':
+                    this.maxHitPoints = state[item];
+                    break;
+                case 'stats':
+                    for (var stat in state[item]) {
+                        if (state[item].hasOwnProperty(stat)) {
+                            console.log(stat, state[item][stat]);
+                            if (stat === 'score') {
+                                this.setScore(state[item][stat]);
+                            } else if (stat === 'kills') {
+                                this.setKills(state[item][stat]);
+                            }
+                        }
+                    }
+                    break;
+                case 'color':
+                    this.color = state[item];
+                    break;
+                case 'name':
+                    this.name = state[item];
+            }
         }
     },
     resetHitPoints: function(maxHitPoints) {
