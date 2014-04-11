@@ -201,9 +201,9 @@ GameClass = Class.extend({
     },
     resizeBrowser: function() {
         // Resize the game to be as big as possible while maintaining the proper aspect ratio
-        var headerHeight = document.querySelector('header').getBoundingClientRect().height,
+        var header = document.querySelector('header #your-stats'),
             width = window.innerWidth,
-            height = window.innerHeight - headerHeight,
+            height = window.innerHeight,
             canvas = document.getElementById('frame');
 
         if (width / height >= 1.6) {
@@ -215,6 +215,8 @@ GameClass = Class.extend({
             height = width / 1.6;
             canvas.height = height;
         }
+
+        header.style.marginLeft = width / -2 + 'px';
 
         leftOff = canvas.offsetLeft;
         topOff = canvas.offsetTop;
