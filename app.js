@@ -1,3 +1,9 @@
+/*
+** app.js is where the server starts its program.
+** It instantiates a new node.js server, opens its
+** port to any incoming clients, and configures socket.io.
+*/
+
 // Include all of the required node modules
 var http = require('http'),
     path = require('path'),
@@ -9,9 +15,10 @@ var http = require('http'),
     io = require('socket.io').listen(server),
     // Link all of our files together
     router = require('./server/router'),
+    // Instantiate the lobby object at the very beginning to globalize
     lobbies = {};
 
-// Set the main directory for client files to the client directory
+// Set the main directory for client files to the /client directory
 app.set("view options", {
     layout: false
 });
@@ -20,7 +27,7 @@ app.get('/changelog', function(req, res) {
     res.sendfile(__dirname + '/client/changelog.html');
 });
 
-// Configure the socket
+// Configure the websocket
 io.configure(function() {
 
     // Don't log unimportant (to us) stuff to the console
@@ -28,11 +35,12 @@ io.configure(function() {
 
     // Require a handshake before proceeding with a client
     io.set('authorization', function(handshakeData, callback) {
-        callback(null, true); // error first callback style
+        callback(null, true); // error-first callback style
     });
 
 });
 
+// Generates and returns a list of all of the lobbies on the server
 function createLobbyList() {
     var lobbyList = {};
 
@@ -47,6 +55,7 @@ function createLobbyList() {
     return lobbyList;
 }
 
+// Runs 'callback' on all connected clients
 function forEachSocket(callback) {
     var clients = io.sockets.clients();
 
@@ -67,6 +76,7 @@ io.on('connection', function(socket) {
         socket.emit('lobbyList', createLobbyList());
     });
 
+    // When the player requests that a new lobby be created, create a new lobby
     socket.on('newLobby', function() {
         var lobby = router.createLobby(5),
             listOfLobbies;
@@ -101,6 +111,7 @@ io.on('connection', function(socket) {
             router.findOpenLobby(lobbies).addPlayer(socket);
         }
 
+        // Do whatever the message requires
         socket.player.parseMessage(message);
     });
 
@@ -111,9 +122,11 @@ io.on('connection', function(socket) {
         if (socket.player) {
             var listOfLobbies;
 
-            console.log('And left the lobby:', socket.player.lobby.id);
+            // Remove the player & user from the lobby
+            console.log('Player left lobby', socket.player.lobby.id);
             socket.player.lobby.removePlayer(socket);
 
+            // If the user was the last one in the lobby, destroy the lobby
             if (!Object.keys(socket.player.lobby.clients).length) {
                 socket.player.lobby.remove(lobbies);
             }
