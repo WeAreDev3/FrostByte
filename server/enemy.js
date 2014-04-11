@@ -62,6 +62,10 @@ var Enemy = Character.extend({
                 closestDistance,
                 offScreen = false,
                 players = [];
+                // The movement can go down to as low as half speed based on health
+                // movement = (this.speed / 2) + (this.speed / 2)  * (this.hitPoints / this.maxHitPoints);
+
+            // movement = movement < 50 ? 50 : movement;
 
             // Regenerate health
             this.setHitPoints(this.hitPoints + (timeElapsed * 20));
