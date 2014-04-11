@@ -1,28 +1,21 @@
-/*
-** package.json defines everything about our app, including
-** its name, version, contributors, dependencies, and what bash
-** should do when it encounters specific scripts.
-*/
-
-
 {
     "name": "FrostByte",
     "version": "0.2.0",
     "author": "Dev3",
     "description": "A top down shooter",
     "contributors": [{
-        "name": "mkeedlinger" // Michael Edlinger
+        "name": "mkeedlinger" 
     }, {
-        "name": "janka102" // Jesse Smick
+        "name": "janka102" 
     }, {
-        "name": "talbenari1" // Tal Ben-Ari
+        "name": "talbenari1" 
     }],
     "scripts": {
-        // To start the server regularly, run 'npm start'
+        
         "start": "node app.js",
-        // To start the server with nodemon (which restarts the server every time code changes), run 'npm dev'
+        
         "dev": "nodemon --ignore client/ app.js",
-        // To start the server with nodemon and open a new client in the browser, run 'npm mdev'
+        
         "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
     },
     "repository": {
@@ -30,11 +23,11 @@
         "url": "https://github.com/dev3/frostbyte.git"
     },
     "dependencies": {
-        "express": "~3.2.4", // For extended app development
-        "socket.io": "~0.9.14", // For websocket support
-        "node-uuid": "*" // For unique identification capabilities
+        "express": "~3.2.4", 
+        "socket.io": "~0.9.14", 
+        "node-uuid": "*" 
     },
     "devDependencies": {
-        "nodemon": "*" // For better and more efficient coding
+        "nodemon": "*" 
     }
 }
