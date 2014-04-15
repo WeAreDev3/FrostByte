@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- NOTE: This is closed source software! -->
-<!-- While we can not stop you from seeing our client-side code, we kindly ask that you refrane from looking -->
 <head>
     <title>FrostByte - A top down shooter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,700|Roboto+Condensed:400,700|PT+Serif:400italic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Iceberg">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/main.css">
     <script type="text/javascript">
@@ -89,8 +86,28 @@
             <a href="/changelog" target="_blank" tabindex="-1">View Changelog</a>
         </div>
     </div>
+    <header>
+        <div id="your-stats">
+            <div id="health">
+                <h2>Health</h2>
+                <h3 id="player-health">75<span> / <span id="max-player-health">100</span></span></h3>
+                <meter id="health-meter" value="75" min="0" max="100" low="30"></meter>
+            </div>
+            <div id="score">
+                <h1>Level
+                    <span id="game-level">0</span>
+                </h1>
+                <h1>Score
+                    <span id="player-score">0</span>
+                </h1>
+                <h1>Kills
+                    <span id="player-kills">0</span>
+                </h1>
+            </div>
+        </div>
+    </header>
     <canvas id="frame">
-        Sorry, your browser does not support the HTML5 Canvas Element. Try using <a href="https://chrome.google.com" tabindex="-1">Google Chrome</a>
+        Sorry, your browser does not support the HTML5 Canvas Element. Try using a <a href="http://browsehappy.com/" tabindex="-1">modern browser</a>.
     </canvas>
     <!-- Required for websocket to work -->
     <script src="/socket.io/socket.io.js"></script>
@@ -105,10 +122,13 @@
     <script src="js/crosshairs.js"></script>
     <script src="js/character.js"></script>
     <script src="js/player.js"></script>
+    <script src="js/mainPlayer.js"></script>
     <script src="js/enemy.js"></script>
     <script src="js/gun.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/hud.js"></script>
     <script src="js/bullet.js"></script>
+    <script src="js/utils.js"></script>
 </body>
 
 </html>

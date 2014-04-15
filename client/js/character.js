@@ -1,3 +1,8 @@
+/*
+ * character.js (client) - a base class for player and enemy.
+ * It sets up functions that are used by both classes
+ */
+
 Character = Class.extend({
     init: function(id, x, y) {
         this.id = id;
@@ -22,13 +27,46 @@ Character = Class.extend({
         this.y = y;
     },
     setColor: function(r, g, b, a) {
-        // Assuming giving Red and Green and Blue seperatly and optionaly Alpha
+        // Assuming giving Red and Green and Blue separately and optional Alpha
         a = a !== undefined ? a : '1';
         this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
     },
     setState: function(state) {
+        // When an update comes in from the server, this is how that change takes effect
         for (var item in state) {
-            this[item] = state[item];
+            switch (item) {
+                case 'direction':
+                    this.setDirection(state[item]);
+                    break;
+                case 'x':
+                    this.x = state[item];
+                    break;
+                case 'y':
+                    this.y = state[item];
+                    break;
+                case 'hitPoints':
+                    this.setHitPoints(state[item]);
+                    break;
+                case 'maxHitPoints':
+                    this.maxHitPoints = state[item];
+                    break;
+                case 'stats':
+                    for (var stat in state[item]) {
+                        if (state[item].hasOwnProperty(stat)) {
+                            if (stat === 'score') {
+                                this.setScore(state[item][stat]);
+                            } else if (stat === 'kills') {
+                                this.setKills(state[item][stat]);
+                            }
+                        }
+                    }
+                    break;
+                case 'color':
+                    this.color = state[item];
+                    break;
+                case 'name':
+                    this.name = state[item];
+            }
         }
     },
     resetHitPoints: function(maxHitPoints) {
@@ -48,12 +86,13 @@ Character = Class.extend({
         }
     },
     healthGone: function() {
+        // Percentage from 0-1 of how much health is gone
         return 1 - (this.hitPoints / this.maxHitPoints);
     },
     hit: function(damage) {
-        this.hitPoints -= damage;
+        this.setHitPoints(this.hitPoints - damage);
 
-        if (this.health() <= 0) {
+        if (this.hitPoints <= 0) {
             this.kill();
         }
     },

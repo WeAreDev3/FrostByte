@@ -11,6 +11,11 @@ Player = Character.extend({
         this.setDirection(0);
         this.setColor(77, 144, 254);
         this.setGun('full-auto');
+
+        this.stats = {
+            'score': 0,
+            'kills': 0
+        };
     },
     setGun: function(gun) {
         // Can pass in an actual Gun object or the type of gun
@@ -19,6 +24,12 @@ Player = Character.extend({
         } else {
             this.gun = new Gun(this, gun);
         }
+    },
+    setScore: function(score) {
+        this.stats.score = score;
+    },
+    setKills: function(kills) {
+        this.stats.kills = kills;
     },
     draw: function(context, scale) {
         if (this.hitPoints > 0) {

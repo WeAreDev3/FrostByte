@@ -12,7 +12,7 @@ window.onload = function() {
         if (lobbyId) {
             document.getElementById('lobbies').classList.add('remove-display');
 
-            // Tell the  server we are ready to play the game (damn it, I lost the game)
+            // Tell the  server we are ready to play the game (I lost the game)
             socket.emit('play', {
                 lobbyId: lobbyId
             });
@@ -42,5 +42,6 @@ function setupGame() {
 function startGame() {
     document.getElementById('intro').classList.add('playing');
     document.getElementById('frame').classList.add('playing');
-    document.getElementsByTagName('html')[0].classList.add('playing');
+    document.querySelector('html').classList.add('playing');
+    document.querySelector('header').classList.add('playing');
 }

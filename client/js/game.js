@@ -1,3 +1,8 @@
+/*
+ * game.js (client) - Holds all information about the game itself
+ * including players, enemies, and bullets
+ */
+
 GameClass = Class.extend({
     init: function(width, height, level) {
         this.width = width;
@@ -31,6 +36,7 @@ GameClass = Class.extend({
         delete this.enemies[enemy.id];
     },
     spawnEnemies: function(number) {
+        // Spawn in from a random side at a random location on that side
         var location = {
             'x': 0,
             'y': 0
@@ -66,6 +72,8 @@ GameClass = Class.extend({
         this.spawnEnemies(16 * ((this.level + 1) / 2));
         this.level++;
     },
+    // These 'forEach' functions loop through all the respective types in the game
+    // and passes in the object and id to a callback. Useful in the updating process
     forEachPlayer: function(callback) {
         for (var playerID in this.players) {
             if (this.players.hasOwnProperty(playerID)) {
@@ -150,7 +158,7 @@ GameClass = Class.extend({
             }
         };
 
-        this.tmpInput = { // Used to see if input actaully needs to be sent to the server
+        this.tmpInput = { // Used to see if input actually needs to be sent to the server
             'u': false,
             'd': false,
             'l': false,
@@ -201,7 +209,8 @@ GameClass = Class.extend({
     },
     resizeBrowser: function() {
         // Resize the game to be as big as possible while maintaining the proper aspect ratio
-        var width = window.innerWidth,
+        var header = document.querySelector('header #your-stats'),
+            width = window.innerWidth,
             height = window.innerHeight,
             canvas = document.getElementById('frame');
 
@@ -214,6 +223,8 @@ GameClass = Class.extend({
             height = width / 1.6;
             canvas.height = height;
         }
+
+        header.style.marginLeft = width / -2 + 'px';
 
         leftOff = canvas.offsetLeft;
         topOff = canvas.offsetTop;

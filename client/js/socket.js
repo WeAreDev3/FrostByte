@@ -54,20 +54,22 @@ socket.on('lobbyList', function(lobbies) {
 socket.on('joinedLobby', function(data) {
     console.log('Joined the lobby:', data.id);
 
+    var hud = new Hud(document.getElementById('your-stats'));
+
     // If player reconnects, don't start another game
     if (typeof Game === 'undefined') {
-        Game = new GameClass(data.width, data.height);
+        Game = new GameClass(data.width, data.height, 1);
         console.log('New Game:', Game);
 
-        Game.currentPlayer = new Player(socket.socket.sessionid, username);
-        Game.currentPlayer.crosshairs = new Crosshairs(Game.currentPlayer);
+        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
+        Game.currentPlayer.hud.setLevel(Game.level);
 
         Game.start();
     } else {
-        Game.currentPlayer = new Player(socket.socket.sessionid, username);
-        Game.currentPlayer.crosshairs = new Crosshairs(Game.currentPlayer);
+        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
         Game.addPlayer(Game.currentPlayer);
+        Game.currentPlayer.hud.setLevel(Game.level);
     }
 });
 
@@ -86,6 +88,11 @@ socket.on('update', function(update) {
 
         // Apply the change
         Game.players[playerID].setState(update.players[playerID]);
+
+        if (playerID === Game.currentPlayer.id && update.players[playerID].hitPoints) {
+            // console.log('Your health changed: ', update.players[playerID].hitPoints);
+            Game.currentPlayer.hud.setHealth(update.players[playerID].hitPoints);
+        }
     }
 
     // Check if any players left
@@ -104,7 +111,7 @@ socket.on('update', function(update) {
         }
 
         // Apply the change
-        Game.enemies[enemyID].setState(update.enemies[enemyID])
+        Game.enemies[enemyID].setState(update.enemies[enemyID]);
     }
 
     // Check if any enemies died
@@ -126,11 +133,16 @@ socket.on('update', function(update) {
         Game.bullets[bulletID].setState(update.bullets[bulletID]);
     }
 
-    // Check if any bullets dissapeared
+    // Check if any bullets disappeared
     Game.forEachBullet(function(bullet, id) {
         if (!(id in update.bullets)) {
-            // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet dissapeared' + (id !== 'undefined' ? ': ' + id : ''));
+            // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet disappeared' + (id !== 'undefined' ? ': ' + id : ''));
             delete Game.bullets[id];
         }
     });
+
+    if (typeof update.game.level !== 'undefined') {
+        Game.level = update.game.level;
+        Game.currentPlayer.hud.setLevel(Game.level);
+    }
 });

@@ -1,15 +1,15 @@
-var Character = require('./character'),
-    UUID = require('node-uuid');
+var Character = require('./character'), // Enemy builds on top of Character
+    UUID = require('node-uuid'); // Ability to create unique IDs
 
 var Enemy = Character.extend({
     init: function(x, y, level, game) {
+        // Inherit functionality from Character
         this._super(UUID(), x, y);
 
+        // Give the enemy access to the game it's being used in
         this.game = game;
 
-        this.resetHitPoints(Math.round(70 + (level * Math.random() * 20)));
-        this.damageLeft = this.hitPoints; // Used for scoring purposes
-
+        // Define the starting and ending colors for enemies as they change health
         this.baseColor = {
             'start': {
                 'red': 255,
@@ -23,19 +23,26 @@ var Enemy = Character.extend({
             }
         };
 
+        // Define/reset all variables associated with the enemy
+        this.resetHitPoints(Math.round(70 + (level * Math.random() * 20)));
+        this.damageLeft = this.hitPoints; // Used for scoring purposes
         this.setSize(10);
         this.setSpeed(Math.round(50 + (level * Math.random() * 10)));
         this.setMobility(10);
         this.setDirection(0);
         this.updateColor();
-        this.damage = 5;
+        this.damage = Math.round((this.hitPoints / 40) + (this.speed / 20));
 
         this.alpha = 1;
     },
+
+    // Redefine what happens when the player is hit
     hit: function(damage) {
-        this.hitPoints -= damage;
+        // Remove the hitpoints from the total, based on damage
+        this.setHitPoints(this.hitPoints - damage);
         this.damageLeft -= damage;
 
+        // Don't overshoot the loss in health
         if (this.hitPoints < 0) {
             this.hitPoints = 0;
         }
@@ -44,6 +51,7 @@ var Enemy = Character.extend({
             this.damageLeft = -1;
         }
 
+        // Set the color to a new color
         this.updateColor();
     },
     update: function(timeElapsed) {
@@ -54,8 +62,12 @@ var Enemy = Character.extend({
                 closestDistance,
                 offScreen = false,
                 players = [];
+                // The movement can go down to as low as half speed based on health
+                // movement = (this.speed / 2) + (this.speed / 2)  * (this.hitPoints / this.maxHitPoints);
 
-            // Regen health
+            // movement = movement < 50 ? 50 : movement;
+
+            // Regenerate health
             this.setHitPoints(this.hitPoints + (timeElapsed * 20));
 
             // Create an array of all the players to loop through them with Array.reduce()
@@ -81,7 +93,7 @@ var Enemy = Character.extend({
                     return prevPlayer;
                 });
 
-                this.setDirection(+Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
+                this.setDirection(Math.atan2((nearestPlayer.y - this.y), (nearestPlayer.x - this.x).toFixed(3)));
 
                 // If there is only one player closestDistance wouldn't be defined yet
                 if (closestDistance === undefined) {
@@ -98,7 +110,7 @@ var Enemy = Character.extend({
 
             this.setPosition(this.x + this.speed * Math.cos(this.direction) * timeElapsed, this.y + this.speed * Math.sin(this.direction) * timeElapsed);
 
-            // Make sure the enemy can't off the screen
+            // Make sure the enemy can't go off the screen (they logically shouldn't, but hey, you never know)
             if (this.x < 0) {
                 this.setPosition(0, this.y);
                 offScreen = true;
@@ -134,4 +146,5 @@ var Enemy = Character.extend({
     }
 });
 
+// Make the Enemy class accessible to other modules
 module.exports = Enemy;

@@ -1,3 +1,8 @@
+/*
+ * crosshairs.js - this is what replaces the mouse on the canvas
+ * and determines where the player is facing/firing at
+ */
+
 Crosshairs = Class.extend({
     init: function(player) {
         this.player = player;
@@ -45,6 +50,7 @@ Crosshairs = Class.extend({
         }
     },
     update: function(timeElapsed) {
+        // The actual spot the player is firing at laggs behind the cursor a bit
         if (this.player.hitPoints > 0) {
             var mouseXDiff = Game.input.mouse.drawnX - this.x,
                 mouseYDiff = Game.input.mouse.drawnY - this.y,

@@ -26,9 +26,9 @@ var Player = Character.extend({
                 'blue': 254
             },
             'delta': {
-                'red': 77,
-                'green': 144,
-                'blue': 254
+                'red': 178,
+                'green': -89,
+                'blue': -254
             }
         };
 
@@ -98,7 +98,7 @@ var Player = Character.extend({
 
     },
     hit: function(damage) {
-        this.hitPoints -= damage;
+        this.setHitPoints(this.hitPoints - damage);
         console.log(this.name, 'got hit:', this.hitPoints);
 
         if (this.hitPoints <= 0) {
@@ -108,6 +108,51 @@ var Player = Character.extend({
     kill: function() {
         // this.lobby.removePlayer(this);
         console.log('Booted!!!');
+    },
+    getChangedState: function() {
+        var currentState = {
+            'x': this.x,
+            'y': this.y,
+            'direction': this.direction,
+            'maxHitPoints': this.maxHitPoints,
+            'hitPoints': this.hitPoints,
+            'color': this.color,
+            'name': this.name,
+            'stats': {
+                'score': this.stats.score,
+                'kills': this.stats.kills
+            }
+        },
+            changes = {};
+
+        if (!this.forceUpdate) {
+            for (var item in currentState) {
+                if (currentState.hasOwnProperty(item)) {
+                    if (item === 'stats') {
+                        for (var stat in currentState[item]) {
+                            if (currentState[item].hasOwnProperty(stat)) {
+                                if (typeof this.previousState[item] === 'undefined' || currentState[item][stat] !== this.previousState[item][stat]) {
+                                    if (typeof changes.stats === 'undefined') {
+                                        changes.stats = {};
+                                        // console.log('added stat', stat, currentState[item][stat]);
+                                    }
+
+                                    changes.stats[stat] = currentState[item][stat];
+                                }
+                            }
+                        }
+                    } else if (currentState[item] !== this.previousState[item]) {
+                        changes[item] = currentState[item];
+                    }
+                }
+            }
+        } else {
+            changes = currentState;
+            this.forceUpdate = false;
+        }
+
+        this.previousState = currentState;
+        return changes;
     },
     update: function(timeElapsed) {
         if (this.hitPoints > 0) {
