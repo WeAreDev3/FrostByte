@@ -1,3 +1,8 @@
+/*
+ * enemy.js (client) - a child of the character class. It initializes
+ * properties on the enemy and defines the draw and update function
+ */
+
 Enemy = Character.extend({
     init: function(id, state) {
         this._super(id, state.x, state.y);
@@ -34,7 +39,7 @@ Enemy = Character.extend({
         context.fill();
         context.closePath();
 
-        // Draws death animation
+        // Draws death animation - shards coming out of center
         if (this.lines.length) {
             for (var i = this.lines.length - 1; i >= 0; i--) {
                 line = this.lines[i];
@@ -50,6 +55,7 @@ Enemy = Character.extend({
             }
         }
 
+        // And a circle expanding from the center
         if (this.hitPoints <= 0) {
             context.fillStyle = "rgba(" + (this.alpha > .6 ? 95 : 43) + ",149,238," + (this.alpha > .3 ? 1 : this.alpha + .3) + ")";
             context.beginPath();

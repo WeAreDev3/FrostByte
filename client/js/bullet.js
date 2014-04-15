@@ -1,7 +1,7 @@
 /*
 ** bullet.js (client-side) defines the Bullet class,
 ** giving it the ability to update on the client before
-** the next server update (cleint smoothing), 
+** the next server update (client smoothing), 
 ** and draw
 */
 
@@ -26,7 +26,7 @@ Bullet = Class.extend({
         this.previousState = {};
     },
     getChangedState: function() {
-        // Get only the properies that changed
+        // Get only the properties that changed
         var currentState = {
             'gun': {
                 'player': {

@@ -1,3 +1,8 @@
+/*
+ * character.js (client) - a base class for player and enemy.
+ * It sets up functions that are used by both classes
+ */
+
 Character = Class.extend({
     init: function(id, x, y) {
         this.id = id;
@@ -22,11 +27,12 @@ Character = Class.extend({
         this.y = y;
     },
     setColor: function(r, g, b, a) {
-        // Assuming giving Red and Green and Blue seperatly and optionaly Alpha
+        // Assuming giving Red and Green and Blue separately and optional Alpha
         a = a !== undefined ? a : '1';
         this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
     },
     setState: function(state) {
+        // When an update comes in from the server, this is how that change takes effect
         for (var item in state) {
             switch (item) {
                 case 'direction':
@@ -80,6 +86,7 @@ Character = Class.extend({
         }
     },
     healthGone: function() {
+        // Percentage from 0-1 of how much health is gone
         return 1 - (this.hitPoints / this.maxHitPoints);
     },
     hit: function(damage) {

@@ -133,10 +133,10 @@ socket.on('update', function(update) {
         Game.bullets[bulletID].setState(update.bullets[bulletID]);
     }
 
-    // Check if any bullets dissapeared
+    // Check if any bullets disappeared
     Game.forEachBullet(function(bullet, id) {
         if (!(id in update.bullets)) {
-            // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet dissapeared' + (id !== 'undefined' ? ': ' + id : ''));
+            // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet disappeared' + (id !== 'undefined' ? ': ' + id : ''));
             delete Game.bullets[id];
         }
     });
