@@ -13,6 +13,7 @@ var Game = Class.extend({
         this.players = {};
         this.enemies = {};
         this.bullets = {};
+        this.forceUpdate = true;
 
         // Define any needed variables
         this.level = 1;
@@ -192,9 +193,11 @@ var Game = Class.extend({
             });
 
             // If the level changed, send that
-            if (self.prevLevel !== self.level) {
+            if (self.prevLevel !== self.level || self.forceUpdate) {
                 update.game.level =  self.level - 1;
                 self.prevLevel = self.level;
+
+                self.forceUpdate = false;
             }
 
             // Send the data to each client

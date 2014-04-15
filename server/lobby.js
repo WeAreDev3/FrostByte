@@ -27,6 +27,8 @@ var Lobby = Class.extend({
         this.clients[socket.id] = socket;
         this.game.players[socket.id] = new Player(socket, this);
 
+        this.game.forceUpdate = true;
+
         this.game.forEachPlayer(function(player, id) {
             player.forceUpdate = true;
         });
