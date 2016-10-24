@@ -16,8 +16,8 @@
   ],
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon --ignore client/ app.js",
-    "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
+    "dev": "webpack --watch & nodemon -i client/ app.js",
+    "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run dev"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,11 @@
     "socket.io": "^1.5.0"
   },
   "devDependencies": {
-    "nodemon": "*"
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "nodemon": "*",
+    "standard": "^8.4.0",
+    "webpack": "^1.13.2"
   }
 }

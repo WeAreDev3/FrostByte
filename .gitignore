@@ -2,6 +2,9 @@
 npm-debug.log
 node_modules/
 
+## Webpack
+client/bundle.js*
+
 # Mac crap
 .DS_Store
 

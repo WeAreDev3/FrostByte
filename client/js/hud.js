@@ -1,31 +1,36 @@
-Hud = Class.extend({
-    init: function(hud) {
+import { formatNumber } from './utils'
 
-        this.hud = hud;
-        this.playerHealth = document.getElementById('player-health').childNodes[0];
-        this.maxPlayerHealth = document.getElementById('max-player-health');
-        this.healthMeter = document.getElementById('health-meter');
-        this.score = document.getElementById('player-score');
-        this.kills = document.getElementById('player-kills');
-        this.level = document.getElementById('game-level');
-    },
-    setHealth: function(hitPoints, maxHitPoints) {
-        if (maxHitPoints !== undefined) {
-            this.healthMeter.max = maxHitPoints;
-            this.healthMeter.low = maxHitPoints * 0.3;
-            this.maxPlayerHealth.textContent = maxHitPoints;
-        }
+export default class Hud {
+  constructor (hudElement) {
+    this.hud = hudElement
+    this.playerHealth = hudElement.querySelector('#player-health').childNodes[0]
+    this.maxPlayerHealth = hudElement.querySelector('#max-player-health')
+    this.healthMeter = hudElement.querySelector('#health-meter')
+    this.score = hudElement.querySelector('#player-score')
+    this.kills = hudElement.querySelector('#player-kills')
+    this.level = hudElement.querySelector('#game-level')
+  }
 
-        this.healthMeter.value = hitPoints;
-        this.playerHealth.nodeValue = hitPoints;
-    },
-    setScore: function(score) {
-        this.score.textContent = Utils.formatNumber(score);
-    },
-    setKills: function(kills) {
-        this.kills.textContent = Utils.formatNumber(kills);
-    },
-    setLevel: function(level) {
-        this.level.textContent = level;
+  setHealth (hitPoints, maxHitPoints) {
+    if (maxHitPoints !== undefined) {
+      this.healthMeter.max = maxHitPoints
+      this.healthMeter.low = maxHitPoints * 0.3
+      this.maxPlayerHealth.textContent = maxHitPoints
     }
-});
+
+    this.healthMeter.value = hitPoints
+    this.playerHealth.nodeValue = hitPoints
+  }
+
+  setScore (score) {
+    this.score.textContent = formatNumber(score)
+  }
+
+  setKills (kills) {
+    this.kills.textContent = formatNumber(kills)
+  }
+
+  setLevel (level) {
+    this.level.textContent = level
+  }
+}
