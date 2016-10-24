@@ -1,6 +1,6 @@
 socket = io.connect();
 socket.on('connect', function() {
-    console.log('Connected successfully as', socket.socket.sessionid);
+    console.log('Connected successfully as', socket.id);
 });
 
 socket.on('lobbyList', function(lobbies) {
@@ -61,13 +61,13 @@ socket.on('joinedLobby', function(data) {
         Game = new GameClass(data.width, data.height, 1);
         console.log('New Game:', Game);
 
-        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
+        Game.currentPlayer = new MainPlayer(socket.id, username, hud);
         Game.addPlayer(Game.currentPlayer);
         Game.currentPlayer.hud.setLevel(Game.level);
 
         Game.start();
     } else {
-        Game.currentPlayer = new MainPlayer(socket.socket.sessionid, username, hud);
+        Game.currentPlayer = new MainPlayer(socket.id, username, hud);
         Game.addPlayer(Game.currentPlayer);
         Game.currentPlayer.hud.setLevel(Game.level);
     }

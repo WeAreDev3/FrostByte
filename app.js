@@ -27,19 +27,6 @@ app.get('/changelog', function(req, res) {
     res.sendfile(__dirname + '/client/changelog.html');
 });
 
-// Configure the websocket
-io.configure(function() {
-
-    // Don't log unimportant (to us) stuff to the console
-    io.set('log level', 0);
-
-    // Require a handshake before proceeding with a client
-    io.set('authorization', function(handshakeData, callback) {
-        callback(null, true); // error-first callback style
-    });
-
-});
-
 // Generates and returns a list of all of the lobbies on the server
 function createLobbyList() {
     var lobbyList = {};
@@ -57,10 +44,11 @@ function createLobbyList() {
 
 // Runs 'callback' on all connected clients
 function forEachSocket(callback) {
-    var clients = io.sockets.clients();
+    var clients = io.sockets.connected;
+    var clientIds = Object.keys(clients);
 
-    for (var i = clients.length - 1; i >= 0; i--) {
-        callback(clients[i]);
+    for (var i = clientIds.length - 1; i >= 0; i--) {
+        callback(clients[clientIds[i]]);
     }
 }
 
@@ -89,7 +77,6 @@ io.on('connection', function(socket) {
                 socket.emit('lobbyList', listOfLobbies);
             }
         });
-        
     });
 
     // When the player is ready to play, add them to an open lobby

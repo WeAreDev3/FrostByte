@@ -10,8 +10,4 @@ Did you...
 - Document any bugs created or fixed as a result of your changes in our Issues?
 
 ### Resources
-Dev3 FrostByte wiki:  [Home](http://gitlab.mke8.me/dev3/frostbyte/wikis/home)  |  [Installing/Using](http://gitlab.mke8.me/dev3/frostbyte/wikis/How-to-install)
-
 A lot of the time they're down, but you can [play on our servers!](http://frostbyte.mke8.me/)
-
-Installing node.js: [node.js Wiki](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)

@@ -1,33 +1,34 @@
 {
-    "name": "FrostByte",
-    "version": "0.2.0",
-    "author": "Dev3",
-    "description": "A top down shooter",
-    "contributors": [{
-        "name": "mkeedlinger" 
-    }, {
-        "name": "janka102" 
-    }, {
-        "name": "talbenari1" 
-    }],
-    "scripts": {
-        
-        "start": "node app.js",
-        
-        "dev": "nodemon --ignore client/ app.js",
-        
-        "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
+  "name": "FrostByte",
+  "version": "0.3.0",
+  "author": "Dev3",
+  "description": "A top down shooter",
+  "contributors": [
+    {
+      "name": "mkeedlinger"
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/dev3/frostbyte.git"
+    {
+      "name": "janka102"
     },
-    "dependencies": {
-        "express": "~3.2.4", 
-        "socket.io": "~0.9.14", 
-        "node-uuid": "*" 
-    },
-    "devDependencies": {
-        "nodemon": "*" 
+    {
+      "name": "talbenari1"
     }
+  ],
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --ignore client/ app.js",
+    "mdev": "hash google-chrome 2>/dev/null && google-chrome ./resources/redirect.html || open ./resources/redirect.html; npm run-script dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WeAreDev3/frostbyte.git"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "node-uuid": "*",
+    "socket.io": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "*"
+  }
 }
