@@ -1,30 +1,25 @@
-var Utils = {
-    random: function(range) {
-        return Math.random() * range;
-    },
-    randomInt: function(range) {
-        return Math.floor(Math.random() * range);
-    },
-    randomRange: function(min, max) {
-        return min + (Math.random() * (max - min));
-    },
-    randomRangeInt: function(min, max) {
-        return min + Math.floor(Math.random() * (max - min + 1));
+// Calculates the distance between two points
+exports.distance = (x1, y1, x2, y2) => Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
 
-    },
-    formatNumber: function(number) {
-        if (number < 1000) { // 1,000
-            return number;
-        } else if (number < 100000) { // 100,000
-            return (number / 1000).toFixed(1) + 'K';
-        } else if (number < 1000000) { // 1,000,000
-            return (number / 1000).toFixed(0) + 'K';
-        } else if (number < 10000000) { // 10,000,000
-            return (number / 1000000).toFixed(1) + 'M';
-        } else if (number < 1000000000) { // 1,000,000,000
-            return (number / 1000000).toFixed(0) + 'M';
-        }
-    }
-};
+// Formats a number with 'K' and 'M' postfixes if needed
+exports.formatNumber = number => {
+  if (number < 1000) return number
+  if (number < 100000) return (number / 1000).toFixed(1) + 'K'
+  if (number < 1000000) return (number / 1000).toFixed(0) + 'K'
+  if (number < 10000000) return (number / 1000).toFixed(1) + 'M'
+  if (number < 100000000) return (number / 1000).toFixed(0) + 'M'
+}
 
-module.exports = Utils;
+// Returns a random number between 0 and max
+// TODO: merge with randomRange() below
+exports.random = max => Math.random() * max
+
+// Returns a random integer between 0 and max
+// TODO: merge with randomRangeInt() below
+exports.randomInt = range => Math.floor(Math.random() * range) // TODO: floor or round?
+
+// Returns a random number between min and max
+exports.randomRange = (min, max) => min + (Math.random() * (max - min))
+
+// Returns a random integer between min and max
+exports.randomRangeInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1))
