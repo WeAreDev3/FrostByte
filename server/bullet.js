@@ -1,141 +1,107 @@
-/*
-** bullet.js (server-side) defines the Bullet class,
-** giving it the ability to update its stats and check
-** for specific events that may occur, such as touching
-** an enemy, allowing it to behave accordingly.
-*/
+import * as uuid from 'uuid'
+import * as utils from './utils'
 
-var Class = require('./class'), // John Resig's Class Inheritance
-    UUID = require('node-uuid'); // UUID functionality
+export default class Bullet {
+  constructor (gun, direction) {
+    this.id = uuid()
+    this.gun = gun
+    this.speed = this.gun.bulletSpeed
+    this.direction = direction || this.gun.player.direction // TODO: improve optional case
+    this.direction += gun.accuracy * 0.001 * (2 * Math.random() - 1) // TODO: handle magic numbers
 
-// Define the Bullet class
-var Bullet = Class.extend({
+    this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction)
+    this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction)
+    this.x2 = this.x1 - 10 * Math.cos(this.direction)
+    this.y2 = this.xy1 - 10 * Math.sin(this.direction)
 
-    // init will get called whenever a new bullet is created
-    init: function(gun, direction) {
-        // Give the bullet a unique ID
-        this.id = UUID();
+    this.prevX = this.x1
 
-        // Map a gun to the bullet
-        this.gun = gun;
+    this.previousState = {}
+  }
 
-        // Give the bullet a speed
-        this.speed = this.gun.bulletSpeed;
-
-        // Set the direction in which the bullet will travel
-        this.direction = direction ? direction : this.gun.player.direction;
-
-        // Give the bullet some directional inaccuracy, depending on the bullet accuracy
-        this.direction += gun.accuracy * 0.001 * (2 * Math.random() - 1);
-
-        // Define the initial position of the bullet (away from the player body, so it won't hit it)
-        this.x1 = this.gun.player.x - (5 + this.gun.player.size) * Math.cos(this.direction);
-        this.y1 = this.gun.player.y - (5 + this.gun.player.size) * Math.sin(this.direction);
-        this.x2 = this.x1 - 10 * Math.cos(this.direction);
-        this.y2 = this.y1 - 10 * Math.sin(this.direction);
-
-        // prevX is used because if the bullet is going fast enough, on the next update
-        // it will be more than one length ahead, so it checks from the previous location
-        // for any hits
-        this.prevX = this.x1;
-
-        // Instantiate a previousState object (will come in handy below)
-        this.previousState = {};
-    },
-    getChangedState: function() {
-        // Create an object denoting the current state of the bullet
-        var currentState = {
-            'gun': {
-                'player': {
-                    'id': this.gun.player.id,
-                    'x': this.x1,
-                    'y': this.y1,
-                    'direction': this.direction,
-                    'size': this.gun.player.size
-                },
-                'damage': this.gun.damage,
-                'bulletSpeed': this.speed
-            }
-        },
-            // Instantiate a changes object
-            changes = {};
-
-        // If the current state of each item in currentState matches the previous state, remove it
-        for (var item in currentState) {
-            if (currentState.hasOwnProperty(item)) {
-                if (currentState[item] !== this.previousState[item]) {
-                    changes[item] = currentState[item];
-                }
-            }
+  getChangedState () {
+    // TODO: convert currentState to an instance of a class
+    let currentState = {
+      'gun': {
+        'player': {
+          'id': this.gun.player.id,
+          'x': this.x1,
+          'y': this.y1,
+          'direction': this.direction,
+          'size': this.gun.player.size
         }
-        // changes should now only reflect differences between previousState and currentState
-
-        // Set the previousState to the currentState
-        this.previousState = currentState;
-
-        // Return the changes to whatever asked for it
-        return changes;
-    },
-    update: function(timeElapsed) {
-        var game = this.gun.player.lobby.game,
-            self = this;
-
-        // If the bullet has gone off the screen, remove it from the game
-        if (this.x1 < 0 || this.x1 > game.width || this.y1 < 0 || this.y1 > game.height) {
-            game.removeBullet(this);
-            return;
-        }
-
-        // m is the slope of the line, m2 is opposite reciprocal, or the slope of the perpendicular line
-        var m = (this.y2 - this.y1) / (this.x2 - this.x1),
-            m2 = -1 / m,
-            intersection = [];
-
-        // Find the first enemy to be touching the bullet, and damage them
-        game.forEachEnemy(function(enemy, id) {
-            // The x and y intersect of the line and enemy
-            intersection[0] = ((enemy.x * -m2) + (self.x1 * m) + enemy.y - self.y1) / (m - m2);
-            intersection[1] = m * intersection[0] - (m * self.x1) + self.y1;
-
-            // Only check alive enemies, aka. not ones that are fading out
-            if (enemy.healthGone() < 1) {
-
-                // If the enemy intersects with the line
-                if (self.x2 > self.prevX ? intersection[0] > self.prevX && intersection[0] < self.x2 : intersection[0] < self.prevX && intersection[0] > self.x2) {
-                    var distanceFromBulletLine = Math.sqrt(Math.pow((enemy.x - intersection[0]), 2) + Math.pow((enemy.y - intersection[1]), 2));
-
-                    // And is the correct distance from the line
-                    if (distanceFromBulletLine <= enemy.size) {
-                        enemy.hit(self.gun.damage);
-
-                        // Update stats
-                        if (enemy.damageLeft >= 0) {
-                            self.gun.player.stats.score += Math.round((enemy.speed / 70) * self.gun.damage);
-                            self.gun.player.lifeScore += Math.round((enemy.speed / 70) * self.gun.damage);
-                            self.gun.player.stats.damage += self.gun.damage;
-                        }
-
-                        if (enemy.hitPoints <= 0) {
-                            self.gun.player.stats.kills++;
-                            // console.log(self.gun.player.name, "killed enemy #" + self.gun.player.stats.kills + ". Score: ", self.gun.player.stats.score);
-                        }
-
-                        // Destroy the bullet
-                        game.removeBullet(self);
-                        return true;
-                    }
-                }
-            }
-        });
-
-        // If the bullet hasn't already been destroyed from the above conditions, update its stats
-        this.prevX = this.x1;
-        this.x1 -= this.speed * Math.cos(this.direction) * timeElapsed * 100;
-        this.y1 -= this.speed * Math.sin(this.direction) * timeElapsed * 100;
-        this.x2 = this.x1 - 10 * Math.cos(this.direction);
-        this.y2 = this.y1 - 10 * Math.sin(this.direction);
+      },
+      'damage': this.gun.damage,
+      'bulletSpeed': this.speed
     }
-});
 
-// Allow the Bullet class to be accessible by other modules
-module.exports = Bullet;
+    // TODO: externalize this function (as a 'diff' method in the State class mentioned above)
+    let changes = {}
+    for (let item in currentState) {
+      if (currentState.hasOwnProperty(item)) {
+        if (currentState[item] !== this.previousState[item]) {
+          changes[item] = currentState[item]
+        }
+      }
+    }
+
+    this.previousState = currentState
+
+    return changes
+  }
+
+  update (timeElapsed) {
+    let game = this.gun.player.lobby.game
+
+    // TODO: make this predicate a call to the game object, passing it x1, y1
+    if (this.x1 < 0 || this.x1 > game.width || this.y1 > game.height) {
+      game.removeBullet(this)
+      return
+    }
+
+    let slope = (this.y2 - this.y1) / (this.x2 - this.x1) // slope of bullet line
+    // TODO: replace intersection with 2 variables or similar structure
+    let intersection = [] // pair of intersection points
+
+    game.forEachEnemy((enemy, id) => {
+      if (enemy.healthGone() < 1) {
+        // TODO: the line below may not be completely correct
+        intersection[0] = ((enemy.x / slope) + (this.x1 * slope) + enemy.y - this.y1) / (slope + 1 / slope)
+        intersection[1] = slope * intersection[0] - (slope * this.x1) + this.y1
+
+        // Check if the enemy intersects with path of the bullet
+        if (this.x2 > this.prevX
+          ? intersection[0] > this.prevX && intersection[0] < this.x2
+          : intersection[0] < this.prevX && intersection[0] > this.x2) {
+          let distanceFromBulletLine = utils.distance(enemy.x, enemy.y, intersection[0], intersection[1])
+
+          if (distanceFromBulletLine <= enemy.size) {
+            enemy.hit(this.gun.damage)
+
+            if (enemy.damageLeft >= 0) {
+              // TODO: handle magic number
+              let score = Math.round((enemy.speed / 70) * this.gun.damage)
+              this.gun.player.stats.score += score
+              this.gun.player.stats.lifeScore += score
+              this.gun.player.stats.damage += this.gun.damage
+            }
+
+            if (enemy.hitPoints <= 0) {
+              this.gun.player.stats.kills++
+            }
+
+            game.removeBullet(this)
+            return true // TODO: what's the point of the true?
+          }
+        }
+      }
+    })
+
+    // If the bullet hasn't already been destroyed, update its stats
+    this.prevX = this.x1
+    this.x1 -= this.speed * Math.cos(this.direction) * timeElapsed * 100
+    this.y1 -= this.speed * Math.sin(this.direction) * timeElapsed * 100
+    this.x2 = this.x1 - 10 * Math.cos(this.direction)
+    this.y2 = this.y1 - 10 * Math.sin(this.direction)
+  }
+}
