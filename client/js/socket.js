@@ -1,148 +1,149 @@
-socket = io.connect();
-socket.on('connect', function() {
-    console.log('Connected successfully as', socket.id);
-});
+import Game from './game'
+import MainPlayer from './mainplayer'
+import Player from './player'
+import Enemy from './enemy'
+import Bullet from './bullet'
+import Hud from './hud'
+import io from 'socket.io'
 
-socket.on('lobbyList', function(lobbies) {
-    var lobbyTable = document.getElementById('lobbies').querySelector('table'),
-        count = 0,
-        tr,
-        td;
+const socket = io()
+export default socket
 
-    for (lobby in lobbies) {
-        if (lobbies.hasOwnProperty(lobby)) {
-            if (lobbyTable.innerText.indexOf(lobby) === -1) {
-                // Add a new lobby to the table
-                tr = document.createElement('tr');
+let game = null
 
-                td = document.createElement('td');
-                td.innerText = lobby;
+socket.on('connect', () => {
+  console.log(`Connected successfully as ${socket.id}`)
+})
 
-                tr.appendChild(td);
+socket.on('lobbyList', (lobbies) => {
+  let lobbyTable = document.querySelector('#lobbies table')
+  let lobbyRow = 0
 
-                td = document.createElement('td');
-                td.innerText = lobbies[lobby].playerCount;
+  for (let lobby in lobbies) {
+    if (lobbies.hasOwnProperty(lobby)) {
+      if (lobbyTable.innerText.indexOf(lobby) === -1) {
+        // Add a new lobby to the table
+        let row = document.createElement('tr')
+        let td = document.createElement('td')
+        td.textContent = lobby
+        row.appendChild(td)
 
-                tr.appendChild(td);
+        td = document.createElement('td')
+        td.textContent = lobbies[lobby].playerCount
+        row.appendChild(td)
 
-                tr.onclick = function(event) {
-                    var self = event.target.tagName === "TR" ? event.target : event.target.parentNode,
-                        siblings = self.parentNode.childNodes;
+        row.addEventListener('click', (event) => {
+          let row = event.target.tagName === 'TR' ? event.target : event.target.parentNode
+          let selected = row.parentNode.querySelectorAll('.selected')
 
-                    for (var i = siblings.length - 1; i >= 0; i--) {
-                        if (siblings[i].tagName) {
-                            siblings[i].classList.remove('selected');
-                        }
-                    }
+          for (let i = selected.length - 1; i >= 0; i--) {
+            selected[i].classList.remove('selected')
+          }
 
-                    self.classList.add('selected');
-                };
+          row.classList.add('selected')
+        })
 
-                lobbyTable.querySelector('tbody').appendChild(tr);
-            } else {
+        lobbyTable.querySelector('tbody').appendChild(tr)
+      } else {
                 // Update the lobby size
-                lobbyTable.querySelectorAll('tbody tr')[count].querySelector('td:last-of-type').innerText = lobbies[lobby].playerCount;
-            }
+        lobbyTable.querySelectorAll('tbody tr')[lobbyRow].querySelector('td:last-of-type').innerText = lobbies[lobby].playerCount
+      }
 
-            count++;
-        }
+      lobbyRow++
     }
+  }
 
-    lobbyTable.parentElement.classList.remove('remove-display');
-});
+  lobbyTable.parentElement.classList.remove('remove-display')
+})
 
-socket.on('joinedLobby', function(data) {
-    console.log('Joined the lobby:', data.id);
+socket.on('joinedLobby', (data) => {
+  console.log(`Joined the lobby: ${data.id}`)
 
-    var hud = new Hud(document.getElementById('your-stats'));
+  let hud = new Hud(document.getElementById('your-stats'))
 
     // If player reconnects, don't start another game
-    if (typeof Game === 'undefined') {
-        Game = new GameClass(data.width, data.height, 1);
-        console.log('New Game:', Game);
+  if (game == null) {
+    game = new Game(data.width, data.height, 1)
+    console.log('New Game:', game)
 
-        Game.currentPlayer = new MainPlayer(socket.id, username, hud);
-        Game.addPlayer(Game.currentPlayer);
-        Game.currentPlayer.hud.setLevel(Game.level);
+    game.currentPlayer = new MainPlayer(socket.id, username, hud)
+    game.addPlayer(game.currentPlayer)
+    game.currentPlayer.hud.setLevel(game.level)
 
-        Game.start();
-    } else {
-        Game.currentPlayer = new MainPlayer(socket.id, username, hud);
-        Game.addPlayer(Game.currentPlayer);
-        Game.currentPlayer.hud.setLevel(Game.level);
-    }
-});
+    game.start()
+  } else {
+    game.currentPlayer = new MainPlayer(socket.id, username, hud)
+    game.addPlayer(game.currentPlayer)
+    game.currentPlayer.hud.setLevel(game.level)
+  }
+})
 
-socket.on('update', function(update) {
-    var playerID,
-        enemyID,
-        bulletID;
-
+socket.on('update', (update) => {
     // For every player in the update
-    for (playerID in update.players) {
+  for (let playerID in update.players) {
         // Check if they are new
-        if (!Game.players[playerID]) {
-            Game.addPlayer(new Player(playerID, update.players[playerID].name));
-            console.log('Player added:', Game.players[playerID]);
-        }
+    if (!game.players[playerID]) {
+      game.addPlayer(new Player(playerID, update.players[playerID].name))
+      console.log('Player added:', game.players[playerID])
+    }
 
         // Apply the change
-        Game.players[playerID].setState(update.players[playerID]);
+    game.players[playerID].setState(update.players[playerID])
 
-        if (playerID === Game.currentPlayer.id && update.players[playerID].hitPoints) {
+    if (playerID === game.currentPlayer.id && update.players[playerID].hitPoints) {
             // console.log('Your health changed: ', update.players[playerID].hitPoints);
-            Game.currentPlayer.hud.setHealth(update.players[playerID].hitPoints);
-        }
+      game.currentPlayer.hud.setHealth(update.players[playerID].hitPoints)
     }
+  }
 
     // Check if any players left
-    Game.forEachPlayer(function(player, id) {
-        if (!(id in update.players)) {
-            console.log('Player left:', id);
-            delete Game.players[id];
-        }
-    });
+  game.forEachPlayer((player, id) => {
+    if (!(id in update.players)) {
+      console.log('Player left:', id)
+      delete game.players[id]
+    }
+  })
 
     // For each enemy in the update
-    for (enemyID in update.enemies) {
+  for (let enemyID in update.enemies) {
         // Check if they are new
-        if (!Game.enemies[enemyID]) {
-            Game.addEnemy(new Enemy(enemyID, update.enemies[enemyID]));
-        }
+    if (!game.enemies[enemyID]) {
+      game.addEnemy(new Enemy(enemyID, update.enemies[enemyID]))
+    }
 
         // Apply the change
-        Game.enemies[enemyID].setState(update.enemies[enemyID]);
-    }
+    game.enemies[enemyID].setState(update.enemies[enemyID])
+  }
 
     // Check if any enemies died
-    Game.forEachEnemy(function(enemy, id) {
-        if (!(id in update.enemies)) {
+  game.forEachEnemy((enemy, id) => {
+    if (!(id in update.enemies)) {
             // console.log('Enemy died:', id);
-            delete Game.enemies[id];
-        }
-    });
+      delete game.enemies[id]
+    }
+  })
 
     // For each bullet in the update
-    for (bulletID in update.bullets) {
+  for (let bulletID in update.bullets) {
         // Check if it is new
-        if (!Game.bullets[bulletID]) {
-            Game.addBullet(new Bullet(update.bullets[bulletID].gun, bulletID));
-        }
+    if (!game.bullets[bulletID]) {
+      game.addBullet(new Bullet(update.bullets[bulletID].gun, bulletID))
+    }
 
         // Apply the change
-        Game.bullets[bulletID].setState(update.bullets[bulletID]);
-    }
+    game.bullets[bulletID].setState(update.bullets[bulletID])
+  }
 
     // Check if any bullets disappeared
-    Game.forEachBullet(function(bullet, id) {
-        if (!(id in update.bullets)) {
+  game.forEachBullet((bullet, id) => {
+    if (!(id in update.bullets)) {
             // console.log(id !== 'undefined' ? 'Server' : 'Client', 'bullet disappeared' + (id !== 'undefined' ? ': ' + id : ''));
-            delete Game.bullets[id];
-        }
-    });
-
-    if (typeof update.game.level !== 'undefined') {
-        Game.level = update.game.level;
-        Game.currentPlayer.hud.setLevel(Game.level);
+      delete game.bullets[id]
     }
-});
+  })
+
+  if (typeof update.game.level !== 'undefined') {
+    game.level = update.game.level
+    game.currentPlayer.hud.setLevel(game.level)
+  }
+})
