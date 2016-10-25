@@ -1,157 +1,132 @@
-/*
-** character.js (server-side) defines the Character class,
-** giving it the ability to update its stats and check
-** for specific events that may occur, such as touching
-** an enemy, allowing it to behave accordingly.
-*/
+export default class Character {
+  constructor (id, x, y) {
+    // Define its ID and position on the screen, as passed in when created
+    this.id = id
+    this.setPosition(x, y)
 
-var Class = require('./class'); // John Resig's Class Inheritance
+    // Define a couple of variables that will come in handy for recording stuff
+    this.previousState = {}
+    this.forceUpdate = false
+  }
 
-var Character = Class.extend({
-    // init will get called whenever a new Character is created
-    init: function(id, x, y) {
-        // Define its ID and position on the screen, as passed in when created
-        this.id = id;
-        this.setPosition(x, y);
+  // Give the character a different size
+  setSize (size) {
+    this.size = size
+  }
 
-        // Define a couple of variables that will come in handy for recording stuff
-        this.previousState = {};
-        this.forceUpdate = false;
-    },
+  // Give the character a different speed
+  setSpeed (speed) {
+    this.speed = speed
+  }
 
-    // Give the character a different size
-    setSize: function(size) {
-        this.size = size;
-    },
+  // Give the character a different mobility (rotational speed)
+  setMobility (mobility) {
+    this.mobility = mobility
+  }
 
-    // Give the character a different speed
-    setSpeed: function(speed) {
-        this.speed = speed;
-    },
+  // Give the character a different direction
+  setDirection (direction) {
+    this.direction = direction
+  }
 
-    // Give the character a different mobility (speed of rotation)
-    setMobility: function(mobility) {
-        this.mobility = mobility;
-    },
+  // Give the character a different position
+  setPosition (x, y) {
+    this.x = x
+    this.y = y
+  }
 
-    // Give the character a different direction
-    setDirection: function(direction) {
-        this.direction = direction;
-    },
+  // Give the character a new color (alpha is optional)
+  // TODO: create a Color class and use it here
+  setColor (r, g, b, a) {
+    a = a || 1
+    this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')'
+  }
 
-    // Redefine the position of the character
-    setPosition: function(x, y) {
-        this.x = x;
-        this.y = y;
-    },
+  // Update the character's color to reflect the health level
+  // TODO: create a Color class and use it here
+  updateColor () {
+    let healthGone = this.healthGone()
 
-    // Give the character a new color
-    setColor: function(r, g, b, a) {
-        // Assuming giving Red, Green and Blue seperately (and, optionally, Alpha)
-        a = a !== undefined ? a : '1';
-        this.color = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-    },
+    // Transition the color based on health
+    this.setColor(parseInt(this.baseColor.start.red + (healthGone * this.baseColor.delta.red)),
+                  parseInt(this.baseColor.start.green + (healthGone * this.baseColor.delta.green)),
+                  parseInt(this.baseColor.start.blue + (healthGone * this.baseColor.delta.green)))
+  }
 
-    // Update the character's color to reflect the health level
-    updateColor: function() {
-        var healthGone = this.healthGone();
+  // Set the character's score for the round back to 0
+  resetRoundScore () {
+    this.lifeScore = 0
+    console.log('Round score reset') // TODO: replace this with better logging utility
+  }
 
-        // Transition the color based on health
-        this.setColor(parseInt(this.baseColor.start.red + (healthGone * this.baseColor.delta.red)),
-            parseInt(this.baseColor.start.green + (healthGone * this.baseColor.delta.green)),
-            parseInt(this.baseColor.start.blue + (healthGone * this.baseColor.delta.blue)));
-    },
+  // Set the character's health back to 100%
+  resetHitPoints (maxHitPoints) {
+    if (!maxHitPoints) console.error('maxHitPoints not passed to resetHitPoints')
+    this.maxHitPoints = maxHitPoints
+    this.isDead = false
+    this.hitPoints = this.maxHitPoints
+    this.updateColor()
+  }
 
-    // Set the character's score for the round back to 0
-    resetRoundScore: function() {
-        this.lifeScore = 0;
-        console.log('Round score reset');
-    },
+  // Set the character's health to the given value
+  setHitPoints (hitPoints) {
+    // Limit hitPoints to between 0 and maxHitPoints
+    this.hitPoints = Math.min(Math.max(hitPoints, 0), this.maxHitPoints)
 
-    // Set the character's health back to 100%
-    resetHitPoints: function(maxHitPoints) {
-        if (maxHitPoints !== undefined) {
-            this.maxHitPoints = maxHitPoints;
+    this.updateColor()
+  }
+
+  // Calculate the total number of hitpoints lost so far
+  healthGone () {
+    return 1 - (this.hitPoints / this.maxHitPoints)
+  }
+
+  // Handle being hit using the specified damage
+  hit (damage) {
+    this.setHitPoints(this.hitPoints - damage)
+
+    this.health() <= 0 && this.kill()
+  }
+
+  // Kill the player
+  kill () {
+    this.setHitPoints(0)
+    this.setSpeed(0)
+    this.setMobility(0)
+  }
+
+  getChangedState () {
+    // TODO: convert currentState to an instance of a class
+    let currentState = {
+      'x': this.x,
+      'y': this.y,
+      'direction': this.direction,
+      'maxHitPoints': this.maxHitPoints,
+      'hitPoints': this.hitPoints,
+      'color': this.color,
+      'name': this.name
+    }
+
+    let changes = {}
+
+    // Determine whether to get actual changes or force the entire
+    // instance to be updated
+    if (!this.forceUpdate) {
+      // TODO: externalize this function (as a 'diff' method in the State class mentioned above)
+      for (let item in currentState) {
+        if (currentState.hasOwnProperty(item)) {
+          if (currentState[item] !== this.previousState[item]) {
+            changes[item] = currentState[item]
+          }
         }
+      }
+    } else {
+      changes = currentState
+      this.forceUpdate = false
+    }
 
-        if (this.isDead !== undefined) {
-            this.isDead = false;
-        }
+    this.previousState = currentState
 
-        this.hitPoints = this.maxHitPoints;
-        this.updateColor();
-    },
-
-    // Set the character's health to the given value
-    setHitPoints: function(hitPoints) {
-        if (hitPoints > this.maxHitPoints) {
-            this.hitPoints = this.maxHitPoints;
-        } else if (hitPoints < 0) {
-            this.hitPoints = 0;
-        } else {
-            this.hitPoints = hitPoints;
-        }
-
-        this.updateColor();
-    },
-
-    // Calculate the total number of hitpoints lost so far
-    healthGone: function() {
-        return 1 - (this.hitPoints / this.maxHitPoints);
-    },
-
-    // Handle being hit using the specified damage
-    hit: function(damage) {
-        this.setHitPoints(this.hitPoints - damage);
-
-        // If the damage exceeds the remaining hitpoints, see ya!
-        if (this.health() <= 0) {
-            this.kill();
-        }
-    },
-
-    // Kill the player
-    kill: function() {
-        this.setHitPoints(0);
-        this.setSpeed(0);
-        this.setMobility(0);
-    },
-    getChangedState: function() {
-        // Create an object denoting the current state of the bullet
-        var currentState = {
-            'x': this.x,
-            'y': this.y,
-            'direction': this.direction,
-            'maxHitPoints': this.maxHitPoints,
-            'hitPoints': this.hitPoints,
-            'color': this.color,
-            'name': this.name
-        },
-            // Instantiate a changes object
-            changes = {};
-
-        if (!this.forceUpdate) {
-            // If the current state of each item in currentState matches the previous state, remove it
-            for (var item in currentState) {
-                if (currentState.hasOwnProperty(item)) {
-                    if (currentState[item] !== this.previousState[item]) {
-                        changes[item] = currentState[item];
-                    }
-                }
-            }
-        } else {
-            changes = currentState;
-            this.forceUpdate = false;
-        }
-        // changes should now only reflect differences between previousState and currentState
-
-        // Set the previousState to the currentState
-        this.previousState = currentState;
-        
-        // Return the changes to whatever asked for it
-        return changes;
-    },
-    update: function(timeElapsed) {}
-});
-
-module.exports = Character;
+    return changes
+  }
+}
