@@ -65,11 +65,12 @@ export default class Bullet {
 
     game.forEachEnemy((enemy, id) => {
       if (enemy.healthGone() < 1) {
-        // TODO: the line below may not be completely correct
+        // TODO: check that the line below is completely correct
         intersection[0] = ((enemy.x / slope) + (this.x1 * slope) + enemy.y - this.y1) / (slope + 1 / slope)
         intersection[1] = slope * intersection[0] - (slope * this.x1) + this.y1
 
         // Check if the enemy intersects with path of the bullet
+        // TODO: simplify this predicate
         if (this.x2 > this.prevX
           ? intersection[0] > this.prevX && intersection[0] < this.x2
           : intersection[0] < this.prevX && intersection[0] > this.x2) {
